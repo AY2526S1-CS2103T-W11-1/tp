@@ -7,7 +7,7 @@
       "headings": {
         "about-us": "About Us",
         "project-team": "Project team",
-        "john-doe": "John Doe",
+        "chuckyang123": "ChuckYang123",
         "junrong": "Junrong",
         "jiayi": "Jiayi",
         "jean-doe": "Jean Doe",
@@ -133,6 +133,11 @@
       "headings": {
         "addressbook-level-3": "AddressBook Level-3"
       },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/chuckyang123.md",
+      "headings": {},
       "headingKeywords": {}
     },
     {
