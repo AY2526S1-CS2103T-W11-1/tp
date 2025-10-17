@@ -15,8 +15,23 @@ import seedu.address.commons.core.LogsCenter;
  */
 public class HelpWindow extends UiPart<Stage> {
 
-    public static final String USERGUIDE_URL = "https://se-education.org/addressbook-level3/UserGuide.html";
-    public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL;
+    public static final String USERGUIDE_URL = "https://ay2526s1-cs2103t-w11-1.github.io/tp/UserGuide.html";
+    public static final String COMMAND_SYNTAX = "here is the list of all command syntax:\n"
+            + "- add_student: add n/NAME i/NUSNETID t/TELEGRAM g/GROUPID [p/PHONE] [e/EMAIL]\n"
+            + "- edit_student: edit INDEX [n/NAME] [i/NUSNETID] [t/TELEGRAM] [g/GROUPID] [p/PHONE] [e/EMAIL]\n"
+            + "- delete: delete INDEX\n"
+            + "- clear: clear\n"
+            + "- find: find KEYWORD \n"
+            + "- list: list\n"
+            + "- help: help\n"
+            + "- exit: exit\n"
+            + "- add_hw: add homework i/NETID a/ASSIGNMENT_ID or all a/ASSIGNMENT_ID\n"
+            + "- mark_hw: mark homework i/NUSNETID a/ASSIGNMENT_ID status/complete|incomplete|late\n"
+            + "- mark_attendance: mark attendance i/NUSNETID w/WEEK present|absent|excused\n"
+            + "- create_group: create_group g/GROUPID\n"
+            + "- add_consult: add consultation i/NUSNETID from/START_TIME to/END_TIME\n";
+
+    public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL + "\n" + COMMAND_SYNTAX;
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";

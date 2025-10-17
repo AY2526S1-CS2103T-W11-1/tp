@@ -19,7 +19,7 @@ import seedu.address.model.person.Person;
  *
  * <p>Example usage:</p>
  * <pre>{@code
- * mark_attendance w/3 present n/E1234567
+ * mark_attendance  i/E1234567 w/3 present
  * }</pre>
  * This marks week 3 attendance for student E1234567 as present.
  */
@@ -28,8 +28,8 @@ public class MarkAttendanceCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the attendance of a person identified "
             + "by their index number in the displayed person list. "
-            + "Parameters: w/<week> <present|absent|excused> i/<NET id>\n"
-            + "Example: " + COMMAND_WORD + " w/3" + " present i/E1234567";
+            + "Parameters: i/<NET id> w/<week> <present|absent|excused> \n"
+            + "Example: " + COMMAND_WORD + " i/E1234567 w/3" + " present";
 
     public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Marked attendance for %1$s: %2$s in week %3$d.";
     public static final String MESSAGE_STUDENT_NOT_FOUND = "Student not found.";

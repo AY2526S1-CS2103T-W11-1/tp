@@ -19,14 +19,14 @@ public class MarkAttendanceCommandParserTest {
     @Test
     public void parse_validArgs_success() {
         // Single student
-        assertParseSuccess(parser, " w/" + VALID_WEEK_1 + " " + VALID_STATUS_PRESENT + " i/" + VALID_NUSNETID_AMY,
+        assertParseSuccess(parser, " i/" + VALID_NUSNETID_AMY + " w/" + VALID_WEEK_1 + " " + VALID_STATUS_PRESENT ,
                 new MarkAttendanceCommand(VALID_NUSNETID_AMY, 2, VALID_STATUS_PRESENT));
     }
 
 
     @Test
     public void parse_invalidWeek_failure() {
-        assertParseFailure(parser, " w/" + INVALID_WEEK + " " + VALID_STATUS_PRESENT + " i/" + VALID_NUSNETID_AMY,
+        assertParseFailure(parser, " i/" + VALID_NUSNETID_AMY + " w/" + INVALID_WEEK + " " + VALID_STATUS_PRESENT ,
                 MarkAttendanceCommand.MESSAGE_INVALID_WEEK);
     }
 

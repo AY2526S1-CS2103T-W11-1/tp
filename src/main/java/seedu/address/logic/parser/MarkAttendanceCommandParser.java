@@ -21,12 +21,13 @@ import seedu.address.logic.parser.exceptions.ParseException;
  *
  * <p>Example usage:</p>
  * <pre>{@code
- * mark_attendance w/3 present n/E1234567    // marks week 3 attendance for student E1234567 as present
+ * mark_attendance i/E1234567 w/3 present  // marks week 3 attendance for student E1234567 as present
  * }</pre>
  */
 public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand> {
     private static final Pattern MARK_COMMAND_FORMAT = Pattern.compile(
-            "w/(?<week>\\d+)\\s+(?<status>\\S+)\\s+i/(?<nusnetId>\\S+)", Pattern.CASE_INSENSITIVE);
+            "i/(?<nusnetId>\\S+)\\s+w/(?<week>\\d+)\\s+(?<status>\\S+)",
+            Pattern.CASE_INSENSITIVE);
     @Override
     public MarkAttendanceCommand parse(String args) throws ParseException {
         final Matcher matcher = MARK_COMMAND_FORMAT.matcher(args.trim());

@@ -20,13 +20,13 @@ import seedu.address.model.person.Person;
  *
  * <p>Example usage:</p>
  * <pre>{@code
- * mark i/E1234567 a/0 status/complete
+ * mark_hw i/E1234567 a/0 status/complete
  * }</pre>
  * This marks assignment 0 for student E1234567 as complete.
  */
 public class MarkHomeworkCommand extends Command {
 
-    public static final String COMMAND_WORD = "mark";
+    public static final String COMMAND_WORD = "mark_hw";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Marks a student's assignment completeness.\n"
             + "Parameters: i/<nusnetId> a/<assignmentId> status/<complete|incomplete|late>\n"
