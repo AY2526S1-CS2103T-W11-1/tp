@@ -1,21 +1,136 @@
 @startuml
-!include style.puml
-skinparam arrowThickness 1.1
-skinparam arrowColor MODEL_COLOR
-skinparam classBackgroundColor MODEL_COLOR
+' Better Model Class Diagram (accurate to current codebase)
 
-AddressBook *-right-> "1" UniquePersonList
-AddressBook *-right-> "1" UniqueTagList
-UniqueTagList -[hidden]down- UniquePersonList
-UniqueTagList -[hidden]down- UniquePersonList
+skinparam classAttributeIconSize 0
 
-UniqueTagList -right-> "*" Tag
-UniquePersonList -right-> Person
+package "seedu.address.model" {
+  interface ReadOnlyAddressBook
 
-Person -up-> "*" Tag
+  class AddressBook {
+    - UniquePersonList persons
+    - UniqueConsultationList consultations
+    + hasPerson(Person)
+    + hasPerson(Nusnetid)
+    + addPerson(Person)
+    + setPerson(Person, Person)
+    + removePerson(Person)
+    + hasConsultation(Consultation)
+    + addConsultation(Consultation)
+    + addConsultationToPerson(Nusnetid, Consultation)
+    + getPersonList()
+    + getConsultationList()
+  }
 
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
+  interface Model {
+    + setUserPrefs(ReadOnlyUserPrefs)
+    + getUserPrefs() : ReadOnlyUserPrefs
+    + getGuiSettings()
+    + setGuiSettings(GuiSettings)
+    + getAddressBookFilePath()
+    + setAddressBookFilePath(Path)
+    + setAddressBook(ReadOnlyAddressBook)
+    + getAddressBook() : ReadOnlyAddressBook
+    + hasPerson(Person) : boolean
+    + hasPerson(Nusnetid) : boolean
+    + deletePerson(Person)
+    + addPerson(Person)
+    + setPerson(Person, Person)
+    + getFilteredPersonList()
+    + updateFilteredPersonList(Predicate)
+    + hasConsultation(Consultation) : boolean
+    + addConsultation(Consultation)
+    + getFilteredConsultationList()
+    + updateFilteredConsultationList(Predicate)
+    + addConsultationToPerson(Nusnetid, Consultation)
+    + addGroup(Group)
+    + getGroupList() : List<Group>
+  }
+
+  class ModelManager {
+    - AddressBook addressBook
+    - UserPrefs userPrefs
+    - FilteredList<Person> filteredPersons
+    - FilteredList<Consultation> filteredConsultations
+    - List<Group> groupList
+  }
+
+  class UserPrefs
+  interface ReadOnlyUserPrefs
+
+  class Group {
+    - GroupId groupId
+    - UniquePersonList students
+    + addStudent(Person)
+    + removeStudent(Nusnetid)
+    + hasStudent(Nusnetid) : boolean
+  }
+}
+
+package "seedu.address.model.person" {
+  class UniquePersonList
+
+  class Person {
+    - Name name
+    - Optional<Phone> phone
+    - Optional<Email> email
+    - Nusnetid nusnetid
+    - Telegram telegram
+    - GroupId groupId
+    - HomeworkTracker homeworkTracker
+    - AttendanceSheet attendanceSheet
+    - Optional<Consultation> consultation
+    + hasSameNusnetId(Nusnetid) : boolean
+    + hasConsultation() : boolean
+  }
+
+  class HomeworkTracker
+  class Homework
+  class AttendanceSheet
+  class Attendance
+  class AttendanceStatus
+  class Name
+  class Phone
+  class Email
+  class Nusnetid
+  class Telegram
+  class GroupId
+}
+
+package "seedu.address.model.event" {
+  class Consultation {
+    - Nusnetid nusnetid
+    - LocalDateTime from
+    - LocalDateTime to
+  }
+  class UniqueConsultationList
+}
+
+' interfaces and implementation
+ReadOnlyAddressBook <|.. AddressBook
+Model <|.. ModelManager
+ReadOnlyUserPrefs <|.. UserPrefs
+
+' major compositions/associations
+ModelManager o-- AddressBook
+ModelManager o-- UserPrefs
+ModelManager "1" o-- "0..*" Group : groupList
+
+AddressBook "1" o-- "1" UniquePersonList
+AddressBook "1" o-- "1" UniqueConsultationList
+UniquePersonList "1" o-- "0..*" Person
+UniqueConsultationList "1" o-- "0..*" Consultation
+
+Group "1" o-- "1" seedu.address.model.person.GroupId
+Group "1" o-- "1" UniquePersonList : students
+
+Person "1" o-- Name
+Person "0..1" o-- Phone
+Person "0..1" o-- Email
+Person "1" o-- Nusnetid
+Person "1" o-- Telegram
+Person "1" o-- GroupId
+Person "1" o-- HomeworkTracker
+Person "1" o-- AttendanceSheet
+Person "0..1" --> Consultation
+
 @enduml

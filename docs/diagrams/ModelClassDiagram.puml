@@ -13,12 +13,18 @@ Class ModelManager
 Class UserPrefs
 
 Class UniquePersonList
+Class UniqueConsultationList
+Class Consultation
+Class Group
+Class GroupId
 Class Person
-Class Address
 Class Email
 Class Name
 Class Phone
-Class Tag
+Class Nusnetid
+Class Telegram
+Class HomeworkTracker
+Class AttendanceSheet
 
 Class I #FFFFFF
 }
@@ -35,20 +41,36 @@ ModelManager -left-> "1" AddressBook
 ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
+' AddressBook contents
 AddressBook *--> "1" UniquePersonList
+AddressBook *--> "1" UniqueConsultationList
 UniquePersonList --> "~* all" Person
+UniqueConsultationList --> "~* all" Consultation
+
+' Person contents
 Person *--> Name
 Person *--> Phone
 Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+Person *--> Nusnetid
+Person *--> Telegram
+Person *--> HomeworkTracker
+Person *--> AttendanceSheet
+Person *--> GroupId
 
+' Groups are stored in ModelManager
+ModelManager *--> "~* groups" Group
+Group *--> GroupId
+Group *--> "students" UniquePersonList
+
+' Hidden aligners for layout consistency
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
 
 Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Phone -[hidden]right-> Email
+Email -[hidden]right-> Telegram
+Telegram -[hidden]right-> Nusnetid
 
+' filtered person view in model manager
 ModelManager --> "~* filtered" Person
 @enduml
