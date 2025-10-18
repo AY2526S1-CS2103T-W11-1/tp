@@ -357,9 +357,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
         Use case ends.
 
-* 2e. A student with the same email already exists.
+* 2e. A student with the same nusnetid already exists.
 
-    * 2e1. AddressBook shows error: Student with this email already exists.
+    * 2e1. AddressBook shows error: Student with this nusnetid already exists.
 
        Use case ends.
 
@@ -401,9 +401,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-* 2b. Edited email duplicates another existing student’s email.
+* 2b. Edited email duplicates another existing student’s nusnetid.
 
-    * 2b1. AddressBook shows error: Email already in use.
+    * 2b1. AddressBook shows error: nusnetid already in use.
 
       Use case ends.
 
@@ -459,7 +459,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. The list is empty.
 
     Use case ends.
 
@@ -480,6 +480,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 4a1. Homework Tracker shows error message: `Please enter complete/incomplete/late only`.
   
       Use case ends.
+* 4b. The student already has a status recorded for this assignment.
+    * 4b1. Homework Tracker updates the record with the new status (last write wins).
+
+      Use case resumes at step 5.
 
 **Use case: Add a consultation**
 
@@ -497,7 +501,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. Student email does not exist in the directory.
+* 2a. Student nusnetid does not exist in the directory.
 
   * 2a1. AddressBook shows error: Student not found.
 
@@ -521,39 +525,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
          Use case ends.
 
-**Use case: List consultations**
-
-**MSS**
-
-1. User requests to list all consultations (optionally filtered by date).
-
-2. AddressBook retrieves the consultations that match the criteria.
-
-3. AddressBook displays the consultations in the UI.
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. No consultations exist.
-
-    * 2a1. AddressBook shows message: No consultations found.
-
-
-         Use case ends.
-
-* 2b. No consultations exist for the specified date.
-
-    * 2b1. AddressBook shows message: No consultations found for <date>.
-
-
-         Use case ends.
 
 **Use case: Mark attendance**
 
 **MSS**
 
-1. User requests to mark attendance for a student by specifying student email, date, and attendance status.
+1. User requests to mark attendance for a student by specifying student nusnetid, date, and attendance status.
 
 2. AddressBook validates that the student exists and the date/status are valid.
 
@@ -565,54 +542,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. Student email does not exist.
+* 2a. Student nusnetid does not exist.
 
     * 2a1. AddressBook shows error: Student not found.
 
          Use case ends.
 
-* 2b. Attendance status is invalid (not Present or Absent).
+* 2b. Attendance status is invalid (not Present or Absent or Excused).
 
     * 2b1. AddressBook shows error: Invalid attendance status.
 
          Use case ends.
-
-* 2c. Attendance for this student and date already exists.
-
-     * 2c1. AddressBook shows error: Attendance already marked for this student on <date>.
-
-         Use case ends.
-
-**Use case: List attendance**
-
-**MSS**
-
-1. User requests to list attendance records (optionally filtered by date or student).
-
-2. AddressBook retrieves the relevant attendance records.
-
-3. AddressBook displays the attendance in a table view (e.g., Student | Date | Status).
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. No attendance records exist.
-
-    * 2a1. AddressBook shows message: No attendance records found.
-
-         Use case ends.
-
-* 2b. No attendance records match the filter (date or student).
-
-    * 2b1. AddressBook shows message: No attendance records found for <criteria>.
-
-         Use case ends.
-
-* 4b. The student already has a status recorded for this assignment.
-    * 4b1. Homework Tracker updates the record with the new status (last write wins).
-
-      Use case resumes at step 5.
 
 **Use case: Create and manage student groups**
 
@@ -675,7 +615,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ##### NFR-D1: Data Size
 - Maximum 500 students per course
 - Maximum 50 tutorial slots per course
-- Support 13 weeks of attendance data (weeks 3-13)
+- Support 12 weeks of attendance data (weeks 2-13)
 - Support at least 10 assignments per course
 - Store consultation history for entire semester
 
