@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import seedu.address.model.person.GroupId;
@@ -31,6 +32,22 @@ public class Group {
         return groupId;
     }
 
+    /**
+     * Replaces the given person {@code target} in the list with {@code editedPerson}.
+     * @param target old person
+     * @param editedPerson new person
+     */
+    public void setPerson(Person target, Person editedPerson) {
+        requireNonNull(editedPerson);
+        students.setPerson(target, editedPerson);
+    }
+    /**
+     * Returns all persons in this tutorial.
+     * @return
+     */
+    public ArrayList<Person> getAllPerson() {
+        return this.students.toArrayList();
+    }
     /**
      * Returns the list of students in this tutorial.
      */

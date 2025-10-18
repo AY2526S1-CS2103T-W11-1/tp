@@ -72,6 +72,11 @@ public interface Model {
     boolean hasPerson(Nusnetid nusnetid);
 
     /**
+     * Return true if a group with the same groupId as {@code groupId} exists in the address book.
+     */
+    boolean hasGroup(String groupId);
+
+    /**
      * Deletes the given person.
      * The person must exist in the address book.
      */

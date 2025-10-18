@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.commands.AddConsultationCommand.MESSAGE_STUDENT_ALREADY_HAS_CONSULTATION;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -162,6 +163,10 @@ public class UniquePersonList implements Iterable<Person> {
     @Override
     public String toString() {
         return internalList.toString();
+    }
+
+    public ArrayList<Person> toArrayList() {
+        return new ArrayList<>(internalList);
     }
 
     /**
