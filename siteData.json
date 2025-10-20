@@ -10,7 +10,7 @@
         "chuckyang123": "ChuckYang123",
         "junrong": "Junrong",
         "jiayi": "Jiayi",
-        "jean-doe": "Jean Doe",
+        "letian": "Letian",
         "yu-xin": "Yu Xin"
       },
       "headingKeywords": {}
@@ -107,7 +107,7 @@
       "src": "UserGuide.md",
       "title": "User Guide",
       "headings": {
-        "ab-3-user-guide": "AB-3 User Guide",
+        "socassist-user-guide": "SoCAssist User Guide",
         "quick-start": "Quick start",
         "features": "Features",
         "viewing-help-help": "Viewing help : help",
@@ -121,6 +121,8 @@
         "marking-attendance-mark-attendance": "Marking attendance : mark_attendance",
         "adding-a-consultation-add-consult": "Adding a consultation : add_consult",
         "creating-a-group-create-group": "Creating a group : create_group",
+        "adding-a-student-to-a-group-add-to-group": "Adding a student to a group : add_to_group",
+        "find-group-members-find-group": "Find Group Members : find_group",
         "clearing-all-entries-clear": "Clearing all entries : clear",
         "exiting-the-program-exit": "Exiting the program : exit",
         "saving-the-data": "Saving the data",
