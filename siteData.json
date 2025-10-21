@@ -118,6 +118,7 @@
         "deleting-a-person-delete": "Deleting a person : delete",
         "adding-homework-add-hw": "Adding homework : add_hw",
         "marking-homework-mark-hw": "Marking homework : mark_hw",
+        "deleting-homework-delete-hw": "Deleting homework : delete_hw",
         "marking-attendance-mark-attendance": "Marking attendance : mark_attendance",
         "marking-attendance-for-one-group-of-students-mark-all-attendance": "Marking attendance for one group of students : mark_all_attendance",
         "adding-a-consultation-add-consult": "Adding a consultation : add_consult",
