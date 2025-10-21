@@ -119,6 +119,7 @@
         "adding-homework-add-hw": "Adding homework : add_hw",
         "marking-homework-mark-hw": "Marking homework : mark_hw",
         "marking-attendance-mark-attendance": "Marking attendance : mark_attendance",
+        "marking-attendance-for-one-group-of-students-mark-all-attendance": "Marking attendance for one group of students : mark_all_attendance",
         "adding-a-consultation-add-consult": "Adding a consultation : add_consult",
         "creating-a-group-create-group": "Creating a group : create_group",
         "adding-a-student-to-a-group-add-to-group": "Adding a student to a group : add_to_group",
