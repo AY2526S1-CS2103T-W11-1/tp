@@ -1,0 +1,70 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":DeleteHomeworkCommandParser" as DeleteHomeworkCommandParser LOGIC_COLOR
+participant ":DeleteHomeworkCommand" as DeleteHomeworkCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("delete_hw i/E1234567 a/1")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("delete_hw i/E1234567 a/1")
+activate AddressBookParser
+
+create DeleteHomeworkCommandParser
+AddressBookParser -> DeleteHomeworkCommandParser
+activate DeleteHomeworkCommandParser
+
+DeleteHomeworkCommandParser --> AddressBookParser
+deactivate DeleteHomeworkCommandParser
+
+AddressBookParser -> DeleteHomeworkCommandParser : parse("i/E1234567 a/1")
+activate DeleteHomeworkCommandParser
+
+create DeleteHomeworkCommand
+DeleteHomeworkCommandParser -> DeleteHomeworkCommand
+activate DeleteHomeworkCommand
+
+DeleteHomeworkCommand --> DeleteHomeworkCommandParser :
+deactivate DeleteHomeworkCommand
+
+DeleteHomeworkCommandParser --> AddressBookParser : d
+deactivate DeleteHomeworkCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+DeleteHomeworkCommandParser -[hidden]-> AddressBookParser
+destroy DeleteHomeworkCommandParser
+
+AddressBookParser --> LogicManager : d
+deactivate AddressBookParser
+
+LogicManager -> DeleteHomeworkCommand : execute(m)
+activate DeleteHomeworkCommand
+
+DeleteHomeworkCommand -> Model : DeleteHomeworkCommand(E1234567, 1)
+activate Model
+
+Model --> DeleteHomeworkCommand
+deactivate Model
+
+create CommandResult
+DeleteHomeworkCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> DeleteHomeworkCommand
+deactivate CommandResult
+
+DeleteHomeworkCommand --> LogicManager : r
+deactivate DeleteHomeworkCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

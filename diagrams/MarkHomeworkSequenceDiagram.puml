@@ -1,0 +1,70 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":MarkHomeworkCommandParser" as MarkHomeworkCommandParser LOGIC_COLOR
+participant ":MarkHomeworkCommand" as MarkHomeworkCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("mark_hw i/E1234567 a/1 status/complete")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("mark_hw i/E1234567 a/1 status/true")
+activate AddressBookParser
+
+create MarkHomeworkCommandParser
+AddressBookParser -> MarkHomeworkCommandParser
+activate MarkHomeworkCommandParser
+
+MarkHomeworkCommandParser --> AddressBookParser
+deactivate MarkHomeworkCommandParser
+
+AddressBookParser -> MarkHomeworkCommandParser : parse("i/E1234567 a/1 status/true")
+activate MarkHomeworkCommandParser
+
+create MarkHomeworkCommand
+MarkHomeworkCommandParser -> MarkHomeworkCommand
+activate MarkHomeworkCommand
+
+MarkHomeworkCommand --> MarkHomeworkCommandParser :
+deactivate MarkHomeworkCommand
+
+MarkHomeworkCommandParser --> AddressBookParser : d
+deactivate MarkHomeworkCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+MarkHomeworkCommandParser -[hidden]-> AddressBookParser
+destroy MarkHomeworkCommandParser
+
+AddressBookParser --> LogicManager : d
+deactivate AddressBookParser
+
+LogicManager -> MarkHomeworkCommand : execute(m)
+activate MarkHomeworkCommand
+
+MarkHomeworkCommand -> Model : MarkHomeworkCommand(E1234567, 1, complete)
+activate Model
+
+Model --> MarkHomeworkCommand
+deactivate Model
+
+create CommandResult
+MarkHomeworkCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> MarkHomeworkCommand
+deactivate CommandResult
+
+MarkHomeworkCommand --> LogicManager : r
+deactivate MarkHomeworkCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
