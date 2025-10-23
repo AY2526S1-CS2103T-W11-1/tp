@@ -56,6 +56,7 @@ Person *--> Telegram
 Person *--> HomeworkTracker
 Person *--> AttendanceSheet
 Person *--> GroupId
+Person --> "0..1" Consultation
 
 ' Groups are stored in ModelManager
 ModelManager *--> "~* groups" Group
@@ -70,6 +71,7 @@ Name -[hidden]right-> Phone
 Phone -[hidden]right-> Email
 Email -[hidden]right-> Telegram
 Telegram -[hidden]right-> Nusnetid
+Consultation -[hidden]right-> Email
 
 ' filtered person view in model manager
 ModelManager --> "~* filtered" Person

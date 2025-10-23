@@ -15,8 +15,11 @@ package "seedu.address.model" {
     + setPerson(Person, Person)
     + removePerson(Person)
     + hasConsultation(Consultation)
+    + hasOverlappingConsultation(Consultation)
     + addConsultation(Consultation)
+    + deleteConsultation(Nusnetid)
     + addConsultationToPerson(Nusnetid, Consultation)
+    + deleteConsultationFromPerson(Nusnetid)
     + getPersonList()
     + getConsultationList()
   }
@@ -38,10 +41,13 @@ package "seedu.address.model" {
     + getFilteredPersonList()
     + updateFilteredPersonList(Predicate)
     + hasConsultation(Consultation) : boolean
+    + hasOverlappingConsultation(Consultation) : boolean
     + addConsultation(Consultation)
+    + deleteConsultation(Consultation)
     + getFilteredConsultationList()
     + updateFilteredConsultationList(Predicate)
     + addConsultationToPerson(Nusnetid, Consultation)
+    + deleteConsultationFromPerson(Nusnetid) : Consultation
     + addGroup(Group)
     + getGroupList() : List<Group>
   }
