@@ -1,0 +1,77 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":CreateGroupCommandParser" as CreateGroupCommandParser LOGIC_COLOR
+participant "d:CreateGroupCommand" as CreateGroupCommand LOGIC_COLOR
+participant "newGroup:Group" as Group LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("create_group g/T01")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("create_group g/T01")
+activate AddressBookParser
+
+create CreateGroupCommandParser
+AddressBookParser -> CreateGroupCommandParser
+activate CreateGroupCommandParser
+
+CreateGroupCommandParser --> AddressBookParser
+deactivate CreateGroupCommandParser
+
+AddressBookParser -> CreateGroupCommandParser : parse("g/T01")
+activate CreateGroupCommandParser
+
+create CreateGroupCommand
+CreateGroupCommandParser -> CreateGroupCommand
+activate CreateGroupCommand
+
+CreateGroupCommand --> CreateGroupCommandParser :
+deactivate CreateGroupCommand
+
+CreateGroupCommandParser --> AddressBookParser : d
+deactivate CreateGroupCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+CreateGroupCommandParser -[hidden]-> AddressBookParser
+destroy CreateGroupCommandParser
+
+AddressBookParser --> LogicManager : d
+deactivate AddressBookParser
+
+LogicManager -> CreateGroupCommand : execute(m)
+activate CreateGroupCommand
+
+create Group
+CreateGroupCommand -> Group : Group(groupId)
+activate Group
+Group --> CreateGroupCommand
+deactivate Group
+
+CreateGroupCommand -> Model : addGroup(newGroup))
+activate Model
+
+Model --> CreateGroupCommand
+deactivate Model
+
+create CommandResult
+CreateGroupCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> CreateGroupCommand
+deactivate CommandResult
+
+CreateGroupCommand --> LogicManager : r
+deactivate CreateGroupCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
