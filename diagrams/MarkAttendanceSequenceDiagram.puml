@@ -49,7 +49,7 @@ deactivate AddressBookParser
 LogicManager -> MarkAttendanceCommand : execute(m)
 activate MarkAttendanceCommand
 
-MarkAttendanceCommand -> Model : markAttendance("i/e1234567" "w/3" "present"))
+MarkAttendanceCommand -> Model : markAttendance("e1234567" "3" "present"))
 activate Model
 
 Model --> MarkAttendanceCommand
