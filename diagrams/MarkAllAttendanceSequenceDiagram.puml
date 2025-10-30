@@ -12,14 +12,17 @@ end box
 
 box Model MODEL_COLOR_T1
 participant "m:Model" as Model MODEL_COLOR
+participant ":GroupId" as GroupId MODEL_COLOR
+participant ":AttendanceStatus" as AttendanceStatus MODEL_COLOR
 end box
 
 [-> LogicManager : execute("mark_all_attendance g/T01 w/3 status/present")
-activate LogicManager
 
 LogicManager -> AddressBookParser : parseCommand("mark_all_attendance g/T01 w/3 status/present")
+activate LogicManager
 activate AddressBookParser
 
+' Create command parser
 create MarkAllAttendanceCommandParser
 AddressBookParser -> MarkAllAttendanceCommandParser
 activate MarkAllAttendanceCommandParser
@@ -27,44 +30,71 @@ activate MarkAllAttendanceCommandParser
 MarkAllAttendanceCommandParser --> AddressBookParser
 deactivate MarkAllAttendanceCommandParser
 
+' Start parsing
 AddressBookParser -> MarkAllAttendanceCommandParser : parse("g/T01 w/3 status/present")
 activate MarkAllAttendanceCommandParser
 
-create MarkAllAttendanceCommand
-MarkAllAttendanceCommandParser -> MarkAllAttendanceCommand
-activate MarkAllAttendanceCommand
+' === Create value objects ===
+create GroupId
+MarkAllAttendanceCommandParser -> GroupId : new GroupId("T01")
+activate GroupId
+GroupId --> MarkAllAttendanceCommandParser
+deactivate GroupId
 
-MarkAllAttendanceCommand --> MarkAllAttendanceCommandParser :
-deactivate MarkAllAttendanceCommand
+create AttendanceStatus
+MarkAllAttendanceCommandParser -> AttendanceStatus : AttendanceStatus.fromString("present")
+activate AttendanceStatus
+AttendanceStatus --> MarkAllAttendanceCommandParser
+deactivate AttendanceStatus
 
-MarkAllAttendanceCommandParser --> AddressBookParser : d
-deactivate MarkAllAttendanceCommandParser
-'Hidden arrow to position the destroy marker below the end of the activation bar.
-MarkAllAttendanceCommandParser -[hidden]-> AddressBookParser
-destroy MarkAllAttendanceCommandParser
+alt valid arguments
+    create MarkAllAttendanceCommand
+    MarkAllAttendanceCommandParser -> MarkAllAttendanceCommand : new MarkAllAttendanceCommand(GroupId, 3, AttendanceStatus)
+    activate MarkAllAttendanceCommand
+    MarkAllAttendanceCommand --> MarkAllAttendanceCommandParser
+    deactivate MarkAllAttendanceCommand
 
-AddressBookParser --> LogicManager : d
-deactivate AddressBookParser
+    MarkAllAttendanceCommandParser --> AddressBookParser : d
+    deactivate MarkAllAttendanceCommandParser
+    'Hidden arrow to position destroy marker correctly
+    MarkAllAttendanceCommandParser -[hidden]-> AddressBookParser
+    destroy MarkAllAttendanceCommandParser
 
-LogicManager -> MarkAllAttendanceCommand : execute(m)
-activate MarkAllAttendanceCommand
+    AddressBookParser --> LogicManager : d
+    deactivate AddressBookParser
 
-MarkAllAttendanceCommand -> Model : markAllAttendance(T01, 3, present))
-activate Model
+    ' === Execute command ===
+    LogicManager -> MarkAllAttendanceCommand : execute(m)
+    activate MarkAllAttendanceCommand
 
-Model --> MarkAllAttendanceCommand
-deactivate Model
+    MarkAllAttendanceCommand -> Model : markAllAttendance(GroupId, 3, AttendanceStatus)
+    activate Model
+    Model --> MarkAllAttendanceCommand
+    deactivate Model
 
-create CommandResult
-MarkAllAttendanceCommand -> CommandResult
-activate CommandResult
+    create CommandResult
+    MarkAllAttendanceCommand -> CommandResult : new CommandResult("Marked attendance for Group T01: present in week 3.")
+    activate CommandResult
+    CommandResult --> MarkAllAttendanceCommand
+    deactivate CommandResult
 
-CommandResult --> MarkAllAttendanceCommand
-deactivate CommandResult
+    MarkAllAttendanceCommand --> LogicManager : r
+    deactivate MarkAllAttendanceCommand
+else invalid / missing arguments
+    MarkAllAttendanceCommandParser --> AddressBookParser : throws ParseException(errorMessage)
+    deactivate MarkAllAttendanceCommandParser
 
-MarkAllAttendanceCommand --> LogicManager : r
-deactivate MarkAllAttendanceCommand
+    AddressBookParser --> LogicManager : throws ParseException(errorMessage)
+    deactivate AddressBookParser
+
+    create CommandResult
+    LogicManager -> CommandResult : new CommandResult("Invalid command format\n" + errorMessage)
+    activate CommandResult
+    CommandResult --> LogicManager : r
+    deactivate CommandResult
+end
 
 [<--LogicManager
 deactivate LogicManager
+
 @enduml

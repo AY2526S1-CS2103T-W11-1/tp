@@ -12,14 +12,17 @@ end box
 
 box Model MODEL_COLOR_T1
 participant "m:Model" as Model MODEL_COLOR
+participant ":Nusnetid" as Nusnetid MODEL_COLOR
+participant ":AttendanceStatus" as AttendanceStatus MODEL_COLOR
 end box
 
-[-> LogicManager : execute("mark_attendance i/e1234567 w/3 status/present")
-activate LogicManager
+[-> LogicManager : execute("mark_attendance i/E1234567 w/3 status/present")
 
-LogicManager -> AddressBookParser : parseCommand("mark_attendance i/e1234567 w/3 status/present")
+LogicManager -> AddressBookParser : parseCommand("mark_attendance i/E1234567 w/3 status/present")
+activate LogicManager
 activate AddressBookParser
 
+' Create command parser
 create MarkAttendanceCommandParser
 AddressBookParser -> MarkAttendanceCommandParser
 activate MarkAttendanceCommandParser
@@ -27,44 +30,71 @@ activate MarkAttendanceCommandParser
 MarkAttendanceCommandParser --> AddressBookParser
 deactivate MarkAttendanceCommandParser
 
-AddressBookParser -> MarkAttendanceCommandParser : parse("i/e1234567 w/3 status/present")
+' Start parsing
+AddressBookParser -> MarkAttendanceCommandParser : parse("i/E1234567 w/3 status/present")
 activate MarkAttendanceCommandParser
 
-create MarkAttendanceCommand
-MarkAttendanceCommandParser -> MarkAttendanceCommand
-activate MarkAttendanceCommand
+' === Create value objects ===
+create Nusnetid
+MarkAttendanceCommandParser -> Nusnetid : new Nusnetid("E1234567")
+activate Nusnetid
+Nusnetid --> MarkAttendanceCommandParser
+deactivate Nusnetid
 
-MarkAttendanceCommand --> MarkAttendanceCommandParser :
-deactivate MarkAttendanceCommand
+create AttendanceStatus
+MarkAttendanceCommandParser -> AttendanceStatus : AttendanceStatus.fromString("present")
+activate AttendanceStatus
+AttendanceStatus --> MarkAttendanceCommandParser
+deactivate AttendanceStatus
 
-MarkAttendanceCommandParser --> AddressBookParser : d
-deactivate MarkAttendanceCommandParser
-'Hidden arrow to position the destroy marker below the end of the activation bar.
-MarkAttendanceCommandParser -[hidden]-> AddressBookParser
-destroy MarkAttendanceCommandParser
+alt valid arguments
+    create MarkAttendanceCommand
+    MarkAttendanceCommandParser -> MarkAttendanceCommand : new MarkAttendanceCommand(Nusnetid, 3, AttendanceStatus)
+    activate MarkAttendanceCommand
+    MarkAttendanceCommand --> MarkAttendanceCommandParser
+    deactivate MarkAttendanceCommand
 
-AddressBookParser --> LogicManager : d
-deactivate AddressBookParser
+    MarkAttendanceCommandParser --> AddressBookParser : d
+    deactivate MarkAttendanceCommandParser
+    ' Hidden arrow for destroy marker alignment
+    MarkAttendanceCommandParser -[hidden]-> AddressBookParser
+    destroy MarkAttendanceCommandParser
 
-LogicManager -> MarkAttendanceCommand : execute(m)
-activate MarkAttendanceCommand
+    AddressBookParser --> LogicManager : d
+    deactivate AddressBookParser
 
-MarkAttendanceCommand -> Model : markAttendance(E1234567, 3, present))
-activate Model
+    ' === Execute command ===
+    LogicManager -> MarkAttendanceCommand : execute(m)
+    activate MarkAttendanceCommand
 
-Model --> MarkAttendanceCommand
-deactivate Model
+    MarkAttendanceCommand -> Model : markAttendance(Nusnetid, 3, AttendanceStatus)
+    activate Model
+    Model --> MarkAttendanceCommand
+    deactivate Model
 
-create CommandResult
-MarkAttendanceCommand -> CommandResult
-activate CommandResult
+    create CommandResult
+    MarkAttendanceCommand -> CommandResult : new CommandResult("Marked attendance for John: present in week 3.")
+    activate CommandResult
+    CommandResult --> MarkAttendanceCommand
+    deactivate CommandResult
 
-CommandResult --> MarkAttendanceCommand
-deactivate CommandResult
+    MarkAttendanceCommand --> LogicManager : r
+    deactivate MarkAttendanceCommand
+else invalid / missing arguments
+    MarkAttendanceCommandParser --> AddressBookParser : throws ParseException(errorMessage)
+    deactivate MarkAttendanceCommandParser
 
-MarkAttendanceCommand --> LogicManager : r
-deactivate MarkAttendanceCommand
+    AddressBookParser --> LogicManager : throws ParseException(errorMessage)
+    deactivate AddressBookParser
+
+    create CommandResult
+    LogicManager -> CommandResult : new CommandResult("Invalid command format\n" + errorMessage)
+    activate CommandResult
+    CommandResult --> LogicManager : r
+    deactivate CommandResult
+end
 
 [<--LogicManager
 deactivate LogicManager
+
 @enduml
