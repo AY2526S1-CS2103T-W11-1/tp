@@ -50,6 +50,8 @@ package "seedu.address.model" {
     + deleteConsultationFromPerson(Nusnetid) : Consultation
     + addGroup(Group)
     + getGroupList() : List<Group>
+    + markAttendance(Nusnetid, AttendanceStatus)
+    + markAllAttendance(GroupId, int, AttendanceStatus)
   }
 
   class ModelManager {

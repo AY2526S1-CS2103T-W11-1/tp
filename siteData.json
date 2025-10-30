@@ -55,6 +55,8 @@
         "add-homework-feature": "Add Homework Feature",
         "delete-homework-feature": "Delete Homework Feature",
         "mark-homework-feature": "Mark Homework Feature",
+        "mark-attendance-feature": "Mark Attendance Feature",
+        "mark-all-attendance-feature": "Mark All Attendance Feature",
         "documentation-logging-testing-configuration-dev-ops": "Documentation, logging, testing, configuration, dev-ops",
         "appendix-requirements": "Appendix: Requirements",
         "product-scope": "Product scope",
