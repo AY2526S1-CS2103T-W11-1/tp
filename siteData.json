@@ -52,7 +52,9 @@
         "common-classes": "Common classes",
         "implementation": "Implementation",
         "proposed-undo-redo-feature": "[Proposed] Undo/redo feature",
-        "proposed-data-archiving": "[Proposed] Data archiving",
+        "add-homework-feature": "Add Homework Feature",
+        "delete-homework-feature": "Delete Homework Feature",
+        "mark-homework-feature": "Mark Homework Feature",
         "documentation-logging-testing-configuration-dev-ops": "Documentation, logging, testing, configuration, dev-ops",
         "appendix-requirements": "Appendix: Requirements",
         "product-scope": "Product scope",
@@ -150,7 +152,7 @@
       "src": "index.md",
       "title": "",
       "headings": {
-        "addressbook-level-3": "AddressBook Level-3"
+        "soctassist": "SoCTAssist"
       },
       "headingKeywords": {}
     },
