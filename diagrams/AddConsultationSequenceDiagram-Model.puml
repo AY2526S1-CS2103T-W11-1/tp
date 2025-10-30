@@ -1,0 +1,55 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant ":AddressBook" as AddressBook MODEL_COLOR
+participant ":UniquePersonList" as UniquePersonList MODEL_COLOR
+participant ":Person" as Person MODEL_COLOR
+participant ":UniqueConsultationList" as UniqueConsultationList MODEL_COLOR
+end box
+
+[-> Model : addConsultationToPerson(nusnetid, consultation)
+activate Model
+
+Model -> AddressBook : addConsultationToPerson(nusnetid, consultation)
+activate AddressBook
+
+AddressBook -> UniquePersonList : addConsultationToPerson(nusnetid, consultation)
+activate UniquePersonList
+
+UniquePersonList -> Person : addConsultation(consultation)
+activate Person
+
+Person --> UniquePersonList
+deactivate Person
+
+UniquePersonList --> AddressBook
+deactivate UniquePersonList
+
+AddressBook --> Model
+deactivate AddressBook
+
+[<-- Model
+deactivate Model
+
+[-> Model : addConsultation(consultation)
+activate Model
+
+Model -> AddressBook : addConsultation(consultation)
+activate AddressBook
+
+AddressBook -> UniqueConsultationList : add(consultation)
+activate UniqueConsultationList
+
+UniqueConsultationList --> AddressBook
+deactivate UniqueConsultationList
+
+AddressBook --> Model
+deactivate AddressBook
+
+[<-- Model
+deactivate Model
+
+@enduml
