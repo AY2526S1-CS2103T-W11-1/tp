@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -122,12 +123,18 @@ public class ParserUtil {
         requireNonNull(input);
         String trimmedInput = input.trim();
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HHmm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd HHmm")
+                    .withResolverStyle(ResolverStyle.STRICT);
             LocalDateTime dateTime = LocalDateTime.parse(trimmedInput, formatter);
             return dateTime;
         } catch (DateTimeParseException e) {
-            throw new ParseException(
-                    "Invalid date & time format. Please use yyyyMMdd HHmm format! (Eg. 20251010 1800)");
+            String errorMessage = e.getMessage().toLowerCase();
+            if (errorMessage.contains("invalid")) { // Invalid date or time (e.g., 30 Feb, Month 13, Hour 25)
+                throw new ParseException("Invalid date or time. Please ensure the date exists and time is valid!");
+            } else { // Wrong format
+                throw new ParseException(
+                        "Incorrect date & time format. Please use yyyyMMdd HHmm format! (Eg. 20251010 1800)");
+            }
         }
     }
     /**

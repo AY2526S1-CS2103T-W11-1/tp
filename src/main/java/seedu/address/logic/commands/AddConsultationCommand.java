@@ -5,6 +5,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_FROM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NUSNETID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TO;
 
+import java.time.Duration;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -34,6 +36,8 @@ public class AddConsultationCommand extends Command {
     public static final String MESSAGE_STUDENT_DOES_NOT_EXIST = "Student does not exist";
     public static final String MESSAGE_STUDENT_ALREADY_HAS_CONSULTATION =
             "Student already has a scheduled consultation";
+    public static final String MESSAGE_CONSULTATION_DURATION_TOO_LONG =
+            "Friendly reminder: Consultation duration exceeds 3 hours!";
 
     private final Consultation toAdd;
 
@@ -63,7 +67,12 @@ public class AddConsultationCommand extends Command {
         }
 
         model.addConsultation(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)), false, false, true);
+        if (Duration.between(toAdd.getFrom(), toAdd.getTo()).toHours() > 3) {
+            return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)) + "\n"
+                    + MESSAGE_CONSULTATION_DURATION_TOO_LONG, false, false, true);
+        } else {
+            return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)), false, false, true);
+        }
     }
 
     @Override
