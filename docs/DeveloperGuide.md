@@ -492,13 +492,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2c. Group ID format is invalid.
 
-    * 2d1. AddressBook shows error message: `Invaid Group ID`.
+    * 2c1. AddressBook shows error message: `Invaid Group ID`.
 
         Use case ends.
 
 * 2d. A student with the same nusnetid already exists.
 
-    * 2e1. AddressBook shows error: `Student with this nusnetid already exists`.
+    * 2d1. AddressBook shows error: `This person already exists in the address book.`.
 
        Use case ends.
 
@@ -527,7 +527,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2b. Any updated field is invalid.
 
-    * 2c1. AddressBook shows corresponding validation error. (UC01 Extensions 2b, 2c).
+    * 2b1. AddressBook shows corresponding validation error. (UC01 Extensions 2b, 2c).
 
       Use case ends.
 
@@ -552,6 +552,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 5. AddressBook UI updated.
     Use case ends.
+
+**Extensions**
+* 1a. The list is empty.
+    * 1a1. AddressBook shows error: `The student list is empty.`
+
+      Use case ends.    
+* 3a. Student index does not exist.
+    * 3a1. AddressBook shows error: `The person index provided is invalid`.
+  
+    Use case ends.
+* 3b. Student index is invalid (not a number or is not positive).
+    * 3b1. AddressBook shows error: `Invalid command format!`.
+
+      Use case ends.
 
 **Use Case:** UC04 - Create Homework
 **Actor**: TA

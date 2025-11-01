@@ -12,7 +12,7 @@ public class Phone {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Phone numbers must be 3–30 digits and may optionally start with a '+' country code, "
-                    + "for example +6580000000.";
+                    + "and only accept single phone number, for example +6580000000.";
     // Optional leading '+' followed by 3 to 30 digits
     public static final String VALIDATION_REGEX = "^\\+?\\d{3,30}$";
     public final String value;

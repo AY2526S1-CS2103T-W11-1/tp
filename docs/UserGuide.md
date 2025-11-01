@@ -96,13 +96,10 @@ done faster than traditional Graphical User Interface(GUI) apps while still havi
 
 ## Parameter Constraints
 
-  * Name: May contain letters (including accents), digits, spaces, and quotes (\" and '), must not be blank, and must not contain '/' because '/' is used to identify different fields. e.g. `John Doe`.
+  * Name: May contain letters (including accents), digits, spaces, and quotes (\" and '), must not be blank, and must not contain '/' because '/' is used to identify different fields. And the name is at most 70 characters long. e.g. `John Doe`.
   * NUSNET ID: An `E` (case-insensitive) followed by 7 digits, e.g. `E1234567`.
-
   * Telegram handle: Starts with `@` followed by at least 1 alphanumeric characters (underscores allowed), e.g. `@john_doe123`.
-
-  * Phone number: A string of 3 to 30 digits can start with + to indicate country code, e.g. `+6598765432`.
-
+  * Phone number: A string of 3 to 30 digits can start with + to indicate country code, and only accept single phone number, e.g. `+6598765432`.
   * Email: A valid NUS email address in the format `localdomain@u.nus.edu`, e.g. `e1234567@u.nus.edu`.
   * Group ID: Starts with `T` or `B` (case-insensitive) followed by exactly two digits, e.g., `T01`, `B04`.
   * Assignment number: A positive integer between 1 to 3.
