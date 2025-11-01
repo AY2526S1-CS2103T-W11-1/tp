@@ -13,8 +13,6 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Group;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.event.Consultation;
-import seedu.address.model.person.GroupId;
-import seedu.address.model.person.Nusnetid;
 import seedu.address.model.person.Person;
 
 /**
@@ -84,6 +82,13 @@ class JsonSerializableAddressBook {
             if (addressBook.hasPerson(person)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
             }
+            if (addressBook.hasGroup(person.getGroupId())) {
+                addressBook.getGroup(person.getGroupId()).addStudent(person);
+            } else {
+                Group newGroup = new Group(person.getGroupId());
+                newGroup.addStudent(person);
+                addressBook.addGroup(newGroup);
+            }
             addressBook.addPerson(person);
         }
         // Convert and add all consultations
@@ -94,6 +99,7 @@ class JsonSerializableAddressBook {
             }
             addressBook.addConsultation(consultation);
         }
+        /*
         // Convert and add all groups after students have been added so that
         // we can validate that each nus net id in group refers to an existing student
         List<Group> modelGroups = new ArrayList<>();
@@ -132,6 +138,7 @@ class JsonSerializableAddressBook {
             throw new IllegalValueException(MESSAGE_DUPLICATE_GROUP);
         }
         addressBook.setGroupList(modelGroups);
+         */
         // no need to check every student is in one existing group only
         // if the group is not found, addPerson will auto create in model
         // if a student is in multiple groups, the group addition will fail

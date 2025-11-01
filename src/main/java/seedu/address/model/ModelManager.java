@@ -197,6 +197,7 @@ public class ModelManager implements Model {
                targetStudent.getConsultation());
 
         setPerson(targetStudent, updatedStudent);
+        this.getGroup(targetStudent.getGroupId()).setPerson(targetStudent, updatedStudent);
         Predicate<Person> predicate = person -> true;
         updateFilteredPersonList(predicate);
         return updatedStudent;
@@ -426,7 +427,9 @@ public class ModelManager implements Model {
                             assignmentId, target.getName().fullName));
         }
 
-        setPerson(target, target.withUpdatedHomework(assignmentId, status));
+        Person updatedPerson = target.withUpdatedHomework(assignmentId, status);
+        setPerson(target, updatedPerson);
+        this.getGroup(target.getGroupId()).setPerson(target, updatedPerson);
     }
 
     /**

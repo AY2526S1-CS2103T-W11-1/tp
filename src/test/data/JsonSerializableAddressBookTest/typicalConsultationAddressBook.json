@@ -1,0 +1,85 @@
+{
+  "persons" : [ {
+    "name" : "John Doe",
+    "phone" : null,
+    "email" : null,
+    "nusnetid" : "E1234563",
+    "groupId" : "T01",
+    "telegram" : "@johndoe",
+    "homework" : {
+      "1" : {
+        "id" : 1,
+        "status" : "incomplete"
+      }
+    },
+    "attendanceSheet" : [ {
+      "week" : 3,
+      "status" : "present"
+    }, {
+      "week" : 5,
+      "status" : "absent"
+    }, {
+      "week" : 2,
+      "status" : "present"
+    }, {
+      "week" : 4,
+      "status" : "present"
+    }, {
+      "week" : 6,
+      "status" : "present"
+    } ],
+    "consultationStart" : "20240915 1400",
+    "consultationEnd" : "20240915 1500"
+  }, {
+    "name" : "Chuck Henz",
+    "phone" : "98765432",
+    "email" : "johndoe@u.nus.edu",
+    "nusnetid" : "E1234566",
+    "groupId" : "B06",
+    "telegram" : "@joh",
+    "homework" : {
+      "1" : {
+        "id" : 1,
+        "status" : "complete"
+      }
+    },
+    "attendanceSheet" : [ {
+      "week" : 7,
+      "status" : "excused"
+    } ],
+    "consultationStart" : "",
+    "consultationEnd" : ""
+  }, {
+    "name" : "Seb Yuu",
+    "phone" : "98765532",
+    "email" : "seb@u.nus.edu",
+    "nusnetid" : "E1234569",
+    "groupId" : "T01",
+    "telegram" : "@seb-yuu",
+    "homework" : { },
+    "attendanceSheet" : [ {
+      "week" : 2,
+      "status" : "present"
+    }, {
+      "week" : 4,
+      "status" : "present"
+    }, {
+      "week" : 6,
+      "status" : "present"
+    } ],
+    "consultationStart" : "",
+    "consultationEnd" : ""
+  } ],
+  "consultations" : [ {
+    "nusnetId" : "E1234563",
+    "from" : "20240915 1400",
+    "to" : "20240915 1500"
+  } ],
+  "groups" : [ {
+    "groupId" : "T01",
+    "studentNusnetids" : [ "E1234563", "E1234569" ]
+  }, {
+    "groupId" : "B06",
+    "studentNusnetids" : [ "E1234566" ]
+  } ]
+}

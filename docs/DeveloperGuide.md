@@ -633,9 +633,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 4. Homework Tracker removes the corresponding homework record from the student’s tracker.  
 5. Homework Tracker shows a confirmation message.  
 
-   Use case ends.  
-
----
+   Use case ends.
 
 **Extensions**
 
