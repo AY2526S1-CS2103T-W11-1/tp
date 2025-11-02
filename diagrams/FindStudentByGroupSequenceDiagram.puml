@@ -7,9 +7,7 @@ participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":FindGroupCommandParser" as FindGroupCommandParser LOGIC_COLOR
 participant "d:FindGroupCommand" as FindGroupCommand LOGIC_COLOR
-participant "newGroup:Group" as Group LOGIC_COLOR
 participant "r:CommandResult" as CommandResultSuccess LOGIC_COLOR
-participant "r:CommandResult" as CommandResultFail LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
@@ -51,7 +49,6 @@ deactivate AddressBookParser
 LogicManager -> FindGroupCommand : execute(m)
 activate FindGroupCommand
 
-alt Group exists in Model
 FindGroupCommand -> Model : updateFilteredPersonList(predicate))
 activate Model
 
@@ -63,19 +60,6 @@ FindGroupCommand -> CommandResultSuccess
 activate CommandResultSuccess
 CommandResultSuccess --> FindGroupCommand
 deactivate CommandResultSuccess
-
-else Group does not exist in Model
-
-create CommandResultFail
-FindGroupCommand -> CommandResultFail
-activate CommandResultFail
-
-CommandResultFail --> FindGroupCommand
-deactivate CommandResultFail
-
-FindGroupCommand --> LogicManager : r
-deactivate FindGroupCommand
-end
 
 [<--LogicManager
 deactivate LogicManager
