@@ -50,12 +50,14 @@ public class Telegram {
         }
 
         Telegram otherTelegram = (Telegram) other;
-        return value.equals(otherTelegram.value);
+        // Case-insensitive comparison so that handles differing only by case are considered equal
+        return value.equalsIgnoreCase(otherTelegram.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        // Ensure consistency with equals by hashing lower-cased value
+        return value.toLowerCase().hashCode();
     }
 
 }

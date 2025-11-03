@@ -16,25 +16,29 @@ import seedu.address.commons.core.LogsCenter;
 public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://ay2526s1-cs2103t-w11-1.github.io/tp/UserGuide.html";
-    public static final String COMMAND_SYNTAX = "here is the list of all command syntax:\n"
-            + "- add_student: add_student n/NAME i/NUSNETID t/TELEGRAM g/GROUPID [p/PHONE] [e/EMAIL]\n"
-            + "- edit_student: edit_student INDEX [n/NAME] [i/NUSNETID] [t/TELEGRAM] [g/GROUPID] [p/PHONE] [e/EMAIL]\n"
-            + "- delete: delete INDEX\n"
-            + "- clear: clear\n"
-            + "- find: find KEYWORD \n"
-            + "- list: list\n"
-            + "- help: help\n"
-            + "- exit: exit\n"
-            + "- add_hw: add_hw i/NETID a/ASSIGNMENT_ID or all a/ASSIGNMENT_ID\n"
-            + "- mark_hw: mark_hw i/NUSNETID a/ASSIGNMENT_ID status/complete|incomplete|late\n"
-            + "- delete_hw: delete_hw i/NUSNETID a/ASSIGNMENT_ID\n"
-            + "- mark_attendance: mark_attendance i/NUSNETID w/WEEK STATUS(present|absent|excused)\n"
-            + "- mark_all_attendance: mark_all_attendance g/GROUP w/WEEK STATUS(present|absent|excused)\n"
-            + "- create_group: create_group g/GROUPID\n"
-            + "- add_consult: add_consult i/NUSNETID from/START_TIME to/END_TIME\n"
-            + "- delete_consult: delete_consult i/NUSNETID\n";
+    public static final String COMMAND_SYNTAX = "Here is the list of all command syntax:\n"
+            + "- display help message: help\n"
+            + "- list students: list\n"
+            + "- list consultations: list_consult\n"
+            + "- add student: add_student n/NAME i/NUSNETID t/TELEGRAM g/GROUPID [p/PHONE] [e/EMAIL]\n"
+            + "- edit student: edit_student INDEX [n/NAME] [i/NUSNETID] [t/TELEGRAM] [g/GROUPID] [p/PHONE] [e/EMAIL]\n"
+            + "- delete student: delete INDEX\n"
+            + "- find student by name: find KEYWORD \n"
+            + "- add homework: add_hw i/NETID a/ASSIGNMENT_ID or add_hw i/all a/ASSIGNMENT_ID\n"
+            + "- mark homework: mark_hw i/NUSNETID a/ASSIGNMENT_ID status/complete|incomplete|late\n"
+            + "- delete homework: delete_hw i/NUSNETID a/ASSIGNMENT_ID or delete_hw i/all a/ASSIGNMENT_ID\n"
+            + "- mark attendance: mark_attendance i/NUSNETID w/WEEK status/ATTENDANCE_STATUS(present|absent|excused)\n"
+            + "- mark attendance for all: mark_all_attendance g/GROUP w/WEEK "
+            + "status/ATTENDANCE_STATUS(present|absent|excused)\n"
+            + "- add consultation: add_consult i/NUSNETID from/START_TIME to/END_TIME\n"
+            + "- delete consultation: delete_consult i/NUSNETID\n"
+            + "- create group: create_group g/GROUPID\n"
+            + "- add student to group: add_to_group i/NUSNETID g/GROUPID\n"
+            + "- find students by group: find_group g/GROUPID\n"
+            + "- clear all entries: clear\n"
+            + "- exit: exit\n";
 
-    public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL + "\n" + COMMAND_SYNTAX;
+    public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL + "\n\n" + COMMAND_SYNTAX;
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";

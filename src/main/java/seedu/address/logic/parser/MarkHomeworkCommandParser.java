@@ -17,7 +17,7 @@ import seedu.address.model.person.Nusnetid;
  * <pre>{@code
  * i/<nusnetId> a/<assignmentId> status/<complete|incomplete|late>
  * }</pre>
- * Assignment IDs must be integers between 0 and 2, and the status must be one of
+ * Homework IDs must be integers between 0 and 2, and the status must be one of
  * "complete", "incomplete", or "late".
  * </p>
  *
@@ -35,6 +35,11 @@ public class MarkHomeworkCommandParser implements Parser<MarkHomeworkCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 PREFIX_NUSNETID, PREFIX_ASSIGNMENT, PREFIX_STATUS);
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NUSNETID, PREFIX_ASSIGNMENT, PREFIX_STATUS);
+
+        if (!arePrefixesPresent(argMultimap, PREFIX_NUSNETID, PREFIX_ASSIGNMENT, PREFIX_STATUS)
+                || !argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkHomeworkCommand.MESSAGE_USAGE));
+        }
 
         String nusnetIdRaw = argMultimap.getValue(PREFIX_NUSNETID)
                 .orElseThrow(() -> new ParseException(
@@ -55,10 +60,10 @@ public class MarkHomeworkCommandParser implements Parser<MarkHomeworkCommand> {
         try {
             assignmentId = Integer.parseInt(assignmentRaw);
         } catch (NumberFormatException e) {
-            throw new ParseException("Assignment id must be an integer between 1 and 3.");
+            throw new ParseException("Homework id must be an integer between 1 and 13.");
         }
-        if (assignmentId < 1 || assignmentId > 3) {
-            throw new ParseException("Assignment id must be between 1 and 3.");
+        if (assignmentId < 1 || assignmentId > 13) {
+            throw new ParseException("Homework id must be between 1 and 13.");
         }
 
         String status = argMultimap.getValue(PREFIX_STATUS)
@@ -71,5 +76,14 @@ public class MarkHomeworkCommandParser implements Parser<MarkHomeworkCommand> {
         }
 
         return new MarkHomeworkCommand(nusnetId, assignmentId, status);
+    }
+
+    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        for (Prefix prefix : prefixes) {
+            if (argumentMultimap.getValue(prefix).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

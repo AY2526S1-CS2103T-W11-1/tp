@@ -21,8 +21,20 @@ public class DeleteHomeworkCommandTest {
     public void setUp() {
         model = new ModelManager();
         // Add sample students
-        Person alice = new PersonBuilder().withNusnetid("E1234567").withName("Alice").build();
-        Person bob = new PersonBuilder().withNusnetid("E1234568").withName("Bob").build();
+        Person alice = new PersonBuilder()
+                .withNusnetid("E1234567")
+                .withName("Alice")
+                .withTelegram("@alice")
+                .withPhone(null)
+                .withEmail(null)
+                .build();
+        Person bob = new PersonBuilder()
+                .withNusnetid("E1234568")
+                .withName("Bob")
+                .withTelegram("@bob")
+                .withPhone(null)
+                .withEmail(null)
+                .build();
         model.addPerson(alice);
         model.addPerson(bob);
 

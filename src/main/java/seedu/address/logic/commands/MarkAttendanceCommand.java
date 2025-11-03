@@ -5,19 +5,15 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NUSNETID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_WEEK;
 
-import java.util.List;
-import java.util.function.Predicate;
-
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Attendance;
-import seedu.address.model.person.AttendanceSheet;
 import seedu.address.model.person.AttendanceStatus;
+import seedu.address.model.person.Nusnetid;
 import seedu.address.model.person.Person;
 
 /**
  * Marks a student's attendance status.
- * This command updates the attendance status for a specific week for a student identified by their NUSNET ID.
+ * This command updates the attendance status for a specific week for a student identified by their NUSNETID.
  * Valid statuses are "present", "absent", or "excused".
  * </p>
  *
@@ -30,21 +26,21 @@ import seedu.address.model.person.Person;
 public class MarkAttendanceCommand extends Command {
     public static final String COMMAND_WORD = "mark_attendance";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the attendance of a person identified "
-            + "by their index number in the displayed person list. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the attendance of a student identified "
+            + "by their their NUSNETID. "
             + "Parameters: i/<NET id> w/<week> status/<present|absent|excused> \n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_NUSNETID + "E1234567" + PREFIX_WEEK + "3"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_NUSNETID + "E1234567 " + PREFIX_WEEK + "3 "
             + PREFIX_STATUS + "present";
 
     public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Marked attendance for %1$s: %2$s in week %3$d.";
     public static final String MESSAGE_STUDENT_NOT_FOUND = "Student not found.";
-    public static final String MESSAGE_INVALID_WEEK = "Invalid Week.";
+    public static final String MESSAGE_INVALID_WEEK = "Invalid Week. "
+          + "Week should be between 2 and 13 and be a positive integer.";
     public static final String MESSAGE_INVALID_STATUS = "Please enter present/absent/excused only.";
-    public static final String MESSAGE_MISSING_FIELD = "Missing required field: %s.";
 
-    private final String nusnetId;
+    private final Nusnetid nusnetId;
     private final int week;
-    private final String attendanceStatus;
+    private final AttendanceStatus attendanceStatus;
 
 
     /**
@@ -54,7 +50,7 @@ public class MarkAttendanceCommand extends Command {
      * @param week the week number to update
      * @param attendanceStatus the new attendance status ("present", "absent", or "excused")
      */
-    public MarkAttendanceCommand(String nusnetId, int week, String attendanceStatus) {
+    public MarkAttendanceCommand(Nusnetid nusnetId, int week, AttendanceStatus attendanceStatus) {
         this.week = week;
         this.nusnetId = nusnetId;
         this.attendanceStatus = attendanceStatus;
@@ -63,45 +59,12 @@ public class MarkAttendanceCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (week < 2 || week > 13) {
-            throw new CommandException(MESSAGE_INVALID_WEEK);
-        }
-        AttendanceStatus status = AttendanceStatus.fromString(attendanceStatus);
-        List<Person> list = model.getAddressBook().getUniquePersonList();
-        Person targetStudent = list.stream()
-                .filter(student -> student.getNusnetid().value.equalsIgnoreCase(nusnetId))
-                .findFirst()
-                .orElse(null);
-        if (targetStudent == null) {
+        if (!model.hasPerson(nusnetId)) {
             throw new CommandException(MESSAGE_STUDENT_NOT_FOUND);
         }
-
-        if (status == null) {
-            throw new CommandException(MESSAGE_INVALID_STATUS);
-        }
-
-        AttendanceSheet updatedSheet = new AttendanceSheet();
-        for (Attendance attendance : targetStudent.getAttendanceSheet().getAttendanceList()) {
-            updatedSheet.markAttendance(attendance.getWeek(), attendance.getAttendanceStatus());
-        }
-        updatedSheet.markAttendance(week, status);
-
-        Person updatedStudent = new Person(
-                targetStudent.getName(),
-                targetStudent.getPhone(),
-                targetStudent.getEmail(),
-                targetStudent.getNusnetid(),
-                targetStudent.getTelegram(),
-                targetStudent.getGroupId(),
-                targetStudent.getHomeworkTracker(),
-                updatedSheet,
-                targetStudent.getConsultation());
-
-        model.setPerson(targetStudent, updatedStudent);
-        Predicate<Person> predicate = person -> true;
-        model.updateFilteredPersonList(predicate);
+        Person updatedStudent = model.markAttendance(this.nusnetId, this.week, attendanceStatus);
         return new CommandResult(String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
-                updatedStudent.getName(), status.getStatus(), week));
+                updatedStudent.getName(), attendanceStatus.getStatus(), week));
     }
     @Override
     public boolean equals(Object other) {

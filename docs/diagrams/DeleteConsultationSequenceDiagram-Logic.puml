@@ -1,0 +1,84 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":DeleteConsultationCommandParser" as DeleteConsultationCommandParser LOGIC_COLOR
+participant "d:DeleteConsultationCommand" as DeleteConsultationCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant "n:Nusnetid" as Nusnetid MODEL_COLOR
+end box
+
+[-> LogicManager : execute("delete_consult i/E1234567")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("delete_consult i/E1234567")
+activate AddressBookParser
+
+create DeleteConsultationCommandParser
+AddressBookParser -> DeleteConsultationCommandParser
+activate DeleteConsultationCommandParser
+
+DeleteConsultationCommandParser --> AddressBookParser
+deactivate DeleteConsultationCommandParser
+
+AddressBookParser -> DeleteConsultationCommandParser : parse("i/E1234567")
+activate DeleteConsultationCommandParser
+
+create Nusnetid
+DeleteConsultationCommandParser -> Nusnetid
+activate Nusnetid
+
+Nusnetid --> DeleteConsultationCommandParser
+deactivate Nusnetid
+
+create DeleteConsultationCommand
+DeleteConsultationCommandParser -> DeleteConsultationCommand : new DeleteConsultationCommand(n)
+activate DeleteConsultationCommand
+
+DeleteConsultationCommand --> DeleteConsultationCommandParser :
+deactivate DeleteConsultationCommand
+
+DeleteConsultationCommandParser --> AddressBookParser : d
+deactivate DeleteConsultationCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+DeleteConsultationCommandParser -[hidden]-> AddressBookParser
+destroy DeleteConsultationCommandParser
+
+AddressBookParser --> LogicManager : d
+deactivate AddressBookParser
+
+LogicManager -> DeleteConsultationCommand : execute(m)
+activate DeleteConsultationCommand
+
+DeleteConsultationCommand -> Model : deleteConsultationFromPerson(n)
+activate Model
+
+Model --> DeleteConsultationCommand : deletedConsultation
+deactivate Model
+
+DeleteConsultationCommand -> Model : deleteConsultation(deletedConsultation)
+activate Model
+
+Model --> DeleteConsultationCommand
+deactivate Model
+
+create CommandResult
+DeleteConsultationCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> DeleteConsultationCommand
+deactivate CommandResult
+
+DeleteConsultationCommand --> LogicManager : r
+deactivate DeleteConsultationCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

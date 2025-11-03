@@ -9,7 +9,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Email {
 
-    private static final String SPECIAL_CHARACTERS = "+_.-";
+    private static final String SPECIAL_CHARACTERS = "+_.'-";
     public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format local-part@domain "
             + "and adhere to the following constraints:\n"
             + "1. The local-part should only contain alphanumeric characters and these special characters, excluding "
@@ -60,12 +60,14 @@ public class Email {
         }
 
         Email otherEmail = (Email) other;
-        return value.equals(otherEmail.value);
+        // Case-insensitive comparison to treat emails equivalently regardless of case
+        return value.equalsIgnoreCase(otherEmail.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        // Ensure consistency with equals by hashing lower-cased value
+        return value.toLowerCase().hashCode();
     }
 
 }

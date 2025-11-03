@@ -34,4 +34,3 @@ public class AddToGroupCommandParser implements Parser<AddToGroupCommand> {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }
-

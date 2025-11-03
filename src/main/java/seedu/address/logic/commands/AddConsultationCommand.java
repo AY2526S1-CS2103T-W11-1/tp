@@ -5,6 +5,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_FROM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NUSNETID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TO;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -18,7 +21,7 @@ public class AddConsultationCommand extends Command {
 
     public static final String COMMAND_WORD = "add_consult";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a consultation slot to the address book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a consultation to the address book. "
             + "Parameters: "
             + PREFIX_NUSNETID + "NUSNETID "
             + PREFIX_FROM + "CONSULTATION START TIME "
@@ -34,6 +37,10 @@ public class AddConsultationCommand extends Command {
     public static final String MESSAGE_STUDENT_DOES_NOT_EXIST = "Student does not exist";
     public static final String MESSAGE_STUDENT_ALREADY_HAS_CONSULTATION =
             "Student already has a scheduled consultation";
+    public static final String MESSAGE_CONSULTATION_DURATION_TOO_LONG =
+            "Friendly reminder: Consultation duration exceeds 3 hours!";
+    public static final String MESSAGE_CONSULTATION_IS_OVER = "Friendly reminder: Consultation has ended!";
+    public static final String MESSAGE_CONSULTATION_IS_ONGOING = "Friendly reminder: Consultation is ongoing!";
 
     private final Consultation toAdd;
 
@@ -63,7 +70,18 @@ public class AddConsultationCommand extends Command {
         }
 
         model.addConsultation(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)), false, false, true);
+        String commandResult = String.format(MESSAGE_SUCCESS, Messages.format(toAdd));
+        if (Duration.between(toAdd.getFrom(), toAdd.getTo()).toMinutes() > 3 * 60) {
+            commandResult = commandResult + "\n" + MESSAGE_CONSULTATION_DURATION_TOO_LONG;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        if (!toAdd.getTo().isAfter(now)) {
+            commandResult = commandResult + "\n" + MESSAGE_CONSULTATION_IS_OVER;
+        } else if (!toAdd.getFrom().isAfter(now)) {
+            commandResult = commandResult + "\n" + MESSAGE_CONSULTATION_IS_ONGOING;
+        }
+
+        return new CommandResult(commandResult, false, false, true);
     }
 
     @Override

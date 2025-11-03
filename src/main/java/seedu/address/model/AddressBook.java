@@ -6,16 +6,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.commands.AddToGroupCommand;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.event.Consultation;
 import seedu.address.model.event.UniqueConsultationList;
 import seedu.address.model.person.GroupId;
 import seedu.address.model.person.Nusnetid;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 
 /**
  * Wraps all data at the address-book level
@@ -78,10 +80,9 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Replaces the contents of the group list with {@code groups}.
      * {@code groups} must not contain duplicate groups.
      */
-    public void setGroups(List<Group> groups) {
+    public void setGroupList(List<Group> groups) {
         this.groups.setGroups(groups);
     }
-
     /**
      * Adds a group to the address book.
      * The group must not already exist in the address book.
@@ -90,7 +91,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(g);
         this.groups.add(g);
     }
-
     /**
      * Gets a group by GroupId, or null if not present.
      */
@@ -106,7 +106,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
         setPersons(newData.getPersonList());
         setConsultations(newData.getConsultationList());
-        setGroups(newData.getGroupList());
+        setGroupList(newData.getGroupList());
     }
 
     //// person-level operations
@@ -130,7 +130,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Returns the person with the given nusnetid.
      * Returns null if no such person exists.
      */
-    public Person findPerson(Nusnetid nusnetid) {
+    public Person getPerson(Nusnetid nusnetid) {
         requireNonNull(nusnetid);
         return persons.find(nusnetid);
     }
@@ -153,19 +153,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(editedPerson);
         persons.setPerson(target, editedPerson);
     }
-
-    /**
-     * Retrieves a person by their nusnetId. Assumes that the person exists.
-     * @param nusnetId the nusnetId of the person to be retrieved
-     * @return the person with the specified nusnetId
-     */
-    public Person getPersonByNusnetId(Nusnetid nusnetId) {
-        requireNonNull(nusnetId);
-        return StreamSupport.stream(persons.spliterator(), false)
-                .filter(p -> p.getNusnetid().equals(nusnetId))
-                .findFirst().orElse(null);
-    }
-
     /**
      * Removes {@code key} from this {@code AddressBook}.
      * {@code key} must exist in the address book.
@@ -173,6 +160,81 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void removePerson(Person key) {
         persons.remove(key);
         this.removePersonFromExistingGroup(key);
+    }
+    /**
+     * Updates the group when a new person is added.
+     * If the group does not exist, create a new group and add the person to it.
+     * If the group exists, add the person to the existing group.
+     * @param person the person to be added
+     */
+    @Override
+    public void updateGroupWhenAddPerson(Person person) {
+        requireNonNull(person);
+        if (!groups.contains(person.getGroupId())) {
+            Group newGroup = new Group(person.getGroupId());
+            this.addGroup(newGroup);
+            newGroup.addStudent(person);
+        } else {
+            addPersonToExistingGroup(person);
+        }
+    }
+    private void addPersonToExistingGroup(Person person) {
+        Group group = groups.getGroup(person.getGroupId());
+        group.addStudent(person);
+    }
+    /**
+     * Removes a person from their existing group.
+     * This is used when a person is deleted or their group is changed.
+     * @param person student to be removed from their existing group
+     */
+    public void removePersonFromExistingGroup(Person person) {
+        Group group = groups.getGroup(person.getGroupId());
+        group.removeStudent(person.getNusnetid());
+    }
+    /**
+     * Updates the group when a person's details are edited.
+     * @param oldPerson the person before editing
+     */
+    public void updateGroupWhenEditPerson(Person oldPerson) {
+        requireNonNull(oldPerson);
+        removePersonFromExistingGroup(oldPerson);
+    }
+    /**
+     * Moves a student to a new group. Also update the address book person list.
+     * @param student the student to be moved
+     * @param newGroupId the new group ID
+     */
+    public void moveStudentToNewGroup(Person student, GroupId newGroupId) throws CommandException {
+        requireNonNull(student);
+        requireNonNull(newGroupId);
+        if (student.getGroupId().equals(newGroupId)) {
+            throw new CommandException(AddToGroupCommand.MESSAGE_SAME_GROUP_FAIL);
+        }
+        // Remove from old group
+        Group oldGroup = groups.getGroup(student.getGroupId());
+        assert oldGroup != null : "Old group should exist when moving student to new group.";
+        oldGroup.removeStudent(student.getNusnetid());
+        // Add to new group
+        Person updatedStudent = student.withUpdatedGroup(newGroupId);
+        try {
+            assert this.persons.contains(student);
+            this.setPerson(student, updatedStudent);
+            // Update in address book person list
+            // This may throw DuplicatePersonException or PersonNotFoundException
+            // Here we assume that the student exists and no duplicates will be created
+        } catch (DuplicatePersonException e) {
+            throw new CommandException(e.getMessage());
+        }
+        // If new group does not exist, create it
+        // Else, add student to existing group
+        if (!groups.contains(newGroupId)) {
+            Group newGroup = new Group(newGroupId);
+            this.addGroup(newGroup);
+            newGroup.addStudent(updatedStudent);
+        } else {
+            Group newGroup = groups.getGroup(newGroupId);
+            newGroup.addStudent(updatedStudent);
+        }
     }
 
     /**
@@ -227,19 +289,6 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     //// util methods
-
-    @Override
-    public String toString() {
-        List<Group> groupsString = groups.asUnmodifiableObservableList().stream()
-                .sorted(Comparator.comparing(g -> g.getGroupId().toString()))
-                .collect(Collectors.toList());
-        return new ToStringBuilder(this)
-                .add("persons", persons)
-                .add("consultations", consultations)
-                .add("groups", groupsString)
-                .toString();
-    }
-
     @Override
     public ObservableList<Person> getPersonList() {
         return persons.asUnmodifiableObservableList();
@@ -275,39 +324,6 @@ public class AddressBook implements ReadOnlyAddressBook {
     public int hashCode() {
         return Objects.hash(getPersonList(), getConsultationList(), getGroupList());
     }
-    @Override
-    public void updateGroupWhenAddPerson(Person person) {
-        requireNonNull(person);
-        if (!groups.contains(person.getGroupId())) {
-            Group newGroup = new Group(person.getGroupId());
-            this.addGroup(newGroup);
-            newGroup.addStudent(person);
-        } else {
-            addPersonToExistingGroup(person);
-        }
-    }
-    private void addPersonToExistingGroup(Person person) {
-        Group group = groups.getGroup(person.getGroupId());
-        group.addStudent(person);
-    }
-    /**
-     * Removes a person from their existing group.
-     * This is used when a person is deleted or their group is changed.
-     * @param person student to be removed from their existing group
-     */
-    public void removePersonFromExistingGroup(Person person) {
-        Group group = groups.getGroup(person.getGroupId());
-        group.removeStudent(person.getNusnetid());
-    }
-    /**
-     * Updates the group when a person's details are edited.
-     * @param oldPerson the person before editing
-     */
-    public void updateGroupWhenEditPerson(Person oldPerson) {
-        requireNonNull(oldPerson);
-        removePersonFromExistingGroup(oldPerson);
-    }
-
     /**
      * Updates consultations stored in the address book when a person's nusnetid is edited.
      * Any consultation that references {@code oldNusnetid} will be replaced with a new Consultation
@@ -337,7 +353,7 @@ public class AddressBook implements ReadOnlyAddressBook {
                 try {
                     consultations.add(newConsult);
                 } catch (RuntimeException ex) {
-                    // ignore if add fails due to uniqueness; in that case, an equivalent slot already exists.
+                    // ignore if add fails due to uniqueness; in that case, an equivalent group already exists.
                 }
             }
         }
@@ -358,5 +374,16 @@ public class AddressBook implements ReadOnlyAddressBook {
                 persons.setPerson(p, updatedPerson);
             });
         }
+    }
+    @Override
+    public String toString() {
+        List<Group> groupsString = groups.asUnmodifiableObservableList().stream()
+                .sorted(Comparator.comparing(g -> g.getGroupId().toString()))
+                .collect(Collectors.toList());
+        return new ToStringBuilder(this)
+                .add("persons", persons)
+                .add("consultations", consultations)
+                .add("groups", groupsString)
+                .toString();
     }
 }

@@ -1,0 +1,111 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":AddToGroupCommandParser" as AddToGroupCommandParser LOGIC_COLOR
+participant "d:AddToGroupCommand" as AddToGroupCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant "a:AddressBook" as AddressBook MODEL_COLOR
+participant "og:Group" as OldGroup MODEL_COLOR
+participant "update:Person" as NewPerson MODEL_COLOR
+participant "ng:Group" as NewGroup MODEL_COLOR
+end box
+
+[-> LogicManager : execute(...)
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand(...)
+activate AddressBookParser
+
+create AddToGroupCommandParser
+AddressBookParser -> AddToGroupCommandParser
+activate AddToGroupCommandParser
+
+AddToGroupCommandParser --> AddressBookParser
+deactivate AddToGroupCommandParser
+
+AddressBookParser -> AddToGroupCommandParser : parse(...)
+activate AddToGroupCommandParser
+
+create AddToGroupCommand
+AddToGroupCommandParser -> AddToGroupCommand
+activate AddToGroupCommand
+
+AddToGroupCommand --> AddToGroupCommandParser :
+deactivate AddToGroupCommand
+
+AddToGroupCommandParser --> AddressBookParser : d
+deactivate AddToGroupCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+AddToGroupCommandParser -[hidden]-> AddressBookParser
+destroy AddToGroupCommandParser
+
+AddressBookParser --> LogicManager : d
+deactivate AddressBookParser
+
+LogicManager -> AddToGroupCommand : execute(m)
+activate AddToGroupCommand
+
+AddToGroupCommand -> Model : getPersonByNusnetIdFullList(nusnetId)
+activate Model
+Model --> AddToGroupCommand: targetStudent
+deactivate Model
+
+AddToGroupCommand -> Model: moveStudentToNewGroup(...)
+activate Model
+Model -> AddressBook: moveStudentToNewGroup(...)
+activate AddressBook
+
+AddressBook -> OldGroup: removeStudent()
+activate OldGroup
+OldGroup --> AddressBook
+deactivate OldGroup
+
+create NewPerson
+AddressBook -> NewPerson: student.withUpdatedGroup(newGroupId)
+activate NewPerson
+NewPerson --> AddressBook
+deactivate NewPerson
+
+
+AddressBook -> AddressBook: setPerson(student, updatedStudent)
+opt group not found
+create NewGroup
+AddressBook -> NewGroup: new Group(newGroupId)
+activate NewGroup
+NewGroup --> AddressBook
+deactivate NewGroup
+end
+
+AddressBook -> NewGroup: addStudent()
+activate NewGroup
+NewGroup --> AddressBook
+deactivate NewGroup
+
+AddressBook --> Model
+deactivate AddressBook
+
+Model --> AddToGroupCommand
+deactivate Model
+
+
+create CommandResult
+AddToGroupCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> AddToGroupCommand
+deactivate CommandResult
+
+AddToGroupCommand --> LogicManager : r
+deactivate AddToGroupCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

@@ -38,10 +38,23 @@ public class PersonTest {
                 .withGroup(VALID_GROUPID_BOB).withTelegram(VALID_TELEGRAM_BOB).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
-        // different nusnetid, all other attributes same -> returns false
-        editedAlice = new PersonBuilder(ALICE).withNusnetid(VALID_NUSNETID_BOB).build();
-        assertFalse(ALICE.isSamePerson(editedAlice));
+        // same phone, all other attributes different -> returns true
+        editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB)
+                .withNusnetid(VALID_NUSNETID_BOB).withEmail(VALID_EMAIL_BOB)
+                .withGroup(VALID_GROUPID_BOB).withTelegram(VALID_TELEGRAM_BOB).build();
+        assertTrue(ALICE.isSamePerson(editedAlice));
 
+        // same email, all other attributes different -> returns true
+        editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB).withNusnetid(VALID_NUSNETID_BOB)
+                .withGroup(VALID_GROUPID_BOB).withTelegram(VALID_TELEGRAM_BOB).build();
+        assertTrue(ALICE.isSamePerson(editedAlice));
+
+        // same telegram, all other attributes different -> returns true
+        editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
+                .withGroup(VALID_GROUPID_BOB).withNusnetid(VALID_NUSNETID_BOB).build();
+        assertTrue(ALICE.isSamePerson(editedAlice));
     }
 
     @Test

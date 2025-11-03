@@ -21,7 +21,7 @@ public class Group {
 
     /**
      * Construct a group
-     * @param groupId A valid slot number.
+     * @param groupId A valid group id.
      */
     public Group(GroupId groupId) {
         requireNonNull(groupId);
@@ -31,7 +31,7 @@ public class Group {
 
     /**
      * Construct a group
-     * @param groupId A valid slot number.
+     * @param groupId A valid group id.
      * @param students list of students in this tutorial.
      */
     public Group(GroupId groupId, List<Person> students) {
@@ -71,12 +71,6 @@ public class Group {
      */
     public ArrayList<Person> getAllPersons() {
         return this.students.toArrayList();
-    }
-    /**
-     * Returns the list of students in this tutorial.
-     */
-    public UniquePersonList getStudents() {
-        return students;
     }
     /**
      * adds a student to this tutorial.

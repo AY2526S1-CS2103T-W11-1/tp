@@ -10,13 +10,16 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphanumeric characters and spaces, and it should not be blank";
+            "Names may contain letters (including accents), digits, spaces, quotes (\" and '), and commas,\n "
+            + "must not be blank, must not contain '/', and must be at most 70 characters long.";
 
     /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * The first character of the name must not be a whitespace.
+     * Allowed characters: Unicode letters, digits, spaces (after first char), quotes (") and ('), and comma (,).
+     * Disallowed character: forward slash '/'.
+     * Maximum length: 75 characters total.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX = "[\\p{L}\\p{N}\"',][\\p{L}\\p{N} \"',]{0,69}";
 
     public final String fullName;
 

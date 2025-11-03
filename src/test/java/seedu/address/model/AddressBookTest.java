@@ -80,10 +80,10 @@ public class AddressBookTest {
     }
 
     @Test
-    public void hasPerson_personWithSameIdentityFieldsInAddressBook_returnsFalse() {
+    public void hasPerson_personWithSameIdentityFieldsInAddressBook_returnsTrue() {
         addressBook.addPerson(ALICE);
         Person editedAlice = new PersonBuilder(ALICE).withNusnetid(VALID_NUSNETID_BOB).build();
-        assertFalse(addressBook.hasPerson(editedAlice));
+        assertTrue(addressBook.hasPerson(editedAlice));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class AddressBookTest {
         assertTrue(hasNew);
 
         // Assert person's optional consultation updated
-        Person stored = ab.getPersonByNusnetId(new Nusnetid("E1111111"));
+        Person stored = ab.getPerson(new Nusnetid("E1111111"));
         assertTrue(stored.hasConsultation());
         assertEquals("E2222222", stored.getConsultation().get().getNusnetid().value);
     }

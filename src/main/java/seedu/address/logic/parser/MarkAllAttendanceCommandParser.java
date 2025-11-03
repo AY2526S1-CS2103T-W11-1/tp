@@ -6,10 +6,15 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_GROUP;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_WEEK;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import seedu.address.logic.commands.MarkAllAttendanceCommand;
+import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.AttendanceStatus;
+import seedu.address.model.person.GroupId;
 
 /**
  * Parses input arguments and creates a new {@link MarkAllAttendanceCommand} object.
@@ -37,62 +42,44 @@ public class MarkAllAttendanceCommandParser implements Parser<MarkAllAttendanceC
                 PREFIX_STATUS);
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_GROUP, PREFIX_WEEK, PREFIX_STATUS);
 
-        String groupId = argMultimap.getValue(PREFIX_GROUP)
-                .orElseThrow(() -> new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkAllAttendanceCommand.MESSAGE_USAGE)))
-                .trim();
+        if (!arePrefixesPresent(argMultimap, PREFIX_GROUP, PREFIX_WEEK, PREFIX_STATUS)
+                || !argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    MarkAllAttendanceCommand.MESSAGE_USAGE));
+        }
 
-        String weekRaw = argMultimap.getValue(PREFIX_WEEK)
-                .orElseThrow(() -> new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkAllAttendanceCommand.MESSAGE_USAGE)))
-                .trim();
-
-        int week;
+        String groupIdRaw = argMultimap.getValue(PREFIX_GROUP).get().trim();
+        String weekRaw = argMultimap.getValue(PREFIX_WEEK).get().trim();
+        String statusRaw = argMultimap.getValue(PREFIX_STATUS).get().trim();
+        List<String> errors = new ArrayList<>();
+        int week = 0;
         try {
             week = Integer.parseInt(weekRaw);
+            if (week < 2 || week > 13) {
+                errors.add(MarkAttendanceCommand.MESSAGE_INVALID_WEEK);
+            }
         } catch (NumberFormatException e) {
-            throw new ParseException(MarkAllAttendanceCommand.MESSAGE_INVALID_WEEK);
+            errors.add(MarkAttendanceCommand.MESSAGE_INVALID_WEEK);
         }
-        if (week < 2 || week > 13) {
-            throw new ParseException(MarkAllAttendanceCommand.MESSAGE_INVALID_WEEK);
+        AttendanceStatus status = null;
+        try {
+            status = AttendanceStatus.fromString(statusRaw);
+        } catch (IllegalArgumentException e) {
+            errors.add(MarkAllAttendanceCommand.MESSAGE_INVALID_STATUS);
+        }
+        GroupId targetGroupId = null;
+        if (GroupId.isValidGroupId(groupIdRaw)) {
+            targetGroupId = new GroupId(groupIdRaw);
+        } else {
+            errors.add(GroupId.MESSAGE_CONSTRAINTS);
         }
 
-        String statusRaw = argMultimap.getValue(CliSyntax.PREFIX_STATUS)
-                .orElseThrow(() -> new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkAllAttendanceCommand.MESSAGE_USAGE)))
-                .trim();
-
-        String normalizedStatus = normalizeStatus(statusRaw);
-        if (normalizedStatus == null) {
-            throw new ParseException(MarkAllAttendanceCommand.MESSAGE_INVALID_STATUS);
+        if (!errors.isEmpty()) {
+            throw new ParseException(String.join(System.lineSeparator(), errors));
         }
-
-        return new MarkAllAttendanceCommand(groupId, week, normalizedStatus);
+        return new MarkAllAttendanceCommand(targetGroupId, week, status);
     }
-
-    private String normalizeStatus(String statusRaw) {
-        if (statusRaw == null) {
-            return null;
-        }
-        String s = statusRaw.toLowerCase(Locale.ROOT).trim();
-        // direct matches
-        if (s.equals("present") || s.equals("absent") || s.equals("excused")) {
-            return s;
-        }
-        // common shorthands
-        switch (s) {
-        case "p":
-        case "pres":
-            return "present";
-        case "a":
-        case "abs":
-            return "absent";
-        case "e":
-        case "ex":
-        case "exc":
-            return "excused";
-        default:
-            return null;
-        }
+    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }

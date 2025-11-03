@@ -1,0 +1,33 @@
+{
+  "persons" : [ {
+    "name" : "John Doe",
+    "phone" : "98765432",
+    "email" : "johnd@u.nus.edu",
+    "nusnetid" : "E1234567",
+    "groupId" : "T01",
+    "telegram" : "@handle",
+    "homework" : { },
+    "attendanceSheet" : [ ],
+    "consultationStart" : "",
+    "consultationEnd" : ""
+  }, {
+    "name" : "Seb Henz",
+    "phone" : "85066519",
+    "email" : "s.hex.z@u.nus.edu",
+    "nusnetid" : "E1234568",
+    "groupId" : "T01",
+    "telegram" : "@Fisher",
+    "homework" : { },
+    "attendanceSheet" : [ ],
+    "consultationStart" : "",
+    "consultationEnd" : ""
+  } ],
+  "consultations" : [ ],
+  "groups" : [ {
+    "groupId" : "T01",
+    "studentNusnetids" : [ "E1234567", "E1234568" ]
+  }, {
+    "groupId" : "T03",
+    "studentNusnetids" : [ ]
+  } ]
+}

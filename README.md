@@ -6,7 +6,7 @@
 * This is **The project is tailored for TAs in NUS School of Computing**.<br>
   Example usages:
   * managing student information for CS tutorial classes (attendance, homework, consultations)
-  * tracking student progress and performance across multiple tutorial slots
+  * tracking student progress and performance across multiple tutorial groups.
   * organizing consultation
 * The project simulates an ongoing software project for a desktop application (called _AddressBook_) used for managing contact details.
   * It is **written in OOP fashion**. It provides a **reasonably well-written** code base **bigger** (around 6 KLoC) than what students usually write in beginner-level SE modules, without being overwhelmingly big.

@@ -2,6 +2,8 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
@@ -41,11 +43,34 @@ public class AddToGroupCommandTest {
     public void execute_groupDoesNotExist_createNewGroup() throws Exception {
         ModelStubWithGroup modelStub = new ModelStubWithGroup(
                 new Group(new GroupId("T01"), List.of()));
+        // Ensure that group T02 does not exist
+        assertFalse(modelStub.hasGroup(new GroupId("T02")));
         AddToGroupCommand command = new AddToGroupCommand(new Nusnetid("E1234567"), new GroupId("T02"));
         command.execute(modelStub);
         List<Group> groupsAfter = modelStub.getGroupList();
-        assertEquals(2, groupsAfter.size());
-        assertEquals(true, groupsAfter.stream().anyMatch(g -> g.getGroupId().equals(new GroupId("T02"))));
+        assertEquals(3, groupsAfter.size());
+        assert groupsAfter.stream().anyMatch(g -> g.getGroupId().equals(new GroupId("T02")));
+    }
+    @Test
+    public void execute_validGroup_addStudentToGroup() throws Exception {
+        GroupId targetGroupId = new GroupId("B01");
+        Nusnetid targetNusnetid = new Nusnetid("E1234567");
+        ModelStubWithGroup modelStub = new ModelStubWithGroup();
+        AddToGroupCommand command = new AddToGroupCommand(targetNusnetid, targetGroupId);
+        command.execute(modelStub);
+        Group targetGroup = modelStub.getGroup(targetGroupId);
+        assert targetGroup != null;
+        assert targetGroup.hasStudent(targetNusnetid);
+        assert modelStub.hasGroup(targetGroupId);
+    }
+    @Test
+    public void execute_sameGroup_throwsCommandException() throws Exception {
+        GroupId targetGroupId = new GroupId("T01");
+        Nusnetid targetNusnetid = new Nusnetid("E1234567");
+        ModelStubWithGroup modelStub = new ModelStubWithGroup();
+        AddToGroupCommand command = new AddToGroupCommand(targetNusnetid, targetGroupId);
+        assertThrows(CommandException.class, AddToGroupCommand.MESSAGE_SAME_GROUP_FAIL, ()
+                -> command.execute(modelStub));
     }
 
     /**
@@ -108,8 +133,36 @@ public class AddToGroupCommandTest {
         public void setPerson(Person target, Person editedPerson) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void addHomework(Nusnetid nusnetId, int assignmentId) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteHomework(Nusnetid nusnetId, int assignmentId) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public void markHomework(Nusnetid nusnetId, int assignmentId, String status) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public Person getPersonByNusnetIdFullList(Nusnetid nusnetId) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+
         @Override
         public void updateGroupWhenEditPersonId(Person oldPerson) {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public Person markAttendance(Nusnetid nusnetid, int week, seedu.address.model.person.AttendanceStatus status)
+                throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public void markAllAttendance(GroupId groupId, int week, seedu.address.model.person.AttendanceStatus status) {
             throw new AssertionError("This method should not be called.");
         }
         @Override
@@ -182,24 +235,46 @@ public class AddToGroupCommandTest {
         public void updateGroupWhenAddPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }
+        @Override
+        public void moveStudentToNewGroup(Person student, GroupId newGroupId) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
     }
     private class ModelStubWithGroup extends ModelStub {
         private static final String MESSAGE_STUDENT_NOT_FOUND = "Student not found.";
         private final AddressBook addressBook;
         private final FilteredList<Person> filteredPersonList;
         /**
-         * Creates a ModelStubWithGroup that contains the given group.
-         * @param group the group to be contained in the model stub
+         * Creates a ModelStubWithGroup that contains group {@code T01} and {@code B01} already.
+         * Also, a test user with nus net id E1234567.
+         * @param group the group to be contained in the model stub.
+         *              This will be added to the address book, if not already existing.
          */
         ModelStubWithGroup(Group group) {
             requireNonNull(group);
             this.addressBook = new AddressBook();
             this.addressBook.addGroup(group);
+            // With default group T01
             Person person = new PersonBuilder()
                     .withNusnetid("E1234567")
                     .withName("Test User")
                     .build();
             this.addressBook.addPerson(person);
+            this.addressBook.addGroup(new Group(new GroupId("B01")));
+            this.filteredPersonList = new FilteredList<>(this.addressBook.getPersonList());
+        }
+        /**
+         * Constructs a ModelStubWithGroup with default groups T01 and B01.
+         */
+        ModelStubWithGroup() {
+            this.addressBook = new AddressBook();
+            // With default group T01
+            Person person = new PersonBuilder()
+                    .withNusnetid("E1234567")
+                    .withName("Test User")
+                    .build();
+            this.addressBook.addPerson(person);
+            this.addressBook.addGroup(new Group(new GroupId("B01")));
             this.filteredPersonList = new FilteredList<>(this.addressBook.getPersonList());
         }
         /**
@@ -258,6 +333,20 @@ public class AddToGroupCommandTest {
         @Override
         public ObservableList<Group> getGroupList() {
             return this.addressBook.getGroupList();
+        }
+        @Override
+        public void moveStudentToNewGroup(Person student, GroupId newGroupId) throws CommandException {
+            requireAllNonNull(student, newGroupId);
+            this.addressBook.moveStudentToNewGroup(student, newGroupId);
+        }
+        @Override
+        public Person getPersonByNusnetIdFullList(Nusnetid nusnetId) throws CommandException {
+            requireNonNull(nusnetId);
+            assert hasPerson(nusnetId) : "Person with given nusnetId should exist in the address book.";
+            Person target = this.addressBook.getUniquePersonList()
+                    .stream().filter(p -> p.getNusnetid().equals(nusnetId))
+                    .findFirst().orElseThrow(() -> new CommandException(MESSAGE_STUDENT_NOT_FOUND));
+            return target;
         }
     }
 }

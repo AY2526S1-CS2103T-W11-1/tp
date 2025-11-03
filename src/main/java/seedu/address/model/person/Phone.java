@@ -5,14 +5,16 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's phone number in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidSlot(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidPhone(String)}
  */
 public class Phone {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should only contain numbers, and it should be at least 3 digits long";
-    public static final String VALIDATION_REGEX = "\\d{3,}";
+            "Phone numbers must be 3–30 digits and may optionally start with a '+' country code, "
+                    + "and only accept single phone number, for example +6580000000.";
+    // Optional leading '+' followed by 3 to 30 digits
+    public static final String VALIDATION_REGEX = "^\\+?\\d{3,30}$";
     public final String value;
 
     /**
@@ -22,14 +24,14 @@ public class Phone {
      */
     public Phone(String phone) {
         requireNonNull(phone);
-        checkArgument(isValidSlot(phone), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidPhone(phone), MESSAGE_CONSTRAINTS);
         value = phone;
     }
 
     /**
      * Returns true if a given string is a valid phone number.
      */
-    public static boolean isValidSlot(String test) {
+    public static boolean isValidPhone(String test) {
         return test.matches(VALIDATION_REGEX);
     }
 

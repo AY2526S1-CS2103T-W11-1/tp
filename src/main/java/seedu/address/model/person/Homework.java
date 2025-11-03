@@ -10,7 +10,7 @@ import static java.util.Objects.requireNonNull;
  * </p>
  *
  * <p>Valid statuses are defined by {@link #STATUS_COMPLETE}, {@link #STATUS_INCOMPLETE}, and {@link #STATUS_LATE}.</p>
- * Assignment IDs are integers from 1 to 3.
+ * Assignment IDs are integers from 1 to 13.
  */
 public class Homework {
     public static final String STATUS_COMPLETE = "complete";
@@ -23,17 +23,17 @@ public class Homework {
     /**
      * Constructs a {@code Homework} object with the specified ID and status.
      *
-     * @param id the assignment ID (1 to 3)
+     * @param id the assignment ID (1 to 13)
      * @param status the homework status ("complete", "incomplete", or "late")
      * @throws NullPointerException if {@code status} is null
-     * @throws IllegalArgumentException if {@code id} is not between 1 and 3,
+     * @throws IllegalArgumentException if {@code id} is not between 1 and 13,
      *                                  or {@code status} is invalid
      */
     public Homework(int id, String status) {
         requireNonNull(status);
-        // homework id is form 1 to 3 (assume only 3 homeworks)
-        if (id < 1 || id > 3) {
-            throw new IllegalArgumentException("Assignment ID must be between 1 and 3.");
+        // homework id is form 1 to 13 (assume only 13 homeworks)
+        if (id < 1 || id > 13) {
+            throw new IllegalArgumentException("Assignment ID must be between 1 and 13.");
         }
         if (!isValidStatus(status)) {
             throw new IllegalArgumentException("Please enter complete/incomplete/late only.");

@@ -78,19 +78,23 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_invalidValue_failure() {
-        assertParseFailure(parser, "1" + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS); // invalid name
-        assertParseFailure(parser, "1" + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS); // invalid phone
-        assertParseFailure(parser, "1" + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS); // invalid email
-        assertParseFailure(parser, "1" + INVALID_NUSNETID_DESC, Nusnetid.MESSAGE_CONSTRAINTS); // invalid nusnetid
-        assertParseFailure(parser, "1" + INVALID_TELEGRAM_DESC, Telegram.MESSAGE_CONSTRAINTS); // invalid telegram
-
+        assertParseFailure(parser, "1" + INVALID_NAME_DESC,
+                "Name: " + Name.MESSAGE_CONSTRAINTS); // invalid name
+        assertParseFailure(parser, "1" + INVALID_PHONE_DESC,
+                "Phone: " + Phone.MESSAGE_CONSTRAINTS); // invalid phone
+        assertParseFailure(parser, "1" + INVALID_EMAIL_DESC,
+                "Email: " + Email.MESSAGE_CONSTRAINTS); // invalid email
+        assertParseFailure(parser, "1" + INVALID_NUSNETID_DESC,
+                "NUSNET ID: " + Nusnetid.MESSAGE_CONSTRAINTS); // invalid nusnetid
+        assertParseFailure(parser, "1" + INVALID_TELEGRAM_DESC,
+                "Telegram: " + Telegram.MESSAGE_CONSTRAINTS); // invalid telegram
         // invalid phone followed by valid email
-        assertParseFailure(parser, "1" + INVALID_PHONE_DESC + EMAIL_DESC_AMY, Phone.MESSAGE_CONSTRAINTS);
-
-
-        // multiple invalid values, but only the first invalid value is captured
+        assertParseFailure(parser, "1" + INVALID_PHONE_DESC + EMAIL_DESC_AMY,
+                "Phone: " + Phone.MESSAGE_CONSTRAINTS);
+        // multiple invalid values
         assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC + VALID_NUSNETID_AMY + VALID_PHONE_AMY,
-                Name.MESSAGE_CONSTRAINTS);
+                "Name: " + Name.MESSAGE_CONSTRAINTS + System.lineSeparator()
+                        + "Email: " + Email.MESSAGE_CONSTRAINTS);
     }
 
     @Test

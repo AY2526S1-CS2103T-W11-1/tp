@@ -1,0 +1,102 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":MarkAllAttendanceCommandParser" as MarkAllAttendanceCommandParser LOGIC_COLOR
+participant "d:MarkAllAttendanceCommand" as MarkAllAttendanceCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant ":GroupId" as GroupId MODEL_COLOR
+participant ":AttendanceStatus" as AttendanceStatus MODEL_COLOR
+end box
+
+[-> LogicManager : execute("mark_all_attendance g/T01 w/3 status/present")
+
+LogicManager -> AddressBookParser : parseCommand("mark_all_attendance g/T01 w/3 status/present")
+activate LogicManager
+activate AddressBookParser
+
+' Create command parser
+create MarkAllAttendanceCommandParser
+AddressBookParser -> MarkAllAttendanceCommandParser
+activate MarkAllAttendanceCommandParser
+
+MarkAllAttendanceCommandParser --> AddressBookParser
+deactivate MarkAllAttendanceCommandParser
+
+' Start parsing
+AddressBookParser -> MarkAllAttendanceCommandParser : parse("g/T01 w/3 status/present")
+activate MarkAllAttendanceCommandParser
+
+' === Create value objects ===
+create GroupId
+MarkAllAttendanceCommandParser -> GroupId : new GroupId("T01")
+activate GroupId
+GroupId --> MarkAllAttendanceCommandParser
+deactivate GroupId
+
+create AttendanceStatus
+MarkAllAttendanceCommandParser -> AttendanceStatus : AttendanceStatus.fromString("present")
+activate AttendanceStatus
+AttendanceStatus --> MarkAllAttendanceCommandParser
+deactivate AttendanceStatus
+
+alt valid arguments
+    create MarkAllAttendanceCommand
+    MarkAllAttendanceCommandParser -> MarkAllAttendanceCommand : new MarkAllAttendanceCommand(GroupId, 3, AttendanceStatus)
+    activate MarkAllAttendanceCommand
+    MarkAllAttendanceCommand --> MarkAllAttendanceCommandParser
+    deactivate MarkAllAttendanceCommand
+
+    MarkAllAttendanceCommandParser --> AddressBookParser : d
+    deactivate MarkAllAttendanceCommandParser
+    'Hidden arrow to position destroy marker correctly
+    MarkAllAttendanceCommandParser -[hidden]-> AddressBookParser
+    destroy MarkAllAttendanceCommandParser
+
+    AddressBookParser --> LogicManager : d
+    deactivate AddressBookParser
+
+    ' === Execute command ===
+    LogicManager -> MarkAllAttendanceCommand : execute(m)
+    activate MarkAllAttendanceCommand
+
+    MarkAllAttendanceCommand -> Model : markAllAttendance(GroupId, 3, AttendanceStatus)
+    activate Model
+    Model --> MarkAllAttendanceCommand
+    deactivate Model
+
+    create CommandResult
+    MarkAllAttendanceCommand -> CommandResult : new CommandResult("Marked attendance for Group T01: present in week 3.")
+    activate CommandResult
+    CommandResult --> MarkAllAttendanceCommand
+    deactivate CommandResult
+
+    MarkAllAttendanceCommand --> LogicManager : r
+    deactivate MarkAllAttendanceCommand
+else invalid / missing arguments
+    MarkAllAttendanceCommandParser --> AddressBookParser : throws ParseException(errorMessage)
+    deactivate MarkAllAttendanceCommandParser
+
+    AddressBookParser --> LogicManager : throws ParseException(errorMessage)
+    deactivate AddressBookParser
+
+    create CommandResult
+    LogicManager -> CommandResult : new CommandResult("Invalid command format" + errorMessage)
+    activate CommandResult
+    CommandResult --> LogicManager : r
+    deactivate CommandResult
+
+
+end
+
+[<--LogicManager
+deactivate LogicManager
+
+@enduml

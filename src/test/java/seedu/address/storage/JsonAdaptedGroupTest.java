@@ -7,9 +7,7 @@ import static seedu.address.testutil.TypicalPersons.GEORGE;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Spliterator;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,9 +30,7 @@ public class JsonAdaptedGroupTest {
     public void toModelType_validGroupDetails_returnsGroup() throws Exception {
         JsonAdaptedGroup jsonGroup = new JsonAdaptedGroup(VALID_GROUP);
         assertEquals(VALID_GROUP.getGroupId(), new GroupId(jsonGroup.getGroupId()));
-        Spliterator<Person> spliterator = VALID_GROUP.getStudents().spliterator();
-        assertEquals(StreamSupport.stream(spliterator, false)
-                        .map(Person::getNusnetid).collect(Collectors.toList()),
+        assertEquals(VALID_GROUP.getAllPersons().stream().map(Person::getNusnetid).collect(Collectors.toList()),
                 jsonGroup.getStudentNusnetidsAsIds());
     }
     @Test

@@ -8,6 +8,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NUSNETID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
@@ -41,25 +44,52 @@ public class EditCommandParser implements Parser<EditCommand> {
                 PREFIX_TELEGRAM, PREFIX_PHONE, PREFIX_EMAIL);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
+        List<String> errors = new ArrayList<>();
 
+        // Name
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
+            try {
+                editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
+            } catch (ParseException e) {
+                errors.add("Name: " + e.getMessage());
+            }
         }
+        // Phone (optional, allow clearing with empty value)
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
-            editPersonDescriptor.setPhone(ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get()));
-        } else {
-            editPersonDescriptor.setPhone(null);
+            try {
+                editPersonDescriptor.setPhone(ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get()));
+            } catch (ParseException e) {
+                errors.add("Phone: " + e.getMessage());
+            }
         }
+        // Email (optional, allow clearing with empty value)
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
-            editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
-        } else {
-            editPersonDescriptor.setEmail(null);
+            try {
+                editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
+            } catch (ParseException e) {
+                errors.add("Email: " + e.getMessage());
+            }
         }
+        // Nusnetid
         if (argMultimap.getValue(PREFIX_NUSNETID).isPresent()) {
-            editPersonDescriptor.setNusnetid(ParserUtil.parseNusnetid(argMultimap.getValue(PREFIX_NUSNETID).get()));
+            try {
+                editPersonDescriptor.setNusnetid(ParserUtil.parseNusnetid(argMultimap.getValue(PREFIX_NUSNETID).get()));
+            } catch (ParseException e) {
+                errors.add("NUSNET ID: " + e.getMessage());
+            }
         }
+        // Telegram
         if (argMultimap.getValue(PREFIX_TELEGRAM).isPresent()) {
-            editPersonDescriptor.setTelegram(ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).get()));
+            try {
+                editPersonDescriptor.setTelegram(ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).get()));
+            } catch (ParseException e) {
+                errors.add("Telegram: " + e.getMessage());
+            }
+        }
+
+        // If there were validation errors for any fields, report them together.
+        if (!errors.isEmpty()) {
+            throw new ParseException(String.join(System.lineSeparator(), errors));
         }
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {

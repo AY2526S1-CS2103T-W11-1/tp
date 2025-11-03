@@ -8,6 +8,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NUSNETID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;
@@ -46,16 +49,61 @@ public class AddCommandParser implements Parser<AddCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_NUSNETID,
                 PREFIX_TELEGRAM, PREFIX_GROUP);
-        Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
-        Phone phone = argMultimap.getValue(PREFIX_PHONE).isPresent()
-                ? ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get())
-                : null;
-        Email email = argMultimap.getValue(PREFIX_EMAIL).isPresent()
-                ? ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get())
-                : null;
-        Nusnetid nusnetid = ParserUtil.parseNusnetid(argMultimap.getValue(PREFIX_NUSNETID).get());
-        Telegram telegram = ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).get());
-        GroupId groupId = ParserUtil.parseGroupId(argMultimap.getValue(PREFIX_GROUP).get());
+
+        // Collect errors from parsing each individual field so multiple invalid inputs are reported together.
+        List<String> errors = new ArrayList<>();
+
+        Name name = null;
+        Phone phone = null;
+        Email email = null;
+        Nusnetid nusnetid = null;
+        Telegram telegram = null;
+        GroupId groupId = null;
+
+        try {
+            name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
+        } catch (ParseException e) {
+            errors.add("Name: " + e.getMessage());
+        }
+
+        if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
+            try {
+                phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
+            } catch (ParseException e) {
+                errors.add("Phone: " + e.getMessage());
+            }
+        }
+
+        if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
+            try {
+                email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
+            } catch (ParseException e) {
+                errors.add("Email: " + e.getMessage());
+            }
+        }
+
+        try {
+            nusnetid = ParserUtil.parseNusnetid(argMultimap.getValue(PREFIX_NUSNETID).get());
+        } catch (ParseException e) {
+            errors.add("NUSNET ID: " + e.getMessage());
+        }
+
+        try {
+            telegram = ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).get());
+        } catch (ParseException e) {
+            errors.add("Telegram: " + e.getMessage());
+        }
+
+        try {
+            groupId = ParserUtil.parseGroupId(argMultimap.getValue(PREFIX_GROUP).get());
+        } catch (ParseException e) {
+            errors.add("Group: " + e.getMessage());
+        }
+
+        if (!errors.isEmpty()) {
+            String combined = errors.stream().collect(Collectors.joining(System.lineSeparator()));
+            throw new ParseException(combined);
+        }
 
         Person person = new Person(name, phone, email, nusnetid, telegram, groupId, new HomeworkTracker());
 

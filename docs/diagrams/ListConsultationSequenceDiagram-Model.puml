@@ -1,0 +1,22 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant ":FilteredList" as FilteredList MODEL_COLOR
+end box
+
+[-> Model : updateFilteredConsultationList(predicate)
+activate Model
+
+Model -> FilteredList : setPredicate(predicate)
+activate FilteredList
+
+FilteredList -> Model
+deactivate FilteredList
+
+[<-- Model
+deactivate Model
+
+@enduml

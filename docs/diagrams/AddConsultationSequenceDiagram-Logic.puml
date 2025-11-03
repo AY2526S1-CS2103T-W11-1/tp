@@ -1,0 +1,84 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":AddConsultationCommandParser" as AddConsultationCommandParser LOGIC_COLOR
+participant "d:AddConsultationCommand" as AddConsultationCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant "c:Consultation" as Consultation MODEL_COLOR
+end box
+
+[-> LogicManager : execute("add_consult i/E1234567\nfrom/20251111 1000 to/20251111 1100")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("add_consult i/E1234567\nfrom/20251111 1000 to/20251111 1100")
+activate AddressBookParser
+
+create AddConsultationCommandParser
+AddressBookParser -> AddConsultationCommandParser
+activate AddConsultationCommandParser
+
+AddConsultationCommandParser --> AddressBookParser
+deactivate AddConsultationCommandParser
+
+AddressBookParser -> AddConsultationCommandParser : parse("i/E1234567\nfrom/20251111 1000 to/20251111 1100")
+activate AddConsultationCommandParser
+
+create Consultation
+AddConsultationCommandParser -> Consultation
+activate Consultation
+
+Consultation --> AddConsultationCommandParser
+deactivate Consultation
+
+create AddConsultationCommand
+AddConsultationCommandParser -> AddConsultationCommand : new AddConsultationCommand(c)
+activate AddConsultationCommand
+
+AddConsultationCommand --> AddConsultationCommandParser :
+deactivate AddConsultationCommand
+
+AddConsultationCommandParser --> AddressBookParser : d
+deactivate AddConsultationCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+AddConsultationCommandParser -[hidden]-> AddressBookParser
+destroy AddConsultationCommandParser
+
+AddressBookParser --> LogicManager : d
+deactivate AddressBookParser
+
+LogicManager -> AddConsultationCommand : execute(m)
+activate AddConsultationCommand
+
+AddConsultationCommand -> Model : addConsultationToPerson(E1234567, c)
+activate Model
+
+Model --> AddConsultationCommand
+deactivate Model
+
+AddConsultationCommand -> Model : addConsultation(c)
+activate Model
+
+Model --> AddConsultationCommand
+deactivate Model
+
+create CommandResult
+AddConsultationCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> AddConsultationCommand
+deactivate CommandResult
+
+AddConsultationCommand --> LogicManager : r
+deactivate AddConsultationCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

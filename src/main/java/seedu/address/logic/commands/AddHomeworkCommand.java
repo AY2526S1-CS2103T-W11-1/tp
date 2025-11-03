@@ -83,45 +83,20 @@ public class AddHomeworkCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        String idForLog = isAll ? "all" : (nusnetId != null ? nusnetId.value : "null");
-        logger.info("Executing AddHomeworkCommand for: " + idForLog);
+        String target = isAll ? "all students" : nusnetId.value;
+        logger.info("Executing AddHomeworkCommand for: " + target);
+
         if (isAll) {
-            // Check duplicates BEFORE modifying any student
-            for (Person p : model.getFilteredPersonList()) {
-                if (p.getHomeworkTracker().contains(assignmentId)) {
-                    throw new CommandException(
-                            String.format("Assignment %d already exists for %s.", assignmentId, p.getName())
-                    );
-                }
-            }
-            // add homework for every student
-            for (Person p : model.getFilteredPersonList()) {
-                model.setPerson(p, p.withAddedHomework(assignmentId));
-            }
+            model.addHomework(null, assignmentId);
             return new CommandResult(String.format(MESSAGE_SUCCESS_ALL, assignmentId));
         } else {
-            Person target = model.getFilteredPersonList().stream()
-                    .filter(p -> p.getNusnetid().equals(nusnetId))
-                    .findFirst()
-                    .orElse(null);
-
-            if (target == null) {
-                throw new CommandException(MESSAGE_STUDENT_NOT_FOUND);
-            }
-
-            if (target.getHomeworkTracker().contains(assignmentId)) {
-                throw new CommandException(
-                        String.format("Assignment %d already exists for %s.", assignmentId, target.getName())
-                );
-            }
-
-            Person updated = target.withAddedHomework(assignmentId);
-            model.setPerson(target, updated);
-
-            logger.fine("Successfully added homework " + assignmentId + " to student " + nusnetId);
-            return new CommandResult(String.format(MESSAGE_SUCCESS_ONE, assignmentId, target.getName()));
+            model.addHomework(nusnetId, assignmentId);
+            // single student
+            Person targetPerson = model.getPersonByNusnetId(nusnetId); // fetch the Person
+            return new CommandResult(String.format(MESSAGE_SUCCESS_ONE, assignmentId, targetPerson.getName()));
         }
     }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {

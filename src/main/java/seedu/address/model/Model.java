@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.event.Consultation;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.GroupId;
 import seedu.address.model.person.Nusnetid;
 import seedu.address.model.person.Person;
@@ -105,11 +106,54 @@ public interface Model {
     Person getPersonByNusnetId(Nusnetid nusnetId) throws CommandException;
 
     /**
+     * Retrieves a person by their nusnetId in the Unique Person List
+     * @param nusnetId the nusnetId of the person to be retrieved
+     * @return the person with the specified nusnetId
+     * @throws CommandException if no person with the given nusnetId is found
+     */
+    Person getPersonByNusnetIdFullList(Nusnetid nusnetId) throws CommandException;
+    /**
      * Replaces the given person {@code target} with {@code editedPerson}.
      * {@code target} must exist in the address book.
      * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
      */
     void setPerson(Person target, Person editedPerson);
+
+    /**
+     * Adds a homework assignment to a student or all students.
+     *
+     * @param nusnetId the nusnetId of the target student, or "all" to apply to all students
+     * @param assignmentId the ID of the assignment to add
+     * @throws CommandException if student not found or homework already exists
+     */
+    void addHomework(Nusnetid nusnetId, int assignmentId) throws CommandException;
+
+    /**
+     * Deletes a homework assignment for a student or all students.
+     *
+     * @param nusnetId the NUSNET ID of the target student, or "all" to apply to all students
+     * @param assignmentId the ID of the assignment to delete
+     * @throws CommandException if student not found or homework does not exist
+     */
+    void deleteHomework(Nusnetid nusnetId, int assignmentId) throws CommandException;
+
+    /**
+     * Marks a homework assignment for a student with the given status.
+     *
+     * @param nusnetId the NUSNET ID of the target student
+     * @param assignmentId the ID of the assignment to mark
+     * @param status the new status ("complete", "incomplete", or "late")
+     * @throws CommandException if student not found, assignment does not exist, or status is invalid
+     */
+    void markHomework(Nusnetid nusnetId, int assignmentId, String status) throws CommandException;
+
+    /**
+     * Moves a student to a new group.
+     * @param target the person to be moved
+     * @param newGroupId the new group ID
+     * @throws CommandException if an error occurs during the move
+     */
+    void moveStudentToNewGroup(Person target, GroupId newGroupId) throws CommandException;
     /**
      * Updates the groups to include the newly added person.
      * @param person the person that was added
@@ -125,7 +169,23 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
-
+    /**
+     * Marks attendance for the person with the given nusnetId for the specified week and status.
+     * @param nusnetId the nusnetId of the person whose attendance is to be marked
+     * @param week the week number for which attendance is to be marked
+     * @param status the attendance status to be marked
+     * @return the updated person with the marked attendance
+     * @throws CommandException if no person with the given nusnetId exists in the address book
+     */
+    Person markAttendance(Nusnetid nusnetId, int week, AttendanceStatus status) throws CommandException;
+    /**
+     * Marks attendance for all persons in the specified group for the given week and status.
+     * @param groupId the groupId of the group whose members' attendance is to be marked
+     * @param week the week number for which attendance is to be marked
+     * @param status the attendance status to be marked
+     * @throws CommandException if no group with the given groupId exists in the address book
+     */
+    void markAllAttendance(GroupId groupId, int week, AttendanceStatus status) throws CommandException;
     /**
      * Returns true if a consultation equivalent to {@code consultation} exists in the address book.
      */

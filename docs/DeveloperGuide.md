@@ -4,12 +4,7 @@ title: "Developer Guide"
 pageNav: 3
 ---
 
-# AB-3 Developer Guide
-
-<!-- * Table of Contents -->
-<page-nav-print />
-
---------------------------------------------------------------------------------------------------------------------
+# SoCTAssist Developer Guide
 
 ## **Acknowledgements**
 
@@ -35,7 +30,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-W11-1/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-W11-1/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -107,8 +102,7 @@ How the `Logic` component works:
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
-Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
-
+Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user
 <puml src="diagrams/ParserClasses.puml" width="600"/>
 
 How the parsing works:
@@ -127,15 +121,6 @@ The `Model` component,
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
-
-<box type="info" seamless>
-
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
-
-<puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
-
-</box>
-
 
 ### Storage component
 
@@ -158,106 +143,264 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+---
+### Add Homework Feature
 
-#### Proposed Implementation
+The add homework feature allows users to assign a homework task to either a specific student or all students. Each homework is identified by an assignment ID.
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+The sequence diagram below illustrates the interactions within the `Logic` component for adding homework:
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
-
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
-
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
-
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
-
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
-
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
+<puml src="diagrams/AddHomeworkSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `addhomework` Command" />
 
 <box type="info" seamless>
 
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+**Note:** The lifeline for `AddHomeworkCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+How the `addhomework` command works:
+1. When the user enters an `addhomework` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates an `AddHomeworkCommandParser` to parse the command arguments.
+3. `AddHomeworkCommandParser` validates and parses the NUSNET ID (or the keyword `all`) and the assignment ID.
+4. An `AddHomeworkCommand` object is created and executed.
+5. `AddHomeworkCommand` checks if the homework assignment already exists for the specified student(s).
+6. If no duplicates are found, the homework is added to the target student(s)’ homework tracker(s).
+7. The updated address book is saved to storage.
 
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
+---
 
+### Delete Homework Feature
+
+The delete homework feature allows users to remove an existing homework assignment from a specific student or from all students.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for deleting homework:
+
+<puml src="diagrams/DeleteHomeworkSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `deletehomework` Command" />
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+**Note:** The lifeline for `DeleteHomeworkCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 
 </box>
 
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
+How the `deletehomework` command works:
+1. When the user enters a `deletehomework` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `DeleteHomeworkCommandParser` to parse the command arguments.
+3. `DeleteHomeworkCommandParser` validates and parses the NUSNET ID (or the keyword `all`) and the assignment ID.
+4. A `DeleteHomeworkCommand` object is created and executed.
+5. `DeleteHomeworkCommand` verifies that the homework exists for the specified student(s).
+6. If found, the homework is removed from the respective homework tracker(s).
+7. The updated address book is saved to storage.
 
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
+---
+
+### Mark Homework Feature
+
+The mark homework feature allows users to update the status (e.g., `complete`, `incomplete`, 'late') of a homework assignment for a specific student.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for marking homework:
+
+<puml src="diagrams/MarkHomeworkSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `markhomework` Command" />
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+**Note:** The lifeline for `MarkHomeworkCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 
 </box>
 
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</box>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
-
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
+How the `markhomework` command works:
+1. When the user enters a `markhomework` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `MarkHomeworkCommandParser` to parse the command arguments.
+3. `MarkHomeworkCommandParser` validates and parses the NUSNET ID, assignment ID, and status.
+4. A `MarkHomeworkCommand` object is created and executed.
+5.`MarkHomeworkCommand` checks whether the specified homework exists for the student.
+6. If found, the homework’s status is updated to the new value.
+7. The updated address book is saved to storage.
 
 --------------------------------------------------------------------------------------------------------------------
+### Mark Attendance Feature
 
+The mark attendance feature allows users to mark the attendance status (e.g., `present`, `absent`, `excused`) of a single student in a particular week.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for marking attendance:
+
+<puml src="diagrams/MarkAttendanceSequenceDiagram.puml" width ="1200" height ="900" alt="Interactions Inside the Logic Component for the `mark_attendance` Command" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `MarkAttendanceCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+
+</box>
+
+How the `markAttendance` command works:
+1. When the user enters a `markAttendance` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `MarkAttendanceCommandParser` to parse the command arguments.
+3. `MarkAttendanceCommandParser` validates and parses the NUSNET ID, week number, and attendance status.
+4. A `MarkAttendanceCommand` object is created and executed.
+5. `MarkAttendanceCommand` checks whether the specified student exits.
+6. If exits, the attendance status of the student in the specified week is updated to the status.
+7. The updated address book is saved to storage.
+
+--------------------------------------------------------------------------------------------------------------------
+### Mark All Attendance Feature
+
+The mark all attendance feature allows users to mark the attendance status (e.g., `present`, `absent`, `excused`) of a group of students in a particular week.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for marking attendance:
+
+<puml src="diagrams/MarkAllAttendanceSequenceDiagram.puml" width ="1200" height ="900" alt="Interactions Inside the Logic Component for the `mark_all_attendance` Command" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `MarkAllAttendanceCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+
+</box>
+
+How the `markAllAttendance` command works:
+1. When the user enters a `markAllAttendance` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `MarkAllAttendanceCommandParser` to parse the command arguments.
+3. `MarkAllAttendanceCommandParser` validates and parses the GroupId, week number, and attendance status.
+4. A `MarkAllAttendanceCommand` object is created and executed.
+5. `MarkAllAttendanceCommand` checks whether the specified group exists.
+6. If exists, the attendance status of students of the group in the specified week is updated to the status.
+7. The updated address book is saved to storage.
+
+---
+
+### Add Consultation Feature
+The add consultation feature allows users to add consultation slots for students.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for adding a consultation:
+<puml src="diagrams/AddConsultationSequenceDiagram-Logic.puml" alt="Interactions inside the Logic Component for the `add_consult` Command" />
+
+The sequence diagram below illustrates the interactions within the `Model` component for adding a consultation:
+<puml src="diagrams/AddConsultationSequenceDiagram-Model.puml" alt="Interactions inside the Model Component for the `add_consult` Command" />
+
+How the `add_consult` command works:
+1. When the user enters an `add_consult` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates an `AddConsultationCommandParser` to parse the command arguments.
+3. `AddConsultationCommandParser` validates and parses the NUSNET ID, start time and end time.
+4. An `AddConsultationCommand` object is created and executed.
+5. During execution, `AddConsultationCommand` checks if the student exists in the model, if the consultation overlaps with other existing consultations in the model, and if the student already has a consultation.
+6. If all checks pass, the consultation is added to the student and the model is updated.
+7. The updated address book is saved to storage.
+8. A success message is returned to the user.
+
+---
+
+### Delete Consultation Feature
+The delete consultation feature allows users to delete existing consultations from students.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for deleting a consultation:
+<puml src="diagrams/DeleteConsultationSequenceDiagram-Logic.puml" alt="Interactions inside the Logic Component for the `delete_consult` Command" />
+
+The sequence diagram below illustrates the interactions within the `Model` component for deleting a consultation:
+<puml src="diagrams/DeleteConsultationSequenceDiagram-Model.puml" alt="Interactions inside the Model Component for the `delete_consult` Command" />
+
+How the `delete_consult` command works:
+1. When the user enters a `delete_consult` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `DeleteConsultationCommandParser` to parse the command arguments.
+3. `DeleteConsultationCommandParser` validates and parses the NUSNET ID.
+4. A `DeleteConsultationCommand` object is created and executed.
+5. During execution, `DeleteConsultationCommand` checks if the student exists in the model and if the student has an existing consultation.
+6. If both checks pass, the consultation is removed from the student and the model is updated.
+7. The updated address book is saved to storage.
+8. A success message is returned to the user.
+
+---
+
+### List Consultation Feature
+The list consultation feature allows users to view all scheduled consultations.
+
+The sequence diagram below illustrates the interactions within the `Logic` component for listing consultations:
+<puml src="diagrams/ListConsultationSequenceDiagram-Logic.puml" alt="Interactions inside the Logic Component for the `list_consult` Command" />
+
+The sequence diagram below illustrates the interactions within the `Model` component for listing consultations:
+<puml src="diagrams/ListConsultationSequenceDiagram-Model.puml" alt="Interactions inside the Model Component for the `list_consult` Command" />
+
+How the `list_consult` command works:
+1. When the user enters a `list_consult` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `ListConsultationCommand` object.
+3. The `ListConsultationCommand` object is executed.
+4. During execution, `ListConsultationCommand` updates the filtered consultation list in the model.
+5. A success message is returned to the user.
+
+### Create Group Feature
+
+The create group feature allows users to create a new group by specifying a unique group ID.
+
+The sequence diagram below illustrates the interactions within the `Logic` and `Model` component for creating a group:
+
+<puml src="diagrams/CreateGroupSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `creategroup` Command" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `CreateGroupCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+
+</box>
+
+How the `creategroup` command works:
+1. When the user enters a `creategroup` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `CreateGroupCommandParser` to parse the command arguments.
+3. `CreateGroupCommandParser` validates and parses the group ID.
+4. A `CreateGroupCommand` object is created and executed.
+5. `CreateGroupCommand` checks if the group ID already exists.
+6. If no duplicates are found, a new group is created with the specified group ID.
+7. The updated address book is saved to storage.
+
+### Add Student to Group Feature
+
+The add student to group feature allows users to assign a student to an existing group by specifying the student's NUSNET ID and the group ID.
+
+The sequence diagram below illustrates the interactions within the `Logic` and `Model` component for adding a student to a group:
+
+<puml src="diagrams/AddToGroupSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `addstudenttogroup` Command" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `AddStudentToGroupCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+
+</box>
+
+How the `addstudenttogroup` command works:
+1. When the user enters an `addstudenttogroup` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates an `AddStudentToGroupCommandParser` to parse the command arguments.
+3. `AddStudentToGroupCommandParser` validates and parses the NUSNET ID and group ID.
+4. An `AddStudentToGroupCommand` object is created and executed.
+5. `AddStudentToGroupCommand` checks if the specified student exist.
+6. If the student exists, `AddStudentToGroupCommand` checks if the specified group already exist.
+7. Create an updated student object with the new group ID.
+8. If the group exists, the student is added to the specified group.
+9. Else, the group is created and the student is added to the newly created group.
+10. The updated address book is saved to storage.
+11. If the student does not exist, an error message is shown to the user.
+
+### Find Student by Group Feature
+
+The find student by group feature allows users to search for students belonging to a specific group by specifying the group ID.
+
+The sequence diagram below illustrates the interactions within the `Logic` and `Model` component for finding students by group:
+
+<puml src="diagrams/FindStudentByGroupSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `findstudentbygroup` Command" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `FindStudentByGroupCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+
+</box>
+
+How the `find_group` command works:
+1. When the user enters a `find_group` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates a `FindStudentByGroupCommandParser` to parse the command arguments.
+3. `FindStudentByGroupCommandParser` validates and parses the group ID.
+4. A `FindStudentByGroupCommand` object is created and executed.
+5. If the group ID is valid, and the group exist in the address book, `FindStudentByGroupCommand` retrieves the list of students belonging to the specified group from the `Model`.
+6. The filtered student list in the `Model` is updated to only include students from the specified group.
+7. The updated filtered student list is displayed to the user in the UI.
+8. If the group ID is invalid or the group does not exist, an error message is shown to the user.
+9. No change to the address book is made.
+
+--------------------------------------------------------------------------------------------------------------------
 ## **Documentation, logging, testing, configuration, dev-ops**
 
 * [Documentation guide](Documentation.md)
@@ -299,7 +442,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | TA                  | mark students' attendance                             | record all students' tutorial attendance                                  |
 | `* * *`  | TA                  | track each individual student's homework completeness | view their learning progress and identify students who are falling behind |                                                          |
 | `* *`    | new user            | have a step-by-step usage instruction guide           | learn how to use the app                                                  |
-| `* *`    | course coordinator  | view all TAs' availability                            | assign TAs to their preferred tutorial slot                               |
+| `* *`    | course coordinator  | view all TAs' availability                            | assign TAs to their preferred tutorial group                              |
 | `* *`    | head TA             | create subgroups within the course                    | assign students and TAs to their respective tutorial groups               |
 | `* *`    | head TA             | key in students' scores                               | update students' scores after every exam                                  |
 | `* *`    | head TA             | view overall course feedback from students            | gather data to perform course analysis                                    |
@@ -317,11 +460,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 (For all use cases below, the **System** is the `SocTAssist` and the **Actor** is the `user`, unless specified otherwise)
 
 
-**Use case: Add a student**
+**Use case:** UC01 - Add a student
+**Actor**: TA
 
 **MSS**
 
-1. User requests to add a student by specifying full name, preferred name, email, Telegram handle, and slot ID.
+1. User requests to add a student by specifying required fields: full name, NUSNET ID, email, Telegram handle and optional fields: phone number, group ID.
 
 2. AddressBook validates all fields.
 
@@ -335,39 +479,34 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. One or more required fields are missing.
 
-    * 2a1. AddressBook shows error: Missing required field: <field>.
+    * 2a1. AddressBook shows error: `Invalid command format!`.
 
         Use case ends.
 
 * 2b. Email format is invalid.
 
-    * 2b1. AddressBook shows error: Invalid email format. Use RFC-5322 pattern.
+    * 2b1. AddressBook shows error: `Invalid email format`.
 
         Use case ends.
 
-* 2c. Telegram handle format is invalid.
+* 2c. Group ID format is invalid.
 
-    * 2c1. AddressBook shows error message.
-
-        Use case ends.
-
-* 2d. Slot ID format is invalid.
-
-    * 2d1. AddressBook shows error message.
+    * 2c1. AddressBook shows error message: `Invalid Group ID`.
 
         Use case ends.
 
-* 2e. A student with the same nusnetid already exists.
+* 2d. A student with the same nusnetid already exists.
 
-    * 2e1. AddressBook shows error: Student with this nusnetid already exists.
+    * 2d1. AddressBook shows error: `This person already exists in the address book.`.
 
        Use case ends.
 
-**Use case: Edit a student**
+**Use case:** UC02 - Edit a student
+**Actor**: TA
 
 **MSS**
 
-1. User requests to edit a student by specifying the email and updated fields.
+1. User requests to edit a student by specifying the index and updated fields.
 
 2. AddressBook validates that the student exists.
 
@@ -377,7 +516,28 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-**Use case: Delete a student**
+**Extensions**
+
+* 2a. Student index does not exist.
+
+    * 2a1. AddressBook shows error: `The person index provided is invalid`.
+
+      Use case ends.
+
+* 2b. Any updated field is invalid.
+
+    * 2b1. AddressBook shows corresponding validation error. (UC01 Extensions 2b, 2c).
+
+      Use case ends.
+
+* 2c. Try to update group id.
+
+    * 2c1. AddressBook shows error and states the correct format.
+
+      Use case ends.
+
+**Use case:** UC03 - Delete a student
+**Actor**: TA
 
 **MSS**
 
@@ -393,31 +553,26 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 **Extensions**
+* 1a. The list is empty.
+    * 1a1. AddressBook shows error: `The student list is empty.`
 
-* 2a. Student email does not exist.
-
-    * 2a1. AddressBook shows error: Student not found.
-
-      Use case ends.
-
-* 2b. Edited email duplicates another existing student’s nusnetid.
-
-    * 2b1. AddressBook shows error: nusnetid already in use.
-
-      Use case ends.
-
-* 2c. Any updated field is invalid.
-
-    * 2c1. AddressBook shows corresponding validation error.
+      Use case ends.    
+* 3a. Student index does not exist.
+    * 3a1. AddressBook shows error: `The person index provided is invalid`.
+  
+    Use case ends.
+* 3b. Student index is invalid (not a number or is not positive).
+    * 3b1. AddressBook shows error: `Invalid command format!`.
 
       Use case ends.
 
-**Use Case: Create Assignment**
+**Use Case:** UC04 - Create Homework
+**Actor**: TA
 
 **MSS**
 
-1. User enters a command to create a new assignment numbered 1 to 3 for a student using their NUSNET ID.
-2. Homework Tracker locates the student record.
+1. User enters a command to create a new homework numbered 1 to 3 for a student using their NUSNET ID.
+2. Homework Tracker locates the student homework record.
 3. Homework Tracker validates the assignment ID.
 4. Homework Tracker creates the new assignment with an initial status of `incomplete`.
 5. Homework Tracker displays a success message.
@@ -427,27 +582,29 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 * 2a. Student with the given NUSNET ID does not exist
   
-    * 2a1. Homework Tracker displays an error: `Student not found`.
+    * 2a1. Homework Tracker displays an error message.
 
       Use case ends.
-* 3a. Assignment ID already exists for this student
+* 3a. Homework ID already exists for this student
   
-  * 3a1. Homework Tracker displays an error: `Assignment ID already exists`.
+  * 3a1. Homework Tracker displays an error message.
 
     Use case ends.
-* 3b. Assignment ID is invalid (not between 1–3)
+* 3b. Homework ID is invalid (not between 1–13)
   
-  * 3b1. Homework Tracker displays an error: `Assignment ID must be between 1 and 3`.
+  * 3b1. Homework Tracker displays an error message.
 
     Use case ends.
-**Use case: Mark assignment completion**
+    
+**Use case:** UC05 - Mark Homework completion
+**Actor**: TA
 
 **MSS**
 
-1. User requests to mark an assignment status for a student using their NUSNET ID.
-2. Homework Tracker locates the student record.
-3. Homework Tracker verifies the assignment ID.
-4. Homework Tracker updates the assignment status (complete / incomplete / late).
+1. User requests to mark a homework status for a student using their NUSNET ID.
+2. Homework Tracker locates the student homework record.
+3. Homework Tracker verifies the homework ID.
+4. Homework Tracker updates the homework status (complete / incomplete / late).
 5. Homework Tracker shows a confirmation message.
 
    Use case ends.
@@ -464,13 +621,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   
       Use case ends.
 
-* 3a. The given assignment ID is invalid (not between 0–2).
+* 3a. The given assignment ID is invalid (not between 1-13).
   
-    * 3a1. Homework Tracker shows error message: `Assignment not found`.
+    * 3a1. Homework Tracker shows error message.
   
       Use case ends.
 * 4a. The given status is invalid (not one of complete / incomplete / late).
-    * 4a1. Homework Tracker shows error message: `Please enter complete/incomplete/late only`.
+    * 4a1. Homework Tracker shows error message.
   
       Use case ends.
 * 4b. The student already has a status recorded for this assignment.
@@ -478,133 +635,298 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 5.
 
-**Use case: Add a consultation**
+**Use case:** UC06 - Delete a homework
+**Actor**: TA
 
 **MSS**
 
-1. User requests to add a consultation by specifying student email, date, start time, and end time.
+1. User requests to delete a homework for a student using their NUSNET ID.  
+2. Homework Tracker locates the student homework record.  
+3. Homework Tracker verifies the homework ID.  
+4. Homework Tracker removes the corresponding homework record from the student’s tracker.  
+5. Homework Tracker shows a confirmation message.  
 
-2. AddressBook validates the student email, date, and times.
+   Use case ends.
+
+**Extensions**
+
+* 1a. The list is empty.  
+
+    Use case ends.  
+
+* 2a. The student with the given NUSNET ID does not exist.  
+    * 2a1. Homework Tracker shows error message.  
+
+      Use case ends.  
+
+* 3a. The given assignment ID is invalid.  
+    * 3a1. Homework Tracker shows error message.  
+
+      Use case ends.  
+
+* 4a. The specified homework does not exist for the student.  
+    * 4a1. Homework Tracker shows error message.  
+
+      Use case ends.  
+
+
+**Use case:** UC07 - Add a consultation
+**User**: TA
+
+**MSS**
+
+1. User requests to add a consultation by specifying student's NUSNET ID, start date & time, and end date & time.
+
+2. AddressBook validates the NUSNET ID, dates, and times.
 
 3. AddressBook creates the consultation booking for the student.
 
-4. AddressBook shows success message with consultation details.
+4. AddressBook shows success message with consultation details and displays list of consultations to user.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. Student nusnetid does not exist in the directory.
+* 2a. Student NUSNET ID does not exist in the directory.
 
-  * 2a1. AddressBook shows error: Student not found.
+  * 2a1. AddressBook shows an error message.
 
        Use case ends.
 
 * 2b. End time is not after start time.
 
-    * 2b1. AddressBook shows error: End time must be after start time.
+    * 2b1. AddressBook shows an error message.
 
          Use case ends.
 
 * 2c. The new consultation overlaps with an existing one.
 
-    * 2c1. AddressBook shows error: Time conflict with existing booking.
+    * 2c1. AddressBook shows an error message.
 
          Use case ends.
 
 * 2d. A consultation with identical date and time already exists.
 
-    * 2d1. AddressBook shows error: Duplicate consultation booking.
+    * 2d1. AddressBook shows an error message.
 
          Use case ends.
-**Use case: Mark attendance**
+
+* 2d. Student already has an existing consultation.
+
+    * 2d1. AddressBook shows an error message.
+
+      Use case ends.
+
+* 4a. The consultation exceeds 3 hours in duration.
+
+    * 4a1. AddressBook displays a reminder message.
+
+      Use case ends.
+
+* 4b. The consultation is over or ongoing.
+
+    * 4b1. AddressBook displays a reminder message.
+
+      Use case ends.
+
+**Use case:** UC08 - Delete a consultation
+**User**: TA
 
 **MSS**
 
-1. User requests to mark attendance for a student by specifying student nusnetid, date, and attendance status.
+1. User requests to delete a consultation by specifying student's NUSNET ID.  
 
-2. AddressBook validates that the student exists and the date/status are valid.
+2. AddressBook validates the NUSNET ID.  
+
+3. AddressBook locates the consultation record that matches the provided details.  
+
+4. AddressBook deletes the consultation from the system.  
+
+5. AddressBook shows success message confirming the deletion and displays list of consultations to user.  
+
+    Use case ends.  
+
+**Extensions**
+
+* 2a. NUSNET ID does not exist in the directory.  
+
+  * 2a1. AddressBook shows an error message.  
+
+       Use case ends.  
+
+* 3a. Student with specified NUSNET ID does not have a consultation.  
+
+  * 3a1. AddressBook shows an error message.  
+
+       Use case ends.
+
+**Use case:** UC09 - Mark attendance
+**User**: TA
+
+**MSS**
+
+1. User requests to mark attendance for a student by specifying student NUSNET ID, week, and attendance status.
+
+2. AddressBook validates that the student exists and the week and status are valid.
 
 3. AddressBook records the attendance for the student.
 
-4. AddressBook shows confirmation message with details.
+4. AddressBook shows a confirmation message with details.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. Student nusnetid does not exist.
+* 2a. Student NUSNET ID does not exist.
 
-    * 2a1. AddressBook shows error: Student not found.
+    * 2a1. AddressBook shows error: `Student not found`.
 
          Use case ends.
 
 * 2b. Attendance status is invalid (not Present or Absent or Excused).
 
-    * 2b1. AddressBook shows error: Invalid attendance status.
+    * 2b1. AddressBook shows error: `Please enter present/absent/excused only`.
 
          Use case ends.
 
-**Use case: Create and manage student groups**
+
+**Use case: Mark all attendance**
 
 **MSS**
 
-1. User requests to create a new group with a specified GroupName.
-2. Homework Tracker validates the GroupName.
+1. User requests to mark attendance for a group of student by specifying GroupId, week, and attendance status.
+
+2. AddressBook validates that the group exists and the week and status are valid.
+
+3. AddressBook records the attendance for the student.
+
+4. AddressBook shows a confirmation message with details.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. GroupId does not exist.
+
+    * 2a1. AddressBook shows error: `Group not found`.
+
+         Use case ends.
+
+* 2b. Attendance status is invalid (not Present or Absent or Excused).
+
+    * 2b1. AddressBook shows error: `Please enter present/absent/excused only`.
+
+         Use case ends.
+
+* 2c. Week is invalid (input is not between 2 and 13 or is not an integer.").
+
+    * 2c1. AddressBook shows error: `Invalid Week. Week should be between 2 and 13 and be a positive integer.`.
+
+         Use case ends.
+* 2d. Group does not have students.
+
+    * 2d1. AddressBook shows error: `No students in the group.`.
+
+         Use case ends.
+
+**Use case:** UC10 - Create student groups
+**User**: TA
+
+**MSS**
+
+1. User requests to create a new group with a specified GroupId.
+2. Address Book validates the GroupId.
 3. System creates the group.
-4. System shows confirmation message: `Group <GroupName> is created.`
+4. System shows confirmation message.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The GroupName is missing.
-    * 2a1. System shows error message: `Missing required field: GroupName`.
+* 2a. The GroupId is missing.
+    * 2a1. System shows error message, saying GroupId is missing.
+
+    Use case ends.
+
+* 2b. The GroupId is invalid.
+    * 2c1. System shows error message and indicates the valid format for GroupId.
 
       Use case ends.
 
-* 2b. The GroupName is a duplicate.
-    * 2b1. System shows error message: `Invalid Team Name`.
+* 2c. The GroupId is a duplicate.
+    * 2b1. System shows error message, saying GroupId already exists
 
       Use case ends.
-**Use case: Add student to a group**
+
+
+**Use case:** UC11 - Add student to a group
+**User**: TA
 
 **MSS**
 
-1. User requests to add a student to an existing group using the student’s email and GroupName.
-2. System verifies the group exists.
-3. System verifies the student exists.
-4. System checks whether the student is already in the group.
-5. System adds the student to the group.
-6. System shows confirmation message: `Alice is added to Group <GroupName>.`
+1. User requests to add a student to an existing group using the student’s NUSNET ID and GroupId.
+2. System verifies the student exists.
+3. System checks whether the group id is the same as the student's existing group.
+4. System checks whether the group exists.
+5. System adds the student to the specified group.
+6. System shows confirmation message.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The GroupName is missing or invalid.
-    * 2a1. System shows error message: `Missing required field: GroupName` or `Invalid Team Name`.
+* 2a. The student with the NUSNET ID does not exist.
+    * 2a1. System shows error message.
 
       Use case ends.
 
-* 3a. The student's email is missing or invalid.
-    * 3a1. System shows error message: `Missing required field: Email` or `Student does not exist`.
+* 3a. The group id is the same as the student's existing group.
+    * 3a1. System shows error message, saying student already in that group.
 
       Use case ends.
 
-* 4a. The student is already in the group.
-    * 4a1. System shows error message: `Student already in this group`.
+* 4a. The group does not exist.
+    * 4a1. System creates the group.
+
+      Use case resumes at step 5.
+
+**Use case:** UC12 - Find students by group
+**User**: TA
+
+**Guarantees**: 
+* If the GroupId is valid and exists, at least one student is found.
+
+**MSS**
+
+1. User requests to find students by specifying a GroupId.
+2. System verifies the GroupId is valid.
+3. System checks whether the group exists.
+4. System retrieves the list of students in the specified group.
+5. System displays the list of students in the UI. 
+   
+   Use case ends.
+
+**Extensions**
+
+* 2a. The GroupId is invalid.
+    * 2a1. System shows error message and indicates the valid format for Group Id.
 
       Use case ends.
+
+* 3a. The group does not exist.
+    * 3a1. System shows error message, saying group does not exist.
+  
+      Use case ends.
+
 ### Non-Functional Requirements
 
 #### 1. Data Requirements
 ##### NFR-D1: Data Size
-- Maximum 500 students per course
-- Maximum 50 tutorial slots per course
+- Maximum 500 students 
+- Maximum 20 tutorial groups
 - Support 12 weeks of attendance data (weeks 2-13)
-- Support at least 10 assignments per course
-- Store consultation history for entire semester
+- Support maximum 3 assignments
+- Maximum 1 consultation slot for each student
 
 ##### NFR-D2: Data Volatility
 **High Volatility Data** (changes very frequently):
@@ -615,29 +937,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Medium Volatility Data** (changes occasionally):
 - Student contact information: might change once or twice per semester
 - Group assignments: adjusted a few times during the semester
-- TA availability: changes periodically but not daily
 
 **Low Volatility Data** (rarely changes):
-- Student directory (names, NusNET IDs): mostly stable after add/drop period
-- Tutorial slot assignments: fixed after first few weeks
+- Student directory (names, NUSNET IDs): mostly stable after add/drop period
+- Tutorial group assignments: fixed after first few weeks
 
 ##### NFR-D3: Data Persistence
-- All student data must persist between application sessions
-- Attendance, homework, and consultation records must be permanent until explicitly deleted
-- System must auto-save after every successful command
-- Historical data (eg.assessment performance) must persist across semesters
+- All student data must persist between application sessions.
+- Attendance, homework, and consultation records must be permanent until explicitly deleted.
+- System must auto-save after every successful command.
 
 #### 2. Environment/Technical Requirements
 ##### NFR-E1: Operating System Compatibility
-- Must run on Windows, Linux, and OS-X platforms
-- Must work on both 32-bit and 64-bit environments
-- No OS-dependent libraries or OS-specific features allowed
-- Cross-platform compatibility without any modifications to codebase
+- Must run on Windows, Linux, and OS-X platforms.
+- Must work on both 32-bit and 64-bit environments.
+- No OS-dependent libraries or OS-specific features allowed.
+- Cross-platform compatibility without any modifications to codebase.
 
 ##### NFR-E2: Software Dependencies
-- Requires Java 17 only (no other Java version required or installed)
-- Must work without internet connection (offline-first design)
-- No external database server required
+- Requires Java 17 only (no other Java version required or installed).
+- Must work without internet connection (offline-first design).
+- No external database server required.
 - Third-party libraries must be:
   - Free and open-source with permissive licenses
   - Packaged within the JAR file (no separate installation required)
@@ -645,51 +965,49 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - Approved by teaching team prior to use
 
 ##### NFR-E3: Hardware Requirements(To be finalized later)
+- The application must operate efficiently on standard consumer-grade hardware without requiring specialized equipment.
+- Must run on both desktop and laptop computers without additional hardware dependencies.
 
 
 #### 3. Performance Requirements
 ##### NFR-P1: Response Time
-- Basic commands (add, delete, mark) must complete within 2 seconds
-- Search and filter operations must return results within 1 second
-- Tab switching must occur within 1 second
-- PDF export must complete within 5 seconds for up to 200 students
+- Basic commands must complete within 2 seconds.
+- Find operations must return results within 2 second.
 
 ##### NFR-P2: Startup Time
-- Application must launch within 3 seconds on standard hardware
-- Onboarding guide must appear within 1 second of first launch
+- Application must launch within 5 seconds on standard hardware.
+
 #### 4. Scalability Requirements
 ##### NFR-S1: User Scalability
-- Support TAs managing multiple tutorial slots simultaneously
+- Supports TAs managing multiple tutorial groups.
 
 ##### NFR-S2: Data Scalability
-- Performance must not degrade noticeably up to 100 students
-- Support unlimited consultation bookings per student
+- Performance must not degrade noticeably up to 100 students.
+
 #### 5. Usability Requirements
 ##### NFR-U1: Learnability
-- First-time TA users must be able to add a student and mark attendance within 10 minutes using the onboarding guide
-- The onboarding guide must be completable in under 5 minutes
-- Help command must provide examples for all commands
+- First-time TA users must be able to add a student and mark attendance within 10 minutes using the onboarding guide.
+- The onboarding guide must be completable in under 5 minutes.
+- Help command must provide examples for all commands.
 
 ##### NFR-U2: Efficiency
-- Experienced users should be able to mark attendance for 30 students in under 2 minutes
-- Common tasks should require fewer than 10 commands
-- All primary functions must be accessible via keyboard commands without requiring mouse
+- Experienced users should be able to mark attendance for 30 students in under 2 minutes.
+- Common tasks should require fewer than 3 commands.
+- All primary functions must be accessible via keyboard commands without requiring mouse.
 
 ##### NFR-U3: Error Handling
-- Error messages must be specific and actionable (e.g., "Missing required field: email" not "Error 404")
-- System must provide confirmation prompts for destructive operations (delete student, bulk delete)
+- Error messages must be specific and actionable.
+- System must provide confirmation prompts for destructive operations.
 - No technical jargon in error messages - use plain language
 
 ##### NFR-U4: Consistency
-- Command syntax must be consistent across all features using the same prefix style (i/, n/, e/, t/, s/, w/, a/)
-- All command names follow verb-noun format: `add_student`, `mark_attendance`, `delete_student`
-- Parameter handling behavior must be consistent (e.g., last occurrence wins for duplicate prefixes)
+- Command syntax must be consistent across all features using the same prefix style (i/, n/, e/, t/, status/, w/, a/).
+- All command names follow verb-noun format: `add_student`, `mark_attendance`, `delete`.
 
 ##### NFR-U5: Visual Design
 - Minimum font size: 12pt for readability
-- UI must be usable on minimum resolution 1280x720
+- UI must be usable on minimum resolution 1280x720.
 - Clear visual separation between tabs (Students, Attendance, Homework, Groups)
-- Tables must have alternating row colors for scannabilityRetryClaude can make mistakes. Please double-check responses.Research Sonnet 4.5
 
 
 #### 6.Constraints
@@ -707,57 +1025,398 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 
+**Consultation terms**
+* **Ongoing**: A consultation is ongoing if it has a start time before the current time and a end time after the current time.
+
+  (E.g. if the current time is `20251010 1700`, a consultation from `20251010 1600` to `20251010 1800` is ongoing.)
+* **Over**: A consultation is over if its end time is before the current time.
+
+  (E.g. if the current time is `20251010 1700`, a consultation from `20251010 1400` to `20251010 1600` is over.)
+* **Overlap**: A consultation overlaps with another consultation if its start time is before the other consultation's end time and its end time is after the other consultation's start time.
+
+  (E.g. a consultation from `20251010 1400` to `20251010 1600` overlaps with a consultation from `20251010 1559` to `20251010 1759` but does not overlap with a consultation from `20251010 1600` to `20251010 1800`.)
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
 
-Given below are instructions to test the app manually.
+This section provides step-by-step, comprehensive instructions for performing **manual testing** of the application. These steps ensure that testers can validate the app’s functionality, usability, and reliability without the need for automated test tools.
 
-<box type="info" seamless>
+> **Note:** These instructions serve as a foundation for manual testing. Testers are strongly encouraged to perform **exploratory testing** beyond the described cases to uncover edge cases and unexpected behaviors.
 
-**Note:** These instructions only provide a starting point for testers to work on;
-testers are expected to do more *exploratory* testing.
+---
 
-</box>
+### **1. Launch and Shutdown Tests**
 
-### Launch and shutdown
+#### **1.1 Initial Launch**
 
-1. Initial launch
+1. **Download and Setup:**
 
-   1. Download the jar file and copy into an empty folder
+   * Obtain the latest `soctassist.jar` file of the application.
+   * Copy the `soctassist.jar` file into a **new, empty folder** to avoid interference from previous data files.
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+2. **Launch Application:**
 
-1. Saving window preferences
+   * Double-click the `soctassist.jar` file to start the application.
+   * Open a terminal or command prompt in the folder containing the .jar file.
+   * Run the following command:
+     * `java -jar socassisst.jar`
+   * **Expected Result:**
+     * The main GUI should appear with a **set of sample data** (e.g., sample students).
+     * The window size and position may initially not be optimized.
+     * The app should **not crash or freeze** upon startup.
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+#### **1.2 Saving Window Preferences**
 
-   1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+1. **Change and Save Window State:**
 
-1. _{ more test cases …​ }_
+   * Resize and reposition the main application window.
+   * Close the application normally.
+
+2. **Re-launch Application:**
 
 ### Deleting a person
+   * Open the `soctassist.jar` file again.
+   * **Expected Result:**
+     * The window should reopen **at the same size and position** as before.
+     * All layout and visual preferences should persist across restarts.
 
-1. Deleting a person while all persons are being shown
+---
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+### **2. Data Management Tests**
 
+#### **2.1 Deleting a Person (Functional Test)**
+
+1. **Preparation:**
+
+   * Use the `list` command to ensure that multiple persons are visible in the list.
+
+2. **Valid Deletion Command:**
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   * Command: `delete 1`
+   * **Expected Result:**
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+     * The first person in the list is deleted.
+     * The status bar updates with the details of the deleted student.
+     * The total count of persons decreases by one.
 
-1. _{ more test cases …​ }_
+3. **Invalid Deletion Commands:**
 
-### Saving data
+   * Try the following commands:
 
-1. Dealing with missing/corrupted data files
+     * `delete 0`
+     * `delete` (no index)
+     * `delete x` (where *x* is greater than the list size)
+   * **Expected Result:**
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+     * Appropriate error messages displayed.
+     * No data is deleted.
+---
 
-1. _{ more test cases …​ }_
+### **3. Saving and Loading Data**
+
+#### **3.1 Data Persistence Check**
+
+1. Add a few entries (new students).
+2. Close and reopen the application.
+3. **Expected Result:**
+
+   * All newly added data should reappear, confirming that data was correctly saved to disk.
+
+---
+
+### **4. User Interface and Command Behavior**
+
+#### **4.1 Command Validation**
+
+* Test all supported commands (e.g., `add`, `edit`, `list`, `help`) with correct and incorrect parameters.
+* **Expected Result:**
+
+  * Correct commands execute successfully.
+  * Incorrect ones show meaningful error messages (no technical jargon).
+
+#### **4.2 Keyboard Accessibility**
+
+* Verify that all major commands can be executed via keyboard only.
+* **Expected Result:** No mouse interaction should be required for primary operations.
+
+#### **4.3 Error Message Clarity**
+
+* Trigger various input errors intentionally.
+* **Expected Result:**
+
+  * Messages should explain what went wrong and how to fix it.
+  * Messages should use simple, clear language.
+
+---
+
+### **5. Exploratory Testing Suggestions**
+
+* Try adding invalid characters.
+* Test compatibility on different operating systems (Windows, macOS, Linux).
+
+### Add homework
+1. Add homework to a single student
+   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`.
+   2. Execute the command:
+      `add_hw i/E1234567 a/1`
+   3. **Expected:**
+   - Success message is displayed:  
+     ```
+     Added assignment 1 for <STUDENT_NAME> (default incomplete).
+     ```
+   - The student’s homework tracker now includes homework **1**, marked as **incomplete** by default.
+   - The command box is cleared and ready for the next input.
+
+2. Add homework to all students
+   1. Setup: Ensure multiple students are present in the system.
+   2. Execute the command:
+      `add_hw i/all a/2`
+   3. **Expected:**
+   - Success message is displayed:  
+     ```
+     Added assignment 2 for all students (default incomplete).
+     ```
+   - All students’ homework trackers now contain homework **2**.
+  
+3. Add homework (Student not found)
+   1. Setup: Ensure the student with the NUSNET ID E0000000 is not present in the system.
+   2. Execute the command:
+      `add_hw i/E0000000 a/3`
+   3. **Expected:**
+   - Error message is displayed:  
+     ```
+     Student not found.
+     ```
+   - No homework is added.
+
+4. Add homework (Missing parameters)
+   1. Execute the command:
+      `add_hw a/1`
+   2. **Expected:**
+   - Error message is displayed:  
+     ```
+     Invalid command format! <With the rest of helping information>
+     ```
+   - No homework is added.
+
+5. Add homework (Invalid homework ID: out of range)
+   1. Execute the command:
+      `add_hw i/E1234567 a/100`
+   2. **Expected:**
+   - Error message is displayed:  
+     ```
+     Homework id must be between 1 and 13.
+     ```
+   - No homework is added.
+
+6. Add homework (Duplicate prefixes)
+   1. Setup: Make sure that the person with NUSNET ID E1234567 already has homework 1
+   2. Execute the command:
+      `add_hw i/E1234567 a/1`
+   3. **Expected:**
+   - Error message is displayed:  
+     ```
+     Homework 1 already exists for <STUDNET_NAME>.
+     ```
+   - No homework is added.
+
+**Summary of Expected Results**
+
+| Test Case | Command | Expected Outcome |
+|------------|----------|------------------|
+| 1 | `add_hw i/E1234567 a/1` | ✅ Homework 1 added to student E1234567 |
+| 2 | `add_hw i/all a/2` | ✅ Homework 2 added to all students |
+| 3 | `add_hw i/E0000000 a/3` | ❌ Student not found |
+| 4 | `add_hw a/4` | ❌ Missing NUSNET ID |
+| 5 | `add_hw i/E1234567 a/14` | ❌ Homework ID out of range |
+| 6 | `add_hw i/E1234567 i/E7654321 a/1` | ❌ Duplicate prefixes |
+
+### Delete homework
+1. Delete homework from a single student  
+   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`, and that the student already has homework **1** assigned.  
+   2. Execute the command:  
+      `delete_hw i/E1234567 a/1`  
+   3. **Expected:**  
+   - Success message is displayed:  
+     ```
+     Deleted homework 1 for <STUDENT_NAME>.
+     ```
+   - Homework **1** is removed from the student’s homework tracker.
+   - The command box is cleared and ready for the next input.
+
+2. Delete homework from all students  
+   1. Setup: Ensure multiple students are present in the system, each with homework **2** assigned.  
+   2. Execute the command:  
+      `delete_hw i/all a/2`  
+   3. **Expected:**  
+   - Success message is displayed:  
+     ```
+     Deleted homework 2 for all students.
+     ```
+   - Homework **2** is removed from every student’s homework tracker.
+
+3. Delete homework (Student not found)  
+   1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.  
+   2. Execute the command:  
+      `delete_hw i/E0000000 a/1`  
+   3. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Invalid NUSNET ID format.
+     ```
+   - No homework is deleted.
+
+4. Delete homework (Missing parameters)  
+   1. Execute the command:  
+      `delete_hw a/1`  
+   2. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Invalid command format! <With the rest of helping information>
+     ```
+   - No homework is deleted.
+
+5. Delete homework (Invalid homework ID: out of range)  
+   1. Execute the command:  
+      `delete_hw i/E1234567 a/100`  
+   2. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Homework id must be between 1 and 13.
+     ```
+   - No homework is deleted.
+
+6. Delete homework (Homework not found)  
+   1. Setup: Ensure that the student with NUSNET ID `E1234567` **does not** have homework **3** assigned.  
+   2. Execute the command:  
+      `delete_hw i/E1234567 a/3`  
+   3. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Homework 3 not found for Alex Yeoh.
+     ```
+   - No homework is deleted.
+
+7. Delete homework (Duplicate prefixes)  
+   1. Execute the command:  
+      `delete_hw i/E1234567 i/E7654321 a/1`  
+   2. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Invalid command format! <With the rest of helping information>
+     ```
+   - No homework is deleted.
+
+**Summary of Expected Results**
+
+| Test Case | Command | Expected Outcome |
+|------------|----------|------------------|
+| 1 | `delete_hw i/E1234567 a/1` | ✅ Homework 1 deleted from student E1234567 |
+| 2 | `delete_hw i/all a/2` | ✅ Homework 2 deleted from all students |
+| 3 | `delete_hw i/E0000000 a/1` | ❌ Student not found |
+| 4 | `delete_hw a/1` | ❌ Missing NUSNET ID |
+| 5 | `delete_hw i/E1234567 a/100` | ❌ Homework ID out of range |
+| 6 | `delete_hw i/E1234567 a/3` | ❌ Homework does not exist |
+| 7 | `delete_hw i/E1234567 i/E7654321 a/1` | ❌ Duplicate prefixes |
+
+### Mark homework### Mark homework
+1. Mark homework as completed for a single student  
+   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`, and that the student has homework **1** assigned.  
+   2. Execute the command:  
+      `mark_hw i/E1234567 a/1 status/complete`  
+   3. **Expected:**  
+   - Success message is displayed:  
+     ```
+    Assignment 1 for <STUDENT_NAME> marked complete.
+     ```
+   - Homework **1** is now marked as **completed** in the student’s homework tracker.
+   - The command box is cleared and ready for the next input.
+
+2. Mark homework as incomplete for a single student  
+   1. Setup: Ensure homework **1** for student `E1234567` is currently marked as **completed**.  
+   2. Execute the command:  
+      `mark_hw i/E1234567 a/1 status/incomplete`  
+   3. **Expected:**  
+   - Success message is displayed:  
+     ```
+     Assignment 1 for <STUDENT_NAME> marked incomplete.
+     ```
+   - Homework **1** is now marked as **incomplete** in the student’s homework tracker.
+
+3. Mark homework as late for a single student  
+   1. Setup: Ensure homework **2** is assigned to student `E1234567`.  
+   2. Execute the command:  
+      `mark_hw i/E1234567 a/2 status/late`  
+   3. **Expected:**  
+   - Success message is displayed:  
+     ```
+     Assignment 1 for <STUDENT_NAME> marked late.
+     ```
+   - Homework **2** is now marked as **late** in the student’s homework tracker.
+
+4. Mark homework (Student not found)  
+   1. Execute the command:  
+      `mark_hw i/E0000000 a/1 status/complete`  
+   2. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Student not found
+     ```
+   - No homework is updated.
+
+5. Mark homework (Homework not assigned)  
+   1. Setup: Ensure that student `E1234567` **does not** have homework **3** assigned.  
+   2. Execute the command:  
+      `mark_hw i/E1234567 a/3 status/complete`  
+   3. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Homework 3 does not exist for <STUDENT_NAME>. Add it first using 'add_hw'.
+     ```
+   - No homework is updated.
+
+6. Mark homework (Invalid status)  
+   1. Execute the command:  
+      `mark_hw i/E1234567 a/1 status/done`  
+   2. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Status must be one of: complete, incomplete, late.
+     ```
+   - No homework is updated.
+
+7. Mark homework (Missing parameters)  
+   1. Execute the command:  
+      `mark_hw i/E1234567 a/1`  
+   2. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Invalid command format! <With the rest of helping information>
+     ```
+   - No homework is updated.
+
+8. Mark homework (Duplicate prefixes)  
+   1. Execute the command:  
+      `mark_hw i/E1234567 i/E7654321 a/1 status/complete`  
+   2. **Expected:**  
+   - Error message is displayed:  
+     ```
+     Multiple values specified for the following single-valued field(s): i/
+     ```
+   - No homework is updated.
+
+**Summary of Expected Results**
+
+| Test Case | Command | Expected Outcome |
+|------------|----------|------------------|
+| 1 | `mark_hw i/E1234567 a/1 status/completed` | ✅ Homework 1 marked completed |
+| 2 | `mark_hw i/E1234567 a/1 status/incomplete` | ✅ Homework 1 marked incomplete |
+| 3 | `mark_hw i/E1234567 a/2 status/late` | ✅ Homework 2 marked late |
+| 4 | `mark_hw i/E0000000 a/1 status/completed` | ❌ Invalid NUSNET ID |
+| 5 | `mark_hw i/E1234567 a/3 status/completed` | ❌ Homework does not exist |
+| 6 | `mark_hw i/E1234567 a/1 status/done` | ❌ Invalid status |
+| 7 | `mark_hw i/E1234567 a/1` | ❌ Missing status parameter |
+| 8 | `mark_hw i/E1234567 i/E7654321 a/1 status/completed` | ❌ Duplicate prefixes |

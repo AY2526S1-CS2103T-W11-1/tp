@@ -36,7 +36,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/broccoli0616.png" width="200px">
 
-[[github](http://github.com/broccoli0616)] [[portfolio](https://broccoli0616.github.io/Zhang-Jiayi-page/)]
+[[github](http://github.com/broccoli0616)] [[homepage](https://broccoli0616.github.io/Zhang-Jiayi-page/)]
 
 * Role: Developer
 * Responsibilities: Data

@@ -104,7 +104,7 @@ class JsonAdaptedPerson {
 
         Phone modelPhone = null;
         if (phone != null) {
-            if (!Phone.isValidSlot(phone)) { // kept as-is per existing implementation
+            if (!Phone.isValidPhone(phone)) { // kept as-is per existing implementation
                 throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
             }
             modelPhone = new Phone(phone);

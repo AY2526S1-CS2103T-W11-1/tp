@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * Represents a homework tracker for a single person.
@@ -25,7 +26,7 @@ import java.util.Objects;
 public class HomeworkTracker {
 
     /** The maximum number of assignments a person can have (IDs range from 1 to MAX_ASSIGNMENTS). */
-    public static final int MAX_ASSIGNMENTS = 3; // 1..3
+    public static final int MAX_ASSIGNMENTS = 13; // 1..13
 
     /** Internal map storing assignment IDs and their corresponding statuses. */
     private final Map<Integer, Homework> statuses;
@@ -34,7 +35,7 @@ public class HomeworkTracker {
      * Constructs an empty {@code HomeworkTracker} with no recorded homework statuses.
      */
     public HomeworkTracker() {
-        this.statuses = new HashMap<>();
+        this.statuses = new TreeMap<>();
     }
 
     /**
@@ -47,13 +48,13 @@ public class HomeworkTracker {
      * @throws NullPointerException if {@code statuses} is {@code null}
      */
     public HomeworkTracker(Map<Integer, Homework> statuses) {
-        this.statuses = new HashMap<>(Objects.requireNonNull(statuses));
+        this.statuses = new TreeMap<>(Objects.requireNonNull(statuses));
     }
 
     /** Add a new homework with status incomplete by default. */
     public HomeworkTracker addHomework(int assignmentId) {
         if (assignmentId < 0 || assignmentId > MAX_ASSIGNMENTS) {
-            throw new IllegalArgumentException("Assignment ID must be between 1 and 3.");
+            throw new IllegalArgumentException("Assignment ID must be between 1 and 13.");
         }
         if (statuses.containsKey(assignmentId)) {
             return this; // already exists

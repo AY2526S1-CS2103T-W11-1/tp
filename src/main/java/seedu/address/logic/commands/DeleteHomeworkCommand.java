@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
 import java.util.Objects;
 
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -54,41 +53,18 @@ public class DeleteHomeworkCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        // Case: delete for ALL students
+        model.deleteHomework(isAll ? null : nusnetId, assignmentId);
+
         if (isAll) {
-            List<Person> lastShownList = model.getFilteredPersonList();
-
-            for (Person student : lastShownList) {
-                if (!student.getHomeworkTracker().contains(assignmentId)) {
-                    throw new CommandException(String.format(MESSAGE_HOMEWORK_NOT_FOUND, assignmentId));
-                }
-            }
-            for (Person student : lastShownList) {
-                Person updated = student.withDeletedHomework(assignmentId);
-                model.setPerson(student, updated);
-            }
             return new CommandResult(String.format(MESSAGE_DELETE_HOMEWORK_ALL_SUCCESS, assignmentId));
+        } else {
+            // safely fetch the student after deletion succeeded
+            Person targetPerson = model.getPersonByNusnetId(nusnetId);
+            return new CommandResult(String.format(MESSAGE_DELETE_HOMEWORK_SUCCESS, assignmentId,
+                    targetPerson.getName()));
         }
-
-        // Case: delete for a single student
-        List<Person> list = model.getFilteredPersonList();
-        Person target = list.stream()
-                .filter(person -> person.getNusnetid().equals(nusnetId))
-                .findFirst()
-                .orElse(null);
-
-        if (target == null) {
-            throw new CommandException(String.format(MESSAGE_PERSON_NOT_FOUND, nusnetId.value));
-        }
-
-        if (!target.getHomeworkTracker().contains(assignmentId)) {
-            throw new CommandException(String.format(MESSAGE_HOMEWORK_NOT_FOUND, assignmentId));
-        }
-
-        Person updated = target.withDeletedHomework(assignmentId);
-        model.setPerson(target, updated);
-        return new CommandResult(String.format(MESSAGE_DELETE_HOMEWORK_SUCCESS, assignmentId, target.getName()));
     }
+
 
     @Override
     public boolean equals(Object other) {

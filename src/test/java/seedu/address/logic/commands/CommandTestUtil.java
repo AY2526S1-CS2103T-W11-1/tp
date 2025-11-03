@@ -60,7 +60,7 @@ public class CommandTestUtil {
             + PREFIX_NUSNETID; // empty string not allowed for NUSnetid
     public static final String INVALID_TELEGRAM_DESC = " " + PREFIX_TELEGRAM
             + "133"; // string without @ not allowed for telegram
-    public static final String INVALID_SLOT_DESC = " " + PREFIX_GROUP + "02"; // string without T not allowed for slot
+    public static final String INVALID_GROUP_DESC = " " + PREFIX_GROUP + "02"; // string without T not allowed
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";

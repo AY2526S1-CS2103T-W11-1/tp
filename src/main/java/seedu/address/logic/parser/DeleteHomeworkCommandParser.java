@@ -17,7 +17,7 @@ import seedu.address.model.person.Nusnetid;
  *     <li>{@code i/<nusnetId> a/<assignmentId>} – delete homework for one student</li>
  *     <li>{@code i/all a/<assignmentId>} – delete homework for all students</li>
  * </ul>
- * Assignment IDs must be integers between 1 and 3.
+ * Homework IDs must be integers between 1 and 13.
  */
 public class DeleteHomeworkCommandParser implements Parser<DeleteHomeworkCommand> {
 
@@ -26,6 +26,12 @@ public class DeleteHomeworkCommandParser implements Parser<DeleteHomeworkCommand
         requireNonNull(args);
         String normalized = " " + args.trim();
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(normalized, PREFIX_NUSNETID, PREFIX_ASSIGNMENT);
+        if (!arePrefixesPresent(argMultimap, PREFIX_NUSNETID, PREFIX_ASSIGNMENT)
+                || !argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    DeleteHomeworkCommand.MESSAGE_USAGE));
+        }
+
         try {
             argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NUSNETID, PREFIX_ASSIGNMENT);
         } catch (ParseException e) {
@@ -47,10 +53,10 @@ public class DeleteHomeworkCommandParser implements Parser<DeleteHomeworkCommand
         try {
             assignmentId = Integer.parseInt(assignmentRaw);
         } catch (NumberFormatException e) {
-            throw new ParseException("Assignment id must be an integer between 1 and 3.");
+            throw new ParseException("Homework id must be an integer between 1 and 13.");
         }
-        if (assignmentId < 1 || assignmentId > 3) {
-            throw new ParseException("Assignment id must be between 1 and 3.");
+        if (assignmentId < 1 || assignmentId > 13) {
+            throw new ParseException("Homework id must be between 1 and 13.");
         }
 
         String nusnetIdRaw = argMultimap.getValue(PREFIX_NUSNETID)
@@ -67,5 +73,14 @@ public class DeleteHomeworkCommandParser implements Parser<DeleteHomeworkCommand
         } catch (IllegalArgumentException e) {
             throw new ParseException(Nusnetid.MESSAGE_CONSTRAINTS);
         }
+    }
+
+    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        for (Prefix prefix : prefixes) {
+            if (argumentMultimap.getValue(prefix).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

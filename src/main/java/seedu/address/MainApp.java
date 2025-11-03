@@ -83,6 +83,13 @@ public class MainApp extends Application {
                 logger.info("Creating a new data file " + storage.getAddressBookFilePath()
                         + " populated with a sample AddressBook.");
             }
+            if (addressBookOptional.isPresent()) {
+                try {
+                    storage.saveAddressBook(addressBookOptional.get());
+                } catch (IOException ioe) {
+                    logger.warning("Failed to clean up mismatch in addressbook: " + StringUtil.getDetails(ioe));
+                }
+            }
             initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."

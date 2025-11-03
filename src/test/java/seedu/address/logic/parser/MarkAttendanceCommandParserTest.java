@@ -11,6 +11,8 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.MarkAttendanceCommand;
+import seedu.address.model.person.AttendanceStatus;
+import seedu.address.model.person.Nusnetid;
 
 public class MarkAttendanceCommandParserTest {
 
@@ -21,13 +23,15 @@ public class MarkAttendanceCommandParserTest {
         // Single student
         assertParseSuccess(parser, " i/" + VALID_NUSNETID_AMY + " w/" + VALID_WEEK_1
                         + " status/" + VALID_STATUS_PRESENT ,
-                new MarkAttendanceCommand(VALID_NUSNETID_AMY, 2, VALID_STATUS_PRESENT));
+                new MarkAttendanceCommand(new Nusnetid(VALID_NUSNETID_AMY),
+                        2, AttendanceStatus.fromString(VALID_STATUS_PRESENT)));
     }
 
 
     @Test
     public void parse_invalidWeek_failure() {
-        assertParseFailure(parser, " i/" + VALID_NUSNETID_AMY + " w/" + INVALID_WEEK + " " + VALID_STATUS_PRESENT ,
+        assertParseFailure(parser, " i/" + VALID_NUSNETID_AMY + " w/" + INVALID_WEEK + " status/"
+                        + VALID_STATUS_PRESENT ,
                 MarkAttendanceCommand.MESSAGE_INVALID_WEEK);
     }
 

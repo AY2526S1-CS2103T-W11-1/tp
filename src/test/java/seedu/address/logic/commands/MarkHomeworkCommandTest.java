@@ -6,6 +6,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.person.Nusnetid;
@@ -19,9 +20,21 @@ public class MarkHomeworkCommandTest {
     @BeforeEach
     public void setUp() {
         model = new ModelManager();
-        // Add sample students
-        Person alice = new PersonBuilder().withNusnetid("E1234567").withName("Alice").build();
-        Person bob = new PersonBuilder().withNusnetid("E1234568").withName("Bob").build();
+        // Add sample students with distinct identity fields to avoid duplicate detection
+        Person alice = new PersonBuilder()
+                .withNusnetid("E1234567")
+                .withName("Alice")
+                .withTelegram("@alice")
+                .withPhone(null)
+                .withEmail(null)
+                .build();
+        Person bob = new PersonBuilder()
+                .withNusnetid("E1234568")
+                .withName("Bob")
+                .withTelegram("@bob")
+                .withPhone(null)
+                .withEmail(null)
+                .build();
 
         // Add initial homework
         alice = alice.withAddedHomework(1);
@@ -74,6 +87,6 @@ public class MarkHomeworkCommandTest {
     @Test
     public void execute_studentNotFound_throwsCommandException() {
         MarkHomeworkCommand command = new MarkHomeworkCommand(new Nusnetid("E0000000"), 1, "complete");
-        assertThrows(Exception.class, () -> command.execute(model));
+        assertThrows(CommandException.class, () -> command.execute(model));
     }
 }

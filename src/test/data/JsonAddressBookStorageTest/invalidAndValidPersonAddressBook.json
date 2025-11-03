@@ -5,13 +5,13 @@
     "email": "hans@u.nus.edu",
     "nusnetid": "E1234567",
     "telegram": "@valid",
-    "slot": "T01"
+    "groupId": "T01"
   }, {
     "name": "Person With Invalid Phone Field",
     "phone": "948asdf2424",
     "email": "hans@u.nus.edu",
     "nusnetid": "E1234567",
     "telegram": "@valid",
-    "slot": "T01"
+    "groupId": "T01"
   } ]
 }

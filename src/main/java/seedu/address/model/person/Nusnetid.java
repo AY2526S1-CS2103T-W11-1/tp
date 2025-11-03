@@ -10,7 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Nusnetid {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "NUSnetid can start with E and has 7 numbers, and it should not be blank";
+            "NUSNETID can start with E and has 7 numbers, and it should not be blank";
 
     /*
      * The first character of the NUSnetid must be a E and follow by 7 numbers.

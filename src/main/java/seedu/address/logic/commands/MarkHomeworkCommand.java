@@ -2,12 +2,9 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
-
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.CliSyntax;
 import seedu.address.model.Model;
-import seedu.address.model.person.HomeworkTracker;
 import seedu.address.model.person.Nusnetid;
 import seedu.address.model.person.Person;
 
@@ -77,39 +74,12 @@ public class MarkHomeworkCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-
-        List<Person> list = model.getFilteredPersonList();
-
-        // find by nusnetId
-        Person target = list.stream()
-                .filter(p -> p.getNusnetid().equals(nusnetId))
-                .findFirst()
-                .orElse(null);
-
-        if (target == null) {
-            throw new CommandException(MESSAGE_STUDENT_NOT_FOUND);
-        }
-
-        if (!HomeworkTracker.isValidAssignmentId(assignmentId)) {
-            throw new CommandException(MESSAGE_INVALID_ASSIGNMENT);
-        }
-
-        if (!HomeworkTracker.isValidStatus(status)) {
-            throw new CommandException(MESSAGE_INVALID_STATUS);
-        }
-
-        // check if assignment exists first
-        if (!target.getHomeworkTracker().hasAssignment(assignmentId)) {
-            throw new CommandException(
-                    String.format("Assignment %d not found for %s. Add it first using 'add_hw'.",
-                            assignmentId, target.getName().fullName));
-        }
-
-        Person updated = target.withUpdatedHomework(assignmentId, status);
-        model.setPerson(target, updated);
-
-        return new CommandResult(String.format(MESSAGE_SUCCESS, assignmentId, updated.getName().fullName, status));
+        model.markHomework(nusnetId, assignmentId, status);
+        // fetch the student to get the name
+        Person targetPerson = model.getPersonByNusnetId(nusnetId);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, assignmentId, targetPerson.getName(), status));
     }
+
 
     @Override
     public boolean equals(Object other) {

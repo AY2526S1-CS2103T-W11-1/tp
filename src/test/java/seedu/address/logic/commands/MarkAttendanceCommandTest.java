@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
+import seedu.address.model.person.AttendanceStatus;
+import seedu.address.model.person.Nusnetid;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -27,7 +29,8 @@ public class MarkAttendanceCommandTest {
 
     @Test
     public void execute_markAttendance_success() throws Exception {
-        MarkAttendanceCommand command = new MarkAttendanceCommand("E1234567", 2, "present");
+        MarkAttendanceCommand command = new MarkAttendanceCommand(new Nusnetid("E1234567"),
+                2, AttendanceStatus.fromString("present"));
         String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
                 "Alice", "present", 2);
         assertEquals(expectedMessage, command.execute(model).getFeedbackToUser());
@@ -45,7 +48,8 @@ public class MarkAttendanceCommandTest {
 
     @Test
     public void execute_studentNotFound_throwsCommandException() {
-        MarkAttendanceCommand command = new MarkAttendanceCommand("E0000000", 1, "present");
+        MarkAttendanceCommand command = new MarkAttendanceCommand(new Nusnetid("E0000000"),
+                1, AttendanceStatus.fromString("present"));
         assertThrows(Exception.class, () -> command.execute(model));
     }
 }

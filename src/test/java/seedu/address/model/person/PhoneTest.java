@@ -22,20 +22,20 @@ public class PhoneTest {
     @Test
     public void isValidPhone() {
         // null phone number
-        assertThrows(NullPointerException.class, () -> Phone.isValidSlot(null));
+        assertThrows(NullPointerException.class, () -> Phone.isValidPhone(null));
 
         // invalid phone numbers
-        assertFalse(Phone.isValidSlot("")); // empty string
-        assertFalse(Phone.isValidSlot(" ")); // spaces only
-        assertFalse(Phone.isValidSlot("91")); // less than 3 numbers
-        assertFalse(Phone.isValidSlot("phone")); // non-numeric
-        assertFalse(Phone.isValidSlot("9011p041")); // alphabets within digits
-        assertFalse(Phone.isValidSlot("9312 1534")); // spaces within digits
+        assertFalse(Phone.isValidPhone("")); // empty string
+        assertFalse(Phone.isValidPhone(" ")); // spaces only
+        assertFalse(Phone.isValidPhone("91")); // less than 3 numbers
+        assertFalse(Phone.isValidPhone("phone")); // non-numeric
+        assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
+        assertFalse(Phone.isValidPhone("9312 1534")); // spaces within digits
 
         // valid phone numbers
-        assertTrue(Phone.isValidSlot("911")); // exactly 3 numbers
-        assertTrue(Phone.isValidSlot("93121534"));
-        assertTrue(Phone.isValidSlot("124293842033123")); // long phone numbers
+        assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
+        assertTrue(Phone.isValidPhone("93121534"));
+        assertTrue(Phone.isValidPhone("124293842033123")); // long phone numbers
     }
 
     @Test

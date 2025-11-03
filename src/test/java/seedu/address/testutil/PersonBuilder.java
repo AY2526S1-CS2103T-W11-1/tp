@@ -108,10 +108,18 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code Slot} of the {@code Person} that we are building.
+     * Sets the {@code GroupId} of the {@code Person} that we are building.
      */
     public PersonBuilder withGroup(String groupId) {
         this.groupId = new GroupId(groupId);
+        return this;
+    }
+
+    /**
+     * Sets the {@code GroupId} to null of the {@code Person} that we are building.
+     */
+    public PersonBuilder withNoGroup() {
+        this.groupId = null;
         return this;
     }
 

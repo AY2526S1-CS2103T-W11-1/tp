@@ -1,0 +1,61 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant ":AddressBook" as AddressBook MODEL_COLOR
+participant ":UniquePersonList" as UniquePersonList MODEL_COLOR
+participant ":Person" as Person MODEL_COLOR
+participant ":UniqueConsultationList" as UniqueConsultationList MODEL_COLOR
+end box
+
+[-> Model : deleteConsultationFromPerson(nusnetid)
+activate Model
+
+Model -> AddressBook : deleteConsultationFromPerson(nusnetid)
+activate AddressBook
+
+AddressBook -> UniquePersonList : deleteConsultationFromPerson(nusnetid)
+activate UniquePersonList
+
+UniquePersonList -> Person : getConsultation().get()
+activate Person
+
+Person -> UniquePersonList : deletedConsultation
+deactivate Person
+
+UniquePersonList -> Person : deleteConsultation()
+activate Person
+
+Person --> UniquePersonList
+deactivate Person
+
+UniquePersonList --> AddressBook : deletedConsultation
+deactivate UniquePersonList
+
+AddressBook --> Model : deletedConsultation
+deactivate AddressBook
+
+[<-- Model : deletedConsultation
+deactivate Model
+
+[-> Model : deleteConsultation(deletedConsultation)
+activate Model
+
+Model -> AddressBook : deleteConsultation(deletedConsultation)
+activate AddressBook
+
+AddressBook -> UniqueConsultationList : remove(deletedConsultation)
+activate UniqueConsultationList
+
+UniqueConsultationList --> AddressBook
+deactivate UniqueConsultationList
+
+AddressBook --> Model
+deactivate AddressBook
+
+[<-- Model
+deactivate Model
+
+@enduml

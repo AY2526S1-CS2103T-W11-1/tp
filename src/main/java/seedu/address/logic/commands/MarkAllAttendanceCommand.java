@@ -5,18 +5,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_GROUP;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_WEEK;
 
-import java.util.ArrayList;
-import java.util.function.Predicate;
-
-import javafx.collections.ObservableList;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.Group;
 import seedu.address.model.Model;
-import seedu.address.model.person.Attendance;
-import seedu.address.model.person.AttendanceSheet;
 import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.GroupId;
-import seedu.address.model.person.Person;
+
 
 /**
  * Marks the attendance of all students in a specified group for a given week.
@@ -44,14 +37,16 @@ public class MarkAllAttendanceCommand extends Command {
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_GROUP + "T02 " + PREFIX_WEEK + "3 " + PREFIX_STATUS + "present";
 
-    public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Marked attendance for Group %1$s: %2$s in week %3$d.";
+    public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS = "Marked attendance for Group %1$s: "
+            + "%2$s in week %3$d.\n";
     public static final String MESSAGE_GROUP_NOT_FOUND = "Group not found.";
-    public static final String MESSAGE_INVALID_WEEK = "Invalid Week.";
+    public static final String MESSAGE_INVALID_WEEK = "Invalid Week. "
+            + "Week should be between 2 and 13 and be a positive integer.";
     public static final String MESSAGE_INVALID_STATUS = "Please enter present/absent/excused only.";
 
-    private final String groupId;
+    private final GroupId groupId;
     private final int week;
-    private final String attendanceStatus;
+    private final AttendanceStatus attendanceStatus;
 
 
     /**
@@ -61,7 +56,7 @@ public class MarkAllAttendanceCommand extends Command {
      * @param week the week number to update
      * @param attendanceStatus the new attendance status ("present", "absent", or "excused")
      */
-    public MarkAllAttendanceCommand(String groupId, int week, String attendanceStatus) {
+    public MarkAllAttendanceCommand(GroupId groupId, int week, AttendanceStatus attendanceStatus) {
         this.week = week;
         this.groupId = groupId;
         this.attendanceStatus = attendanceStatus;
@@ -76,54 +71,12 @@ public class MarkAllAttendanceCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-
-        if (week < 2 || week > 13) {
-            throw new CommandException(MESSAGE_INVALID_WEEK);
+        if (!model.hasGroup(groupId)) {
+            throw new CommandException(MESSAGE_GROUP_NOT_FOUND);
         }
-
-        AttendanceStatus status = AttendanceStatus.fromString(attendanceStatus);
-        ObservableList<Group> list = model.getAddressBook().getGroupList();
-        GroupId targetGroupId;
-        if (GroupId.isValidGroupId(groupId)) {
-            targetGroupId = new GroupId(groupId);
-        } else {
-            throw new CommandException(GroupId.MESSAGE_CONSTRAINTS);
-        }
-        Group targetGroup = list.stream()
-            .filter(group -> group.getGroupId().equals(targetGroupId))
-               .findFirst()
-               .orElseThrow(() -> new CommandException(MESSAGE_GROUP_NOT_FOUND));
-
-        ArrayList<Person> studentsInGroup = targetGroup.getAllPersons();
-        if (status == null) {
-            throw new CommandException(MESSAGE_INVALID_STATUS);
-        }
-        for (Person targetStudent: studentsInGroup) {
-            AttendanceSheet updatedSheet = new AttendanceSheet();
-            for (Attendance attendance : targetStudent.getAttendanceSheet().getAttendanceList()) {
-                updatedSheet.markAttendance(attendance.getWeek(), attendance.getAttendanceStatus());
-            }
-            updatedSheet.markAttendance(week, status);
-
-            Person updatedStudent = new Person(
-                    targetStudent.getName(),
-                    targetStudent.getPhone(),
-                    targetStudent.getEmail(),
-                    targetStudent.getNusnetid(),
-                    targetStudent.getTelegram(),
-                    targetStudent.getGroupId(),
-                    targetStudent.getHomeworkTracker(),
-                    updatedSheet,
-                    targetStudent.getConsultation());
-
-            model.setPerson(targetStudent, updatedStudent);
-            targetGroup.setPerson(targetStudent, updatedStudent);
-        }
-
-        Predicate<Person> predicate = person -> person.getGroupId().value.equals(groupId);
-        model.updateFilteredPersonList(predicate);
+        model.markAllAttendance(groupId, week, attendanceStatus);
         return new CommandResult(String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
-                    groupId, status.getStatus(), week));
+                    groupId, attendanceStatus.getStatus(), week));
     }
 
     @Override

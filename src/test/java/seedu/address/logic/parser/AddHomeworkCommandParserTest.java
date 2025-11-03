@@ -31,8 +31,8 @@ public class AddHomeworkCommandParserTest {
 
     @Test
     public void parse_invalidAssignmentId_failure() {
-        assertParseFailure(parser, " i/" + VALID_NUSNETID_AMY + " a/10",
-                "Assignment id must be between 1 and 3.");
+        assertParseFailure(parser, " i/" + VALID_NUSNETID_AMY + " a/100",
+                "Homework id must be between 1 and 13.");
     }
 
     @Test
