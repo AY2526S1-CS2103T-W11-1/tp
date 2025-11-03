@@ -70,9 +70,11 @@
         "non-functional-requirements": "Non-Functional Requirements",
         "glossary": "Glossary",
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
-        "launch-and-shutdown": "Launch and shutdown",
-        "deleting-a-person": "Deleting a person",
-        "saving-data": "Saving data"
+        "1-launch-and-shutdown-tests": "1. Launch and Shutdown Tests",
+        "2-data-management-tests": "2. Data Management Tests",
+        "3-saving-and-loading-data": "3. Saving and Loading Data",
+        "4-user-interface-and-command-behavior": "4. User Interface and Command Behavior",
+        "5-exploratory-testing-suggestions": "5. Exploratory Testing Suggestions"
       },
       "headingKeywords": {}
     },

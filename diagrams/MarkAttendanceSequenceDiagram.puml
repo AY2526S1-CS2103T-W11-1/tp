@@ -8,6 +8,7 @@ participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":MarkAttendanceCommandParser" as MarkAttendanceCommandParser LOGIC_COLOR
 participant "d:MarkAttendanceCommand" as MarkAttendanceCommand LOGIC_COLOR
 participant "r:CommandResult" as CommandResult LOGIC_COLOR
+participant "r:CommandResult" as CommandResult2 LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
@@ -88,7 +89,7 @@ else invalid / missing arguments
     deactivate AddressBookParser
 
     create CommandResult
-    LogicManager -> CommandResult : new CommandResult("Invalid command format\n" + errorMessage)
+    LogicManager -> CommandResult : new CommandResult(Invalid command format + errorMessage)
     activate CommandResult
     CommandResult --> LogicManager : r
     deactivate CommandResult
