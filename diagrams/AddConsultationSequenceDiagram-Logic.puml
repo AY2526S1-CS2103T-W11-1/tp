@@ -15,10 +15,10 @@ participant "m:Model" as Model MODEL_COLOR
 participant "c:Consultation" as Consultation MODEL_COLOR
 end box
 
-[-> LogicManager : execute("add_consult i/E1234567 from/20251111 1000 to/20251111 1100")
+[-> LogicManager : execute("add_consult i/E1234567\nfrom/20251111 1000 to/20251111 1100")
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("add_consult i/E1234567 from/20251111 1000 to/20251111 1100")
+LogicManager -> AddressBookParser : parseCommand("add_consult i/E1234567\nfrom/20251111 1000 to/20251111 1100")
 activate AddressBookParser
 
 create AddConsultationCommandParser
@@ -28,7 +28,7 @@ activate AddConsultationCommandParser
 AddConsultationCommandParser --> AddressBookParser
 deactivate AddConsultationCommandParser
 
-AddressBookParser -> AddConsultationCommandParser : parse("i/E1234567 from/20251111 1000 to/20251111 1100")
+AddressBookParser -> AddConsultationCommandParser : parse("i/E1234567\nfrom/20251111 1000 to/20251111 1100")
 activate AddConsultationCommandParser
 
 create Consultation

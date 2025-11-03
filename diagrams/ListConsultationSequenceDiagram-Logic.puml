@@ -32,7 +32,7 @@ deactivate AddressBookParser
 LogicManager -> ListConsultationCommand : execute(m)
 activate ListConsultationCommand
 
-ListConsultationCommand -> Model : updateFilteredConsultationList
+ListConsultationCommand -> Model : updateFilteredConsultationList(predicate)
 activate Model
 
 Model --> ListConsultationCommand
