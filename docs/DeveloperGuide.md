@@ -1450,7 +1450,6 @@ This section provides step-by-step, comprehensive instructions for performing **
       `mark_attendance i/E1234567 w/2 status/present`  
    3. **Expected:**  
    - Success message is displayed.
-   - The student’s attendance record now shows **present** for week **2**.
 
 2. Mark attendance (Student not found)
    1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.
@@ -1474,14 +1473,40 @@ This section provides step-by-step, comprehensive instructions for performing **
    - Error message is displayed.
 
 ### Mark All Attendance
-1. Mark attendance for all students
-    1. Setup: Ensure multiple students are present in the system.
+1. Mark attendance for all students in one group
+    1. Setup: Ensure group T01 with students present in the system.
     2. Execute the command:  
-       `mark_attendance i/all w/2 status/absent`
+       `mark_all_attendance g/T01 w/2 status/absent`
     3. **Expected:**
     - Success message is displayed.
-    - All students’ attendance records now show **absent** for week **2**.
 
+2. Mark all attendance (Group not found)
+    1. Setup: Ensure that there is no group with GroupID T02 in the system.
+    2. Execute the command:
+       `mark_all_attendance g/T02 w/2 status/present`
+    3. **Expected:**
+    - Error message is displayed.
+
+3. Mark all attendance (Invalid week)
+    1.  Setup: Ensure group T01 with students present in the system.
+    2. Execute the command:
+       `mark_all_attendance g/T01 w/20 status/present`
+    2. **Expected:**
+    - Error message is displayed.
+
+4. Mark all attendance (Invalid status)
+    1.  Setup: Ensure group T01 with students present in the system.
+    2. Execute the command:
+       `mark_all_attendance g/T01 w/2 status/late`
+    3. **Expected:**
+    - Error message is displayed.
+
+5. Mark all attendance (Group has no students)
+    1.  Setup: Ensure group T03 exists but has no students in the system.
+    2. Execute the command:
+       `mark_all_attendance g/T03 w/2 status/present`
+    3. **Expected:**
+    - Error message is displayed.
 ### Add Consultation
 1. Add a consultation for a student  
    1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567` that has no consultation.  
