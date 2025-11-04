@@ -79,6 +79,13 @@
         "add-homework": "Add homework",
         "delete-homework": "Delete homework",
         "mark-homework": "Mark homework",
+        "mark-attendance": "Mark Attendance",
+        "mark-all-attendance": "Mark All Attendance",
+        "add-consultation": "Add Consultation",
+        "delete-consultation": "Delete Consultation",
+        "create-group": "Create Group",
+        "add-student-to-group": "Add Student to Group",
+        "find-students-by-group": "Find Students by Group",
         "appendix-planned-enhancement": "Appendix: Planned Enhancement"
       },
       "headingKeywords": {}
