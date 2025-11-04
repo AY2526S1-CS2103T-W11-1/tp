@@ -170,7 +170,7 @@ Format: `add_student n/NAME i/NUSNETID t/TELEGRAM g/GROUPID [p/PHONE_NUMBER] [e/
 <box type="tip" seamless>
 
 **Tip:** Phone and email are optional. You can omit either or both when adding a student.
-* The parameter constraints are listed [here](#Parameter-Constraints).
+* The parameter constraints can be found above.
 * The duplicate checking is done in the fields of NUSNET ID, Telegram handle, phone number and email. Currently, the exact duplicated field will not be reported in the error message. User needs to find the duplicated field manually.
 </box>
 
@@ -192,7 +192,7 @@ Format: `edit_student INDEX [n/NAME] [i/NUSNETID] [t/TELEGRAM] [p/PHONE] [e/EMAI
 * You CANNOT use this command to change the tutorial group that this student belongs to. Use the `add_to_group` command instead.
 * The duplicate checking is done in the fields of NUSNET ID, Telegram handle, phone number and email. Currently, the exact duplicated field will not be reported in the error message. User needs to find the duplicated field manually.
 * You can use `p/` to remove the phone number or `e/` to remove the email address of a student by leaving the parameter value empty.
-* The parameter constraints are listed [here](https://ay2526s1-cs2103t-w11-1.github.io/tp/UserGuide.html#Parameter-Constraints).
+* The parameter constraints can be found above.
 
 
 Examples:
@@ -251,7 +251,7 @@ Format: `add_hw i/NUSNETID (use 'i/all' for all students) a/ASSIGNMENT_NUMBER`
 * The newly added homework will have a default status of `incomplete`.
 * The assignment number should be a positive integer between 1 to 13.
 * If adding homework for a specific student, NUSNET ID is used. The NUSNET ID and homework number **must be valid**.
-* The parameter constraints are listed [here](#Parameter-Constraints).
+* The parameter constraints can be found above.
 * The system will check the validity of command format, followed by validity of input, the existence of the student, and lastly whether the homework has been added already.
 
 Examples:
@@ -277,7 +277,8 @@ Format: `mark_hw i/NUSNETID a/ASSIGNMENT_NUMBER status/STATUS`
 * The assignment number should be a positive integer between 1 to 13.
 * The assignment must exist for the student.
 * The `STATUS` can be one of the following: `complete`, `incomplete`, or `late`.
-* The NUSNET ID, homework number and status **must be valid**. The parameter constraints are listed [here](#Parameter-Constraints).
+* The NUSNET ID, homework number and status **must be valid**.
+* The parameter constraints can be found above.
 * The system will check the validity of command format, followed by validity of input, the existence of the student, and lastly whether the homework can be marked (i.e., whether the homework exists for the student).
 
 Examples:
@@ -302,7 +303,8 @@ Format: `delete_hw i/NUSNETID (use 'i/all' for all students) a/ASSIGNMENT_NUMBER
 * The assignment number should be a positive integer between 1 to 13, and the assignment must exist for the student.
 * If `i/all` is used, the homework is deleted for all students.
 * The user can add homework to all students as long as at least one of the students have the homework. (i.e., deleting homework is successful if everyone has the homework or some of them have the homework, and is unsuccessful if none of the students has the homework).
-* The NUSNET ID and homework number **must be valid**. The parameter constraints are listed [here](#Parameter-Constraints).
+* The NUSNET ID and homework number **must be valid**.
+* The parameter constraints can be found above.
 * The system will check the validity of command format, followed by validity of input, the existence of the student, and lastly whether the student has the homework.
 
 Examples:
@@ -332,7 +334,8 @@ Format: `mark_attendance i/NUSNETID w/WEEK status/ATTENDANCE_STATUS`
 * Week number must between 2 to 13.
 * NUSNET ID can start with E and has 7 numbers, and it should not be blank.
 * The `ATTENDANCE_STATUS` can be one of the following: `present`, `absent`, or `excused`.
-* The NUSNET ID, week number and status **must be valid**. The parameter constraints are listed [here](#Parameter-Constraints).
+* The NUSNET ID, week number and status **must be valid**.
+* The parameter constraints can be found above.
 * The system will check the validity of command format, followed by validity of input, and lastly the existence of the student.
 
 Examples:
@@ -358,7 +361,7 @@ Format: `mark_all_attendance g/GROUPID w/WEEK status/ATTENDANCE_STATUS`
 * Group IDs should start with T or B (case-insensitive) and be followed by strictly 2 digits.
 * The `ATTENDANCE_STATUS` can be one of the following: `present`, `absent`, or `excused`.
 * The groupId, week number and status **must be valid**.
-* The parameter constraints are listed [here](#Parameter-Constraints).
+* The parameter constraints can be found above.
 * The system will check the validity of command format, followed by validity of input, and lastly the existence of the group.
 * After attendance taking, users can use `list` command to return to the full student list view.
 
@@ -387,7 +390,7 @@ Format: `add_consult i/NUSNETID from/DATE_TIME to/DATE_TIME`
 * Both start (`from`) and end (`to`) times **must be in `yyyyMMdd HHmm` format**.
 * The start time must be **earlier** than the end time**.
 * The NUSNET ID, start time and end time **must be valid**.
-* The parameter constraints are listed [here](#Parameter-Constraints).
+* The parameter constraints can be found above.
 * A consultation cannot be added to a student who already has an existing consultation. (i.e. Each student can only have one assigned consultation)
 * A consultation cannot overlap with other existing consultations. (i.e. Students can only have one-to-one consultations)
 
@@ -410,7 +413,7 @@ Format: `delete_consult i/NUSNETID`
 
 * Deletes the consultation for the specified student.
 * The NUSNET ID **must be valid**.
-* The parameter constraints are listed [here](#Parameter-Constraints).
+* The parameter constraints can be found above.
 
 Examples:
 * `delete_consult i/E1234567` deletes consultation for student `E1234567`.
