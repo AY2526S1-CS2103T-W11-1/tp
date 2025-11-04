@@ -348,6 +348,7 @@ Examples:
 <p align="center">
 <img alt="image" src="https://github.com/user-attachments/assets/a7951e3f-465f-44c3-8241-c5796c093361" width="100%"/>
 </p>
+
 ---
 
 ### Marking attendance for one group of students : `mark_all_attendance`
@@ -370,7 +371,9 @@ Examples:
 <p align="center">
 <img alt="image" src="https://github.com/user-attachments/assets/43996d42-0818-4405-93bd-198feb5c8490" width="100%"/>
 </p>
+
 * `mark_all_attendance g/T01 w/5 status/absent` marks all students in group T01 as absent for week 5.
+
 <p align="center">
 <img alt="image" src="https://github.com/user-attachments/assets/df045519-b799-47bd-8e05-00c08e0e030d" width="100%"/>
 </p>
@@ -453,7 +456,7 @@ Format: `add_to_group i/NUSNETID g/GROUPID`
 * If the group exists, the student will be added to that new group.
 * Student cannot be moved to the same group they are already in; an error message will be shown in such cases.
 * Since a student can only belong to one group at a time, adding them to a new group will remove them from their previous group.
-* The NUSNET ID and group ID **must be valid**. For group ID, refer [here](#creating-a-group).
+* The NUSNET ID and group ID **must be valid**.
 
 Examples:
 * `add_to_group i/E1234567 g/T03` move student with NUSNET ID `E1234567` from current group to group `T03`.
