@@ -68,7 +68,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-W11-1/tp/blob/master/src/main/java/seedu/address/MainApp.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-W11-1/tp/blob/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -79,7 +79,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103T-W11-1/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -158,8 +158,8 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 </box>
 
-How the `addhomework` command works:
-1. When the user enters an `addhomework` command, `LogicManager` passes it to `AddressBookParser`.
+How the `add_hw` command works:
+1. When the user enters an `add_hw` command, `LogicManager` passes it to `AddressBookParser`.
 2. `AddressBookParser` creates an `AddHomeworkCommandParser` to parse the command arguments.
 3. `AddHomeworkCommandParser` validates and parses the NUSNET ID (or the keyword `all`) and the assignment ID.
 4. An `AddHomeworkCommand` object is created and executed.
@@ -183,8 +183,8 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 </box>
 
-How the `deletehomework` command works:
-1. When the user enters a `deletehomework` command, `LogicManager` passes it to `AddressBookParser`.
+How the `delete_hw` command works:
+1. When the user enters a `delete_hw` command, `LogicManager` passes it to `AddressBookParser`.
 2. `AddressBookParser` creates a `DeleteHomeworkCommandParser` to parse the command arguments.
 3. `DeleteHomeworkCommandParser` validates and parses the NUSNET ID (or the keyword `all`) and the assignment ID.
 4. A `DeleteHomeworkCommand` object is created and executed.
@@ -196,7 +196,7 @@ How the `deletehomework` command works:
 
 ### Mark Homework Feature
 
-The mark homework feature allows users to update the status (e.g., `complete`, `incomplete`, 'late') of a homework assignment for a specific student.
+The mark homework feature allows users to update the status (e.g., `complete`, `incomplete`, `late`) of a homework assignment for a specific student.
 
 The sequence diagram below illustrates the interactions within the `Logic` component for marking homework:
 
@@ -208,12 +208,12 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 </box>
 
-How the `markhomework` command works:
-1. When the user enters a `markhomework` command, `LogicManager` passes it to `AddressBookParser`.
+How the `mark_hw` command works:
+1. When the user enters a `mark_hw` command, `LogicManager` passes it to `AddressBookParser`.
 2. `AddressBookParser` creates a `MarkHomeworkCommandParser` to parse the command arguments.
 3. `MarkHomeworkCommandParser` validates and parses the NUSNET ID, assignment ID, and status.
 4. A `MarkHomeworkCommand` object is created and executed.
-5.`MarkHomeworkCommand` checks whether the specified homework exists for the student.
+5. `MarkHomeworkCommand` checks whether the specified homework exists for the student.
 6. If found, the homework’s status is updated to the new value.
 7. The updated address book is saved to storage.
 
@@ -224,21 +224,21 @@ The mark attendance feature allows users to mark the attendance status (e.g., `p
 
 The sequence diagram below illustrates the interactions within the `Logic` component for marking attendance:
 
-<puml src="diagrams/MarkAttendanceSequenceDiagram.puml" width ="1200" height ="900" alt="Interactions Inside the Logic Component for the `mark_attendance` Command" />
+<puml src="diagrams/MarkAttendanceSequenceDiagram.puml"  alt="Interactions Inside the Logic Component for the `mark_attendance` Command" />
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `MarkAttendanceCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+**Note:** The lifeline for `MarkAttendanceCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.Due to limited space in the diagram, some input parameters(command text, markAttendanceMessage) are not explicitly shown in the diagram.
 
 </box>
 
-How the `markAttendance` command works:
-1. When the user enters a `markAttendance` command, `LogicManager` passes it to `AddressBookParser`.
+How the `mark_attendance` command works:
+1. When the user enters a `mark_attendance` command, `LogicManager` passes it to `AddressBookParser`.
 2. `AddressBookParser` creates a `MarkAttendanceCommandParser` to parse the command arguments.
 3. `MarkAttendanceCommandParser` validates and parses the NUSNET ID, week number, and attendance status.
 4. A `MarkAttendanceCommand` object is created and executed.
-5. `MarkAttendanceCommand` checks whether the specified student exits.
-6. If exits, the attendance status of the student in the specified week is updated to the status.
+5. `MarkAttendanceCommand` checks whether the specified student exists.
+6. If exists, the attendance status of the student in the specified week is updated to the status.
 7. The updated address book is saved to storage.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -248,16 +248,16 @@ The mark all attendance feature allows users to mark the attendance status (e.g.
 
 The sequence diagram below illustrates the interactions within the `Logic` component for marking attendance:
 
-<puml src="diagrams/MarkAllAttendanceSequenceDiagram.puml" width ="1200" height ="900" alt="Interactions Inside the Logic Component for the `mark_all_attendance` Command" />
+<puml src="diagrams/MarkAllAttendanceSequenceDiagram.puml"  alt="Interactions Inside the Logic Component for the `mark_all_attendance` Command" />
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `MarkAllAttendanceCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+**Note:** The lifeline for `MarkAllAttendanceCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram. Due to limited space in the diagram, some input parameters(command text, markAttendanceMessage) are not explicitly shown in the diagram.
 
 </box>
 
-How the `markAllAttendance` command works:
-1. When the user enters a `markAllAttendance` command, `LogicManager` passes it to `AddressBookParser`.
+How the `mark_all_attendance` command works:
+1. When the user enters a `mark_all_attendance` command, `LogicManager` passes it to `AddressBookParser`.
 2. `AddressBookParser` creates a `MarkAllAttendanceCommandParser` to parse the command arguments.
 3. `MarkAllAttendanceCommandParser` validates and parses the GroupId, week number, and attendance status.
 4. A `MarkAllAttendanceCommand` object is created and executed.
@@ -339,8 +339,8 @@ The sequence diagram below illustrates the interactions within the `Logic` and `
 
 </box>
 
-How the `creategroup` command works:
-1. When the user enters a `creategroup` command, `LogicManager` passes it to `AddressBookParser`.
+How the `create_group` command works:
+1. When the user enters a `create_group` command, `LogicManager` passes it to `AddressBookParser`.
 2. `AddressBookParser` creates a `CreateGroupCommandParser` to parse the command arguments.
 3. `CreateGroupCommandParser` validates and parses the group ID.
 4. A `CreateGroupCommand` object is created and executed.
@@ -358,17 +358,17 @@ The sequence diagram below illustrates the interactions within the `Logic` and `
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `AddStudentToGroupCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+**Note:** The lifeline for `AddToGroupCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 
 </box>
 
-How the `addstudenttogroup` command works:
-1. When the user enters an `addstudenttogroup` command, `LogicManager` passes it to `AddressBookParser`.
-2. `AddressBookParser` creates an `AddStudentToGroupCommandParser` to parse the command arguments.
-3. `AddStudentToGroupCommandParser` validates and parses the NUSNET ID and group ID.
-4. An `AddStudentToGroupCommand` object is created and executed.
-5. `AddStudentToGroupCommand` checks if the specified student exist.
-6. If the student exists, `AddStudentToGroupCommand` checks if the specified group already exist.
+How the `add_to_group` command works:
+1. When the user enters an `add_to_group` command, `LogicManager` passes it to `AddressBookParser`.
+2. `AddressBookParser` creates an `AddToGroupCommandParser` to parse the command arguments.
+3. `AddToGroupCommandParser` validates and parses the NUSNET ID and group ID.
+4. An `AddToGroupCommand` object is created and executed.
+5. `AddToGroupCommand` checks if the specified student exist.
+6. If the student exists, `AddToGroupCommand` checks if the specified group already exist.
 7. Create an updated student object with the new group ID.
 8. If the group exists, the student is added to the specified group.
 9. Else, the group is created and the student is added to the newly created group.
@@ -385,19 +385,20 @@ The sequence diagram below illustrates the interactions within the `Logic` and `
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `FindStudentByGroupCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
+**Note:** The lifeline for `FindGroupCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of the diagram.
 
 </box>
 
 How the `find_group` command works:
 1. When the user enters a `find_group` command, `LogicManager` passes it to `AddressBookParser`.
-2. `AddressBookParser` creates a `FindStudentByGroupCommandParser` to parse the command arguments.
-3. `FindStudentByGroupCommandParser` validates and parses the group ID.
-4. A `FindStudentByGroupCommand` object is created and executed.
-5. If the group ID is valid, and the group exist in the address book, `FindStudentByGroupCommand` retrieves the list of students belonging to the specified group from the `Model`.
-6. The filtered student list in the `Model` is updated to only include students from the specified group.
+2. `AddressBookParser` creates a `FindGroupCommandParser` to parse the command arguments.
+3. `FindGroupCommandParser` validates and parses the group ID.
+4. A `FindGroupCommand` object is created and executed.
+5. If the group ID is valid, and the group exist in the address book, `FindGroupCommand` retrieves the list of students belonging to the specified group from the `Model`.
+6. The filtered student list in the `Model` is updated to **only** include students from the specified group.
 7. The updated filtered student list is displayed to the user in the UI.
-8. If the group ID is invalid or the group does not exist, an error message is shown to the user.
+8. If the group ID is invalid, an error message is shown to the user.
+9. If the group does not exist, inform the user that no such group exists.
 9. No change to the address book is made.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -461,17 +462,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 
 **Use case:** UC01 - Add a student
+
 **Actor**: TA
 
 **MSS**
 
 1. User requests to add a student by specifying required fields: full name, NUSNET ID, email, Telegram handle and optional fields: phone number, group ID.
 
-2. AddressBook validates all fields.
+2. SoCTAssist validates all fields.
 
-3. AddressBook adds the student into the directory.
+3. SoCTAssist adds the student into the directory.
 
-4. AddressBook shows the updated student list in the UI table.
+4. SoCTAssist shows the updated student list in the UI table.
 
     Use case ends.
 
@@ -479,40 +481,39 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. One or more required fields are missing.
 
-    * 2a1. AddressBook shows error: `Invalid command format!`.
+    * 2a1. SoCTAssist shows error.
 
         Use case ends.
 
 * 2b. Email format is invalid.
 
-    * 2b1. AddressBook shows error: `Invalid email format`.
+    * 2b1. SoCTAssist shows error.
 
         Use case ends.
 
 * 2c. Group ID format is invalid.
 
-    * 2c1. AddressBook shows error message: `Invalid Group ID`.
+    * 2c1. SoCTAssist shows error message.
 
         Use case ends.
 
 * 2d. A student with the same nusnetid already exists.
 
-    * 2d1. AddressBook shows error: `This person already exists in the address book.`.
-
-       Use case ends.
+    * 2d1. SoCTAssist shows error.
 
 **Use case:** UC02 - Edit a student
+
 **Actor**: TA
 
 **MSS**
 
 1. User requests to edit a student by specifying the index and updated fields.
 
-2. AddressBook validates that the student exists.
+2. SoCTAssist validates that the student exists.
 
-3. AddressBook updates the student's details.
+3. SoCTAssist updates the student's details.
 
-4. AddressBook shows confirmation message with updated student details.
+4. SoCTAssist shows confirmation message with updated student details.
 
     Use case ends.
 
@@ -520,92 +521,95 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. Student index does not exist.
 
-    * 2a1. AddressBook shows error: `The person index provided is invalid`.
+    * 2a1. SoCTAssist shows error: `The person index provided is invalid`.
 
       Use case ends.
 
 * 2b. Any updated field is invalid.
 
-    * 2b1. AddressBook shows corresponding validation error. (UC01 Extensions 2b, 2c).
+    * 2b1. SoCTAssist shows corresponding validation error. (UC01 Extensions 2b, 2c).
 
       Use case ends.
 
 * 2c. Try to update group id.
 
-    * 2c1. AddressBook shows error and states the correct format.
+    * 2c1. SoCTAssist shows error and states the correct format.
 
       Use case ends.
 
 **Use case:** UC03 - Delete a student
+
 **Actor**: TA
 
 **MSS**
 
 1. User requests to list students.
 
-2. AddressBook shows a list of students.
+2. SoCTAssist shows a list of students.
 
 3. User requests to delete a specific student in the list.
 
-4. AddressBook deletes the student.
+4. SoCTAssist deletes the student.
 
-5. AddressBook UI updated.
+5. SoCTAssist UI updated.
     Use case ends.
 
 **Extensions**
 * 1a. The list is empty.
-    * 1a1. AddressBook shows error: `The student list is empty.`
+    * 1a1. SoCTAssist shows error. 
 
       Use case ends.    
 * 3a. Student index does not exist.
-    * 3a1. AddressBook shows error: `The person index provided is invalid`.
+    * 3a1. SoCTAssist shows error.
   
     Use case ends.
 * 3b. Student index is invalid (not a number or is not positive).
-    * 3b1. AddressBook shows error: `Invalid command format!`.
+    * 3b1. SoCTAssist shows error.
 
       Use case ends.
 
 **Use Case:** UC04 - Create Homework
+
 **Actor**: TA
 
 **MSS**
 
 1. User enters a command to create a new homework numbered 1 to 3 for a student using their NUSNET ID.
-2. Homework Tracker locates the student homework record.
-3. Homework Tracker validates the assignment ID.
-4. Homework Tracker creates the new assignment with an initial status of `incomplete`.
-5. Homework Tracker displays a success message.
+2. SoCTAssist locates the student homework record.
+3. SoCTAssist validates the assignment ID.
+4. SoCTAssist creates the new assignment with an initial status of `incomplete`.
+5. SoCTAssist displays a success message.
 
    Use case ends.
 
 **Extensions**
 * 2a. Student with the given NUSNET ID does not exist
   
-    * 2a1. Homework Tracker displays an error message.
+    * 2a1. SoCTAssist displays an error message.
 
       Use case ends.
 * 3a. Homework ID already exists for this student
   
-  * 3a1. Homework Tracker displays an error message.
+  * 3a1. SoCTAssist displays an error message.
 
     Use case ends.
 * 3b. Homework ID is invalid (not between 1–13)
   
-  * 3b1. Homework Tracker displays an error message.
+  * 3b1. SoCTAssist displays an error message.
 
     Use case ends.
     
 **Use case:** UC05 - Mark Homework completion
+
 **Actor**: TA
 
 **MSS**
 
 1. User requests to mark a homework status for a student using their NUSNET ID.
-2. Homework Tracker locates the student homework record.
-3. Homework Tracker verifies the homework ID.
-4. Homework Tracker updates the homework status (complete / incomplete / late).
-5. Homework Tracker shows a confirmation message.
+2. SoCTAssist locates the student homework record.
+3. SoCTAssist verifies the homework ID.
+4. SoCTAssist updates the homework status (complete / incomplete / late).
+5. SoCTAssist shows a confirmation message.
 
    Use case ends.
 
@@ -617,34 +621,37 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The student with the given NUSNET ID does not exist.
   
-    * 2a1. Homework Tracker shows error message: `Student not found`.
+    * 2a1. SoCTAssist shows error message: `Student not found`.
   
       Use case ends.
 
 * 3a. The given assignment ID is invalid (not between 1-13).
   
-    * 3a1. Homework Tracker shows error message.
+    * 3a1. SoCTAssist shows error message.
   
       Use case ends.
+      
 * 4a. The given status is invalid (not one of complete / incomplete / late).
-    * 4a1. Homework Tracker shows error message.
+    * 4a1. SoCTAssist shows error message.
   
       Use case ends.
+      
 * 4b. The student already has a status recorded for this assignment.
-    * 4b1. Homework Tracker updates the record with the new status (last write wins).
+    * 4b1. SoCTAssist updates the record with the new status (last write wins).
 
       Use case resumes at step 5.
 
 **Use case:** UC06 - Delete a homework
+
 **Actor**: TA
 
 **MSS**
 
 1. User requests to delete a homework for a student using their NUSNET ID.  
-2. Homework Tracker locates the student homework record.  
-3. Homework Tracker verifies the homework ID.  
-4. Homework Tracker removes the corresponding homework record from the student’s tracker.  
-5. Homework Tracker shows a confirmation message.  
+2. SoCTAssist locates the student homework record.  
+3. SoCTAssist verifies the homework ID.  
+4. SoCTAssist removes the corresponding homework record from the student’s tracker.  
+5. SoCTAssist shows a confirmation message.  
 
    Use case ends.
 
@@ -655,33 +662,34 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.  
 
 * 2a. The student with the given NUSNET ID does not exist.  
-    * 2a1. Homework Tracker shows error message.  
+    * 2a1. SoCTAssist shows error message.  
 
       Use case ends.  
 
 * 3a. The given assignment ID is invalid.  
-    * 3a1. Homework Tracker shows error message.  
+    * 3a1. SoCTAssist shows error message.  
 
       Use case ends.  
 
 * 4a. The specified homework does not exist for the student.  
-    * 4a1. Homework Tracker shows error message.  
+    * 4a1. SoCTAssist shows error message.  
 
       Use case ends.  
 
 
 **Use case:** UC07 - Add a consultation
-**User**: TA
+
+**Actor**: TA
 
 **MSS**
 
 1. User requests to add a consultation by specifying student's NUSNET ID, start date & time, and end date & time.
 
-2. AddressBook validates the NUSNET ID, dates, and times.
+2. SoCTAssist validates the NUSNET ID, dates, and times.
 
-3. AddressBook creates the consultation booking for the student.
+3. SoCTAssist creates the consultation booking for the student.
 
-4. AddressBook shows success message with consultation details and displays list of consultations to user.
+4. SoCTAssist shows success message with consultation details and displays list of consultations to user.
 
     Use case ends.
 
@@ -689,60 +697,61 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. Student NUSNET ID does not exist in the directory.
 
-  * 2a1. AddressBook shows an error message.
+  * 2a1. SoCTAssist shows an error message.
 
        Use case ends.
 
 * 2b. End time is not after start time.
 
-    * 2b1. AddressBook shows an error message.
+    * 2b1. SoCTAssist shows an error message.
 
          Use case ends.
 
 * 2c. The new consultation overlaps with an existing one.
 
-    * 2c1. AddressBook shows an error message.
+    * 2c1. SoCTAssist shows an error message.
 
          Use case ends.
 
 * 2d. A consultation with identical date and time already exists.
 
-    * 2d1. AddressBook shows an error message.
+    * 2d1. SoCTAssist shows an error message.
 
          Use case ends.
 
 * 2d. Student already has an existing consultation.
 
-    * 2d1. AddressBook shows an error message.
+    * 2d1. SoCTAssist shows an error message.
 
       Use case ends.
 
 * 4a. The consultation exceeds 3 hours in duration.
 
-    * 4a1. AddressBook displays a reminder message.
+    * 4a1. SoCTAssist displays a reminder message.
 
       Use case ends.
 
 * 4b. The consultation is over or ongoing.
 
-    * 4b1. AddressBook displays a reminder message.
+    * 4b1. SoCTAssist displays a reminder message.
 
       Use case ends.
 
 **Use case:** UC08 - Delete a consultation
-**User**: TA
+
+**Actor**: TA
 
 **MSS**
 
 1. User requests to delete a consultation by specifying student's NUSNET ID.  
 
-2. AddressBook validates the NUSNET ID.  
+2. SoCTAssist validates the NUSNET ID.  
 
-3. AddressBook locates the consultation record that matches the provided details.  
+3. SoCTAssist locates the consultation record that matches the provided details.  
 
-4. AddressBook deletes the consultation from the system.  
+4. SoCTAssist deletes the consultation from the system.  
 
-5. AddressBook shows success message confirming the deletion and displays list of consultations to user.  
+5. SoCTAssist shows success message confirming the deletion and displays list of consultations to user.  
 
     Use case ends.  
 
@@ -750,28 +759,29 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. NUSNET ID does not exist in the directory.  
 
-  * 2a1. AddressBook shows an error message.  
+  * 2a1. SoCTAssist shows an error message.  
 
        Use case ends.  
 
 * 3a. Student with specified NUSNET ID does not have a consultation.  
 
-  * 3a1. AddressBook shows an error message.  
+  * 3a1. SoCTAssist shows an error message.  
 
        Use case ends.
 
 **Use case:** UC09 - Mark attendance
-**User**: TA
+
+**Actor**: TA
 
 **MSS**
 
 1. User requests to mark attendance for a student by specifying student NUSNET ID, week, and attendance status.
 
-2. AddressBook validates that the student exists and the week and status are valid.
+2. SoCTAssist validates that the student exists and the week and status are valid.
 
-3. AddressBook records the attendance for the student.
+3. SoCTAssist records the attendance for the student.
 
-4. AddressBook shows a confirmation message with details.
+4. SoCTAssist shows a confirmation message with details.
 
     Use case ends.
 
@@ -779,28 +789,30 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. Student NUSNET ID does not exist.
 
-    * 2a1. AddressBook shows error: `Student not found`.
+    * 2a1. SoCTAssist shows error: `Student not found`.
 
          Use case ends.
 
 * 2b. Attendance status is invalid (not Present or Absent or Excused).
 
-    * 2b1. AddressBook shows error: `Please enter present/absent/excused only`.
+    * 2b1. SoCTAssist shows error: `Please enter present/absent/excused only`.
 
          Use case ends.
 
 
 **Use case: Mark all attendance**
 
+**Actor: TA**
+
 **MSS**
 
 1. User requests to mark attendance for a group of student by specifying GroupId, week, and attendance status.
 
-2. AddressBook validates that the group exists and the week and status are valid.
+2. SoCTAssist validates that the group exists and the week and status are valid.
 
-3. AddressBook records the attendance for the student.
+3. SoCTAssist records the attendance for the student.
 
-4. AddressBook shows a confirmation message with details.
+4. SoCTAssist shows a confirmation message with details.
 
     Use case ends.
 
@@ -808,90 +820,93 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. GroupId does not exist.
 
-    * 2a1. AddressBook shows error: `Group not found`.
+    * 2a1. SoCTAssist shows error: `Group not found`.
 
          Use case ends.
 
 * 2b. Attendance status is invalid (not Present or Absent or Excused).
 
-    * 2b1. AddressBook shows error: `Please enter present/absent/excused only`.
+    * 2b1. SoCTAssist shows error: `Please enter present/absent/excused only`.
 
          Use case ends.
 
 * 2c. Week is invalid (input is not between 2 and 13 or is not an integer.").
 
-    * 2c1. AddressBook shows error: `Invalid Week. Week should be between 2 and 13 and be a positive integer.`.
+    * 2c1. SoCTAssist shows error: `Invalid Week. Week should be between 2 and 13 and be a positive integer.`.
 
          Use case ends.
 * 2d. Group does not have students.
 
-    * 2d1. AddressBook shows error: `No students in the group.`.
+    * 2d1. SoCTAssist shows error: `No students in the group.`.
 
          Use case ends.
 
 **Use case:** UC10 - Create student groups
-**User**: TA
+
+**Actor**: TA
 
 **MSS**
 
 1. User requests to create a new group with a specified GroupId.
-2. Address Book validates the GroupId.
-3. System creates the group.
-4. System shows confirmation message.
+2. SoCTAssist validates the GroupId.
+3. SoCTAssist creates the group.
+4. SoCTAssist shows confirmation message.
 
    Use case ends.
 
 **Extensions**
 
 * 2a. The GroupId is missing.
-    * 2a1. System shows error message, saying GroupId is missing.
+    * 2a1. SoCTAssist shows error message, saying GroupId is missing.
 
     Use case ends.
 
 * 2b. The GroupId is invalid.
-    * 2c1. System shows error message and indicates the valid format for GroupId.
+    * 2c1. SoCTAssist shows error message and indicates the valid format for GroupId.
 
       Use case ends.
 
 * 2c. The GroupId is a duplicate.
-    * 2b1. System shows error message, saying GroupId already exists
+    * 2b1. SoCTAssist shows error message, saying GroupId already exists
 
       Use case ends.
 
 
 **Use case:** UC11 - Add student to a group
-**User**: TA
+
+**Actor**: TA
 
 **MSS**
 
 1. User requests to add a student to an existing group using the student’s NUSNET ID and GroupId.
-2. System verifies the student exists.
-3. System checks whether the group id is the same as the student's existing group.
-4. System checks whether the group exists.
-5. System adds the student to the specified group.
-6. System shows confirmation message.
+2. SoCTAssist verifies the student exists.
+3. SoCTAssist checks whether the group id is the same as the student's existing group.
+4. SoCTAssist checks whether the group exists.
+5. SoCTAssist adds the student to the specified group.
+6. SoCTAssist shows confirmation message.
 
    Use case ends.
 
 **Extensions**
 
 * 2a. The student with the NUSNET ID does not exist.
-    * 2a1. System shows error message.
+    * 2a1. SoCTAssist shows error message.
 
       Use case ends.
 
 * 3a. The group id is the same as the student's existing group.
-    * 3a1. System shows error message, saying student already in that group.
+    * 3a1. SoCTAssist shows error message, saying student already in that group.
 
       Use case ends.
 
 * 4a. The group does not exist.
-    * 4a1. System creates the group.
+    * 4a1. SoCTAssist creates the group.
 
       Use case resumes at step 5.
 
 **Use case:** UC12 - Find students by group
-**User**: TA
+
+**Actor**: TA
 
 **Guarantees**: 
 * If the GroupId is valid and exists, at least one student is found.
@@ -899,22 +914,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. User requests to find students by specifying a GroupId.
-2. System verifies the GroupId is valid.
-3. System checks whether the group exists.
-4. System retrieves the list of students in the specified group.
-5. System displays the list of students in the UI. 
+2. SoCTAssist verifies the GroupId is valid.
+3. SoCTAssist checks whether the group exists.
+4. SoCTAssist retrieves the list of students in the specified group.
+5. SoCTAssist displays the list of students in the UI. 
    
    Use case ends.
 
 **Extensions**
 
 * 2a. The GroupId is invalid.
-    * 2a1. System shows error message and indicates the valid format for Group Id.
+    * 2a1. SoCTAssist shows error message and indicates the valid format for Group Id.
 
       Use case ends.
 
 * 3a. The group does not exist.
-    * 3a1. System shows error message, saying group does not exist.
+    * 3a1. SoCTAssist informs the user that no such group exists.
   
       Use case ends.
 
@@ -925,7 +940,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - Maximum 500 students 
 - Maximum 20 tutorial groups
 - Support 12 weeks of attendance data (weeks 2-13)
-- Support maximum 3 assignments
+- Support maximum 13 homework
 - Maximum 1 consultation slot for each student
 
 ##### NFR-D2: Data Volatility
@@ -1021,9 +1036,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 
 ### Glossary
+**Homework terms**
+* **complete**: The student has submitted the homework on time.
+* **incompleted**: The student has not submitted the homework yet. When the user creates the homework, it is marked as incomplete by default.
+* **late**: The student has submitted the homework, but has passed the deadline of the homework.
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+**Attendance terms**
+* **present**: The student is present for the tutorial on that week.
+* **excused**: The student did not come for the tutorial, but has a valid reason (e.g., on MC, has competition)
+* **absent**: The student did not come for the tutorial, and does not have a valid reason.
 
 **Consultation terms**
 * **Ongoing**: A consultation is ongoing if it has a start time before the current time and a end time after the current time.
@@ -1060,7 +1081,7 @@ This section provides step-by-step, comprehensive instructions for performing **
    * Double-click the `soctassist.jar` file to start the application.
    * Open a terminal or command prompt in the folder containing the .jar file.
    * Run the following command:
-     * `java -jar socassisst.jar`
+     * `java -jar soctassist.jar`
    * **Expected Result:**
      * The main GUI should appear with a **set of sample data** (e.g., sample students).
      * The window size and position may initially not be optimized.
@@ -1085,7 +1106,7 @@ This section provides step-by-step, comprehensive instructions for performing **
 
 ### **2. Data Management Tests**
 
-#### **2.1 Deleting a Person (Functional Test)**
+#### **2.1 Deleting a person (Functional Test)**
 
 1. **Preparation:**
 
@@ -1188,7 +1209,7 @@ This section provides step-by-step, comprehensive instructions for performing **
    3. **Expected:**
    - Error message is displayed:  
      ```
-     Student not found.
+     Student with NUSNET ID E0000000 does not exist.
      ```
    - No homework is added.
 
@@ -1312,17 +1333,17 @@ This section provides step-by-step, comprehensive instructions for performing **
 
 **Summary of Expected Results**
 
-| Test Case | Command | Expected Outcome |
-|------------|----------|------------------|
-| 1 | `delete_hw i/E1234567 a/1` | ✅ Homework 1 deleted from student E1234567 |
-| 2 | `delete_hw i/all a/2` | ✅ Homework 2 deleted from all students |
-| 3 | `delete_hw i/E0000000 a/1` | ❌ Student not found |
-| 4 | `delete_hw a/1` | ❌ Missing NUSNET ID |
-| 5 | `delete_hw i/E1234567 a/100` | ❌ Homework ID out of range |
-| 6 | `delete_hw i/E1234567 a/3` | ❌ Homework does not exist |
-| 7 | `delete_hw i/E1234567 i/E7654321 a/1` | ❌ Duplicate prefixes |
+| Test Case  | Command                               | Expected Outcome                           |
+|------------|---------------------------------------|--------------------------------------------|
+| 1          | `delete_hw i/E1234567 a/1`            | ✅ Homework 1 deleted from student E1234567 |
+| 2          | `delete_hw i/all a/2`                 | ✅ Homework 2 deleted from all students     |
+| 3          | `delete_hw i/E0000000 a/1`            | ❌ Student not found                        |
+| 4          | `delete_hw a/1`                       | ❌ Missing NUSNET ID                        |
+| 5          | `delete_hw i/E1234567 a/100`          | ❌ Homework ID out of range                 |
+| 6          | `delete_hw i/E1234567 a/3`            | ❌ Homework does not exist                  |
+| 7          | `delete_hw i/E1234567 i/E7654321 a/1` | ❌ Duplicate prefixes                       |
 
-### Mark homework### Mark homework
+### Mark homework
 1. Mark homework as completed for a single student  
    1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`, and that the student has homework **1** assigned.  
    2. Execute the command:  
@@ -1410,13 +1431,183 @@ This section provides step-by-step, comprehensive instructions for performing **
 
 **Summary of Expected Results**
 
-| Test Case | Command | Expected Outcome |
-|------------|----------|------------------|
-| 1 | `mark_hw i/E1234567 a/1 status/completed` | ✅ Homework 1 marked completed |
-| 2 | `mark_hw i/E1234567 a/1 status/incomplete` | ✅ Homework 1 marked incomplete |
-| 3 | `mark_hw i/E1234567 a/2 status/late` | ✅ Homework 2 marked late |
-| 4 | `mark_hw i/E0000000 a/1 status/completed` | ❌ Invalid NUSNET ID |
-| 5 | `mark_hw i/E1234567 a/3 status/completed` | ❌ Homework does not exist |
-| 6 | `mark_hw i/E1234567 a/1 status/done` | ❌ Invalid status |
-| 7 | `mark_hw i/E1234567 a/1` | ❌ Missing status parameter |
-| 8 | `mark_hw i/E1234567 i/E7654321 a/1 status/completed` | ❌ Duplicate prefixes |
+| Test Case | Command                                              | Expected Outcome               |
+|-----------|------------------------------------------------------|--------------------------------|
+| 1         | `mark_hw i/E1234567 a/1 status/completed`            | ✅ Homework 1 marked completed  |
+| 2         | `mark_hw i/E1234567 a/1 status/incomplete`           | ✅ Homework 1 marked incomplete |
+| 3         | `mark_hw i/E1234567 a/2 status/late`                 | ✅ Homework 2 marked late       |
+| 4         | `mark_hw i/E0000000 a/1 status/completed`            | ❌ Invalid NUSNET ID            |
+| 5         | `mark_hw i/E1234567 a/3 status/completed`            | ❌ Homework does not exist      |
+| 6         | `mark_hw i/E1234567 a/1 status/done`                 | ❌ Invalid status               |
+| 7         | `mark_hw i/E1234567 a/1`                             | ❌ Missing status parameter     |
+| 8         | `mark_hw i/E1234567 i/E7654321 a/1 status/completed` | ❌ Duplicate prefixes           |
+
+### Mark Attendance
+
+1. Mark attendance for a single student  
+   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`.  
+   2. Execute the command:  
+      `mark_attendance i/E1234567 w/2 status/present`  
+   3. **Expected:**  
+   - Success message is displayed.
+   - The student’s attendance record now shows **present** for week **2**.
+
+2. Mark attendance (Student not found)
+   1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.
+   2. Execute the command:
+      `mark_attendance i/E0000000 w/2 status/present`
+   3. **Expected:**
+   - Error message is displayed.
+
+3. Mark attendance (Invalid week)
+   1. Ensure that there is a student in the system with NUSNET ID `E1234567`.
+   2. Execute the command:
+      `mark_attendance i/E1234567 w/20 status/present`
+   2. **Expected:**
+   - Error message is displayed.
+
+4. Mark attendance (Invalid status)
+   1. Ensure that there is a student in the system with NUSNET ID `E1234567`.
+   2. Execute the command:
+      `mark_attendance i/E1234567 w/2 status/late`
+   3. **Expected:**
+   - Error message is displayed.
+
+### Mark All Attendance
+1. Mark attendance for all students
+    1. Setup: Ensure multiple students are present in the system.
+    2. Execute the command:  
+       `mark_attendance i/all w/2 status/absent`
+    3. **Expected:**
+    - Success message is displayed.
+    - All students’ attendance records now show **absent** for week **2**.
+
+### Add Consultation
+1. Add a consultation for a student  
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567` that has no consultation.  
+   2. Execute the command:  
+      `add_consult i/E1234567 from/20251010 1400 to/20251010 1500`  
+   3. **Expected:**  
+   - Success message is displayed.
+   - List of consultations is updated to include the new consultation.
+
+2. Add a consultation (Student not found)  
+   1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.
+   2. Execute the command:  
+      `add_consult i/E0000000 from/20251010 1400 to/20251010 1500`  
+   3. **Expected:**  
+   - Error message is displayed.
+
+3. Add a consultation (End time before start time)  
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234568`.
+   2. Execute the command:  
+      `add_consult i/E1234568 from/20251010 1500 to/20251010 1400`
+   3. **Expected:**  
+      - Error message is displayed.
+
+4. Add a consultation (Overlapping consultation)  
+   1. Setup: Ensure that there is a student in the system with a consultation from `20251010 1400` to `20251010 1500`. Ensure that there is a another student in the system with NUSNET ID `E1234569` without consultation.
+   2. Execute the command:  
+      `add_consult i/E1234569 from/20251010 1430 to/20251010 1530`  
+   3. **Expected:**  
+   - Error message is displayed.
+
+5. Add a consultation (Incorrect date/time format)  
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`.
+   2. Execute the command:  
+      `add_consult i/E1234567 from/2025-10-10 14:00 to/2025-10-10 15:00`  
+   3. **Expected:**  
+   - Error message is displayed.
+
+6. Add a consultation (Invalid date)
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`.
+   2. Execute the command:  
+      `add_consult i/E1234567 from/20251310 1400 to/20251310 1500`  
+   3. **Expected:**  
+   - Error message is displayed.
+
+### Delete Consultation
+1. Delete a consultation for a student  
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`, and that the student has a consultation scheduled.
+   2. Execute the command:  
+      `delete_consult i/E1234567`
+   3. **Expected:**  
+   - Success message is displayed.
+   - The consultation list is updated to remove the deleted consultation.
+
+2. Delete a consultation (Student not found)  
+   1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.
+   2. Execute the command:  
+      `delete_consult i/E0000000`
+   3. **Expected:**  
+   - Error message is displayed.
+
+3. Delete a consultation (No consultation found)  
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234568`, and that the student does not have any consultation scheduled.
+   2. Execute the command:  
+      `delete_consult i/E1234568`
+   3. **Expected:**  
+      Error message is displayed.
+
+### Create Group
+1. Create a new group  
+   1. Ensure that group `T01` does not exist.
+   2. Execute the command:  
+      `create_group g/T01`  
+   2. **Expected:**  
+   - Success message is displayed.
+
+2. Create group (Group already exists)  
+   1. Setup: Ensure that group `T01` already exists in the system.
+   2. Execute the command:  
+      `create_group g/T01`  
+   3. **Expected:**  
+   - Error message is displayed.
+
+### Add Student to Group
+1. Add a student to an existing group  
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`.
+   2. Execute the command:  
+      `add_to_group i/E1234567 g/T01`  
+   3. **Expected:**  
+   - Success message is displayed.
+   - Student is updated with the new group.
+
+2. Add student to group (Student not found)  
+   1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system, and that group `T01` exists.
+   2. Execute the command:  
+      `add_to_group i/E0000000 g/T01`  
+   3. **Expected:**  
+   - Error message is displayed.
+
+3. Add student to group (Group already contains the student)
+   1. Setup: Ensure that there is a student with the NUSNET ID `E1234567` that is in group `T01`.
+   2. Execute the command:
+      `add_to_group i/E1234567 g/T01`
+   3. **Expected:**
+   - Error message is displayed.
+
+### Find Students by Group
+1. Find students by group  
+   1. Setup: Ensure that group `T01` exists and has students assigned to it.
+   2. Execute the command:  
+      `find_group g/T01`  
+   3. **Expected:**  
+   - Success message is displayed.
+   - List of students in group `T01` is displayed.
+
+
+## **Appendix: Planned Enhancement**
+This section outlines potential future enhancements for the application that could improve its functionality, usability, or performance. These enhancements are not part of the current scope but may be considered for future development. 
+Team size: 5
+
+
+1. **Remove deprecated `create_group` command**: Since group creation is now integrated into the `add_student` and `add_to_group` command, the standalone `create_group` command can be removed to streamline the command set and reduce redundancy.
+1. **Enhance `mark_attendance` and `mark_all_attendance` command with attendance status `unmark`**: Introduce an `unmark` status option to allow TAs to easily revert a student's attendance for a specific week if they accidentally marked them as present, absent, or excused. For example, if they accidentally marked a student as present in week 5, they can now use `mark_attendance i/E1234567 w/5 status/unmark` to clear the attendance for week 5 and the icon will turn grey.
+1. **Improve 'find' command with advanced filters**: Enable users to search for students using partial name. For example, searching for "Alex" would return both "Alex Yeoh" and "Alexander Tan".
+1. **Error message enhancements**: Show the specific field that caused the error in error messages to help users quickly identify and correct the missing/duplicated field. For example, if a duplicate email is entered, the error message could specify "Duplicate email format in field: email".
+1. **Enhance `add_consult` commands by allowing one student to book multiple consultation slot**: Allow students to book multiple consultation slots instead of being limited to one. This would accommodate students with varying schedules and needs.
+1. **Enhance `add_consult` commands by allowing multiple student to book the same consultation slot**: Allow multiple students to book the same consultation slot, enabling group consultations.
+1. **Enhance `delete_hw i/all a/<hw id>` commands by adding confirmation prompt**: Before deleting a homework assignment for all students, prompt the user for confirmation to prevent accidental deletions. For example, after entering the delete command, the system could ask "Are you sure you want to delete homework for all student (yes/no)".
+1. **Reduce command word length**: Shorten command words to make them quicker to type. For example, change `add_student` to `as`, `mark_attendance` to `ma`, `mark_all_attendance` to `maa` and `delete_hw` to `dh`.
+1. **Enhance `add_to_group` command by allowing adding one student into multiple groups**: For example, a TA can teach both CS2030S and CS2040S, and the same student can be added to both groups.

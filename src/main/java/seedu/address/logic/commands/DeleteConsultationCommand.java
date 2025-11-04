@@ -3,6 +3,8 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NUSNETID;
 
+import java.util.logging.Logger;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -28,6 +30,7 @@ public class DeleteConsultationCommand extends Command {
     public static final String MESSAGE_STUDENT_DOES_NOT_HAVE_CONSULTATION =
             "Student does not have an existing consultation";
 
+    private static final Logger logger = Logger.getLogger(DeleteConsultationCommand.class.getName());
     private final Nusnetid toDelete;
 
     /**
@@ -38,10 +41,15 @@ public class DeleteConsultationCommand extends Command {
         toDelete = nusnetid;
     }
 
+    @SuppressWarnings("checkstyle:Regexp")
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+
+        logger.info("Executing DeleteConsultationCommand for student: " + toDelete);
+
         if (!model.hasPerson(toDelete)) {
+            logger.warning("Attempted to delete consultation from non existent student: " + toDelete);
             throw new CommandException(MESSAGE_STUDENT_DOES_NOT_EXIST);
         }
 
@@ -49,10 +57,12 @@ public class DeleteConsultationCommand extends Command {
         try {
             deletedConsultation = model.deleteConsultationFromPerson(toDelete);
         } catch (IllegalArgumentException e) { // handle error when student does not have a consultation
+            logger.warning("Attempted to delete consultation from student without consultation: " + toDelete);
             throw new CommandException(e.getMessage());
         }
 
         model.deleteConsultation(deletedConsultation);
+        logger.info("Successfully deleted consultation for student: " + toDelete);
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(deletedConsultation)),
                 false, false, true);
     }
