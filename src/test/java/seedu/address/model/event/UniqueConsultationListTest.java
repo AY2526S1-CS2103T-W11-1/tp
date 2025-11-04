@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
 import seedu.address.model.event.exceptions.ConsultationNotFoundException;
 import seedu.address.model.event.exceptions.DuplicateConsultationException;
 import seedu.address.model.person.Nusnetid;
