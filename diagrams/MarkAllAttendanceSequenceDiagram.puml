@@ -8,6 +8,8 @@ participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":MarkAllAttendanceCommandParser" as MarkAllAttendanceCommandParser LOGIC_COLOR
 participant "d:MarkAllAttendanceCommand" as MarkAllAttendanceCommand LOGIC_COLOR
 participant "r:CommandResult" as CommandResult LOGIC_COLOR
+participant "g:GroupId" as GroupId LOGIC_COLOR
+participant "a:AttendanceStatus" as AttendanceStatus LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
@@ -18,7 +20,7 @@ end box
 
 [-> LogicManager : execute("mark_all_attendance g/T01 w/3 status/present")
 
-LogicManager -> AddressBookParser : parseCommand("mark_all_attendance g/T01 w/3 status/present")
+LogicManager -> AddressBookParser : parseCommand(command text)
 activate LogicManager
 activate AddressBookParser
 
@@ -47,9 +49,8 @@ activate AttendanceStatus
 AttendanceStatus --> MarkAllAttendanceCommandParser
 deactivate AttendanceStatus
 
-alt valid arguments
     create MarkAllAttendanceCommand
-    MarkAllAttendanceCommandParser -> MarkAllAttendanceCommand : new MarkAllAttendanceCommand(GroupId, 3, AttendanceStatus)
+    MarkAllAttendanceCommandParser -> MarkAllAttendanceCommand : new MarkAllAttendanceCommand(g, 3, a)
     activate MarkAllAttendanceCommand
     MarkAllAttendanceCommand --> MarkAllAttendanceCommandParser
     deactivate MarkAllAttendanceCommand
@@ -67,34 +68,20 @@ alt valid arguments
     LogicManager -> MarkAllAttendanceCommand : execute(m)
     activate MarkAllAttendanceCommand
 
-    MarkAllAttendanceCommand -> Model : markAllAttendance(GroupId, 3, AttendanceStatus)
+    MarkAllAttendanceCommand -> Model : markAllAttendance(g, 3, a)
     activate Model
     Model --> MarkAllAttendanceCommand
     deactivate Model
 
     create CommandResult
-    MarkAllAttendanceCommand -> CommandResult : new CommandResult("Marked attendance for Group T01: present in week 3.")
+    MarkAllAttendanceCommand -> CommandResult : new CommandResult(markAttendanceMessage)
     activate CommandResult
     CommandResult --> MarkAllAttendanceCommand
     deactivate CommandResult
 
     MarkAllAttendanceCommand --> LogicManager : r
     deactivate MarkAllAttendanceCommand
-else invalid / missing arguments
-    MarkAllAttendanceCommandParser --> AddressBookParser : throws ParseException(errorMessage)
-    deactivate MarkAllAttendanceCommandParser
 
-    AddressBookParser --> LogicManager : throws ParseException(errorMessage)
-    deactivate AddressBookParser
-
-    create CommandResult
-    LogicManager -> CommandResult : new CommandResult("Invalid command format" + errorMessage)
-    activate CommandResult
-    CommandResult --> LogicManager : r
-    deactivate CommandResult
-
-
-end
 
 [<--LogicManager
 deactivate LogicManager
