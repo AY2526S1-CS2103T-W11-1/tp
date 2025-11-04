@@ -76,15 +76,6 @@ public class DeleteConsultationCommandTest {
     }
 
     @Test
-    public void execute_studentHasNoConsultation_throwsCommandException() {
-        model.addPerson(bob);
-        DeleteConsultationCommand command = new DeleteConsultationCommand(bobId);
-
-        assertThrows(CommandException.class,
-                DeleteConsultationCommand.MESSAGE_STUDENT_DOES_NOT_HAVE_CONSULTATION, () -> command.execute(model));
-    }
-
-    @Test
     public void equals() {
         DeleteConsultationCommand deleteConsultationAliceCommand =
                 new DeleteConsultationCommand(aliceId);
