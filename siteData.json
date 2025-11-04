@@ -78,7 +78,7 @@
         "5-exploratory-testing-suggestions": "5. Exploratory Testing Suggestions",
         "add-homework": "Add homework",
         "delete-homework": "Delete homework",
-        "mark-homework-mark-homework": "Mark homework### Mark homework",
+        "mark-homework": "Mark homework",
         "appendix-planned-enhancement": "Appendix: Planned Enhancement"
       },
       "headingKeywords": {}
@@ -150,7 +150,6 @@
         "group-commands": "Group Commands",
         "creating-a-group-create-group": "Creating a group : create_group",
         "adding-a-student-to-a-group-add-to-group": "Adding a student to a group : add_to_group",
-        "finding-group-members-find-group": "Finding group members : find_group",
         "clearing-all-entries-clear": "Clearing all entries : clear",
         "exiting-the-program-exit": "Exiting the program : exit",
         "saving-the-data": "Saving the data",
