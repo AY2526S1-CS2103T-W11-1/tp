@@ -93,6 +93,9 @@ public class TypicalPersons {
         for (Person person : getTypicalPersons()) {
             ab.addPerson(person);
             ab.updateGroupWhenAddPerson(person);
+            if (person.hasConsultation()) {
+                ab.addConsultation(person.getConsultation().get());
+            }
         }
         return ab;
     }

@@ -69,16 +69,4 @@ public class ListConsultationCommandTest {
         assertEquals(expectedModel.getFilteredConsultationList(), model.getFilteredConsultationList());
         assertNotNull(result);
     }
-
-    @Test
-    public void equals() {
-        ListConsultationCommand listCommand1 = new ListConsultationCommand();
-        ListConsultationCommand listCommand2 = new ListConsultationCommand();
-
-        // same object -> returns true
-        assertEquals(listCommand1, listCommand1);
-
-        // different objects but same type -> returns true
-        assertEquals(listCommand1, listCommand2);
-    }
 }

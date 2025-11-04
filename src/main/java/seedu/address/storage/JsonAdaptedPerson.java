@@ -167,12 +167,9 @@ class JsonAdaptedPerson {
                     "consultation end time"));
         }
 
-        if (consultationStart.isEmpty()) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
-                    "consultation start time"));
-        } else if (consultationEnd.isEmpty()) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
-                    "consultation end time"));
+        if (consultationStart.isEmpty() || consultationEnd.isEmpty()) {
+            return new Person(modelName, modelPhone, modelEmail, modelNusnetid,
+                    modelTelegram, modelGroupId, modelHomeworkTracker, modelAttendanceSheet);
         }
 
         LocalDateTime from = ParserUtil.parseDateTime(consultationStart);

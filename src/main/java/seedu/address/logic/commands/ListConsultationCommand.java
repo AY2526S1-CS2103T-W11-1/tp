@@ -21,18 +21,4 @@ public class ListConsultationCommand extends Command {
         model.updateFilteredConsultationList(PREDICATE_SHOW_ALL_CONSULTATIONS);
         return new CommandResult(MESSAGE_SUCCESS, false, false, true);
     }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-
-        // instanceof handles nulls
-        if (!(other instanceof ListConsultationCommand)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 }
