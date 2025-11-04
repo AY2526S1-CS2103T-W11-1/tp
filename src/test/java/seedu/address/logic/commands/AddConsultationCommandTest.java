@@ -199,6 +199,30 @@ public class AddConsultationCommandTest {
         }
 
         @Override
+        public Person markAttendance(Nusnetid nusnetid, int week, seedu.address.model.person.AttendanceStatus status)
+                throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public void markAllAttendance(GroupId groupId, int week, seedu.address.model.person.AttendanceStatus status) {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public void addHomework(Nusnetid nusnetId, int assignmentId) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteHomework(Nusnetid nusnetId, int assignmentId) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public void markHomework(Nusnetid nusnetId, int assignmentId, String status) throws CommandException {
+            throw new AssertionError("This method should not be called.");
+        }
+
+
+        @Override
         public void addConsultationToPerson(Nusnetid nusnetid, Consultation consultation) {
             throw new AssertionError("This method should not be called.");
         }
@@ -276,6 +300,14 @@ public class AddConsultationCommandTest {
         }
         @Override
         public Person getPersonByNusnetId(Nusnetid nusnetid) {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public void moveStudentToNewGroup(Person person, GroupId newGroupId) {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public Person getPersonByNusnetIdFullList(Nusnetid nusnetId) {
             throw new AssertionError("This method should not be called.");
         }
     }
