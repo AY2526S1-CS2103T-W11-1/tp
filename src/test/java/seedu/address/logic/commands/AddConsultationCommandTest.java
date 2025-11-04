@@ -72,8 +72,8 @@ public class AddConsultationCommandTest {
         AddConsultationCommand addConsultationCommand = new AddConsultationCommand(validConsultation);
         ModelStub modelStub = new ModelStubWithConsultation(validConsultation);
 
-        assertThrows(CommandException.class, AddConsultationCommand.MESSAGE_OVERLAPPING_CONSULTATION,
-                () -> addConsultationCommand.execute(modelStub));
+        assertThrows(CommandException.class, AddConsultationCommand.MESSAGE_OVERLAPPING_CONSULTATION, () ->
+                addConsultationCommand.execute(modelStub));
     }
 
     @SuppressWarnings("checkstyle:SeparatorWrap")
@@ -84,8 +84,8 @@ public class AddConsultationCommandTest {
         AddConsultationCommand addConsultationCommand = new AddConsultationCommand(validConsultation);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
-        assertThrows(CommandException.class, AddConsultationCommand.MESSAGE_STUDENT_ALREADY_HAS_CONSULTATION,
-                () -> addConsultationCommand.execute(modelStub));
+        assertThrows(CommandException.class, AddConsultationCommand.MESSAGE_STUDENT_ALREADY_HAS_CONSULTATION, () ->
+                addConsultationCommand.execute(modelStub));
     }
 
     @Test
