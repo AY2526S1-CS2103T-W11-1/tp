@@ -192,7 +192,7 @@ Format: `edit_student INDEX [n/NAME] [i/NUSNETID] [t/TELEGRAM] [p/PHONE] [e/EMAI
 * You CANNOT use this command to change the tutorial group that this student belongs to. Use the `add_to_group` command instead.
 * The duplicate checking is done in the fields of NUSNET ID, Telegram handle, phone number and email. Currently, the exact duplicated field will not be reported in the error message. User needs to find the duplicated field manually.
 * You can use `p/` to remove the phone number or `e/` to remove the email address of a student by leaving the parameter value empty.
-* The parameter constraints are listed [here](#Parameter-Constraints).
+* The parameter constraints are listed [here](https://ay2526s1-cs2103t-w11-1.github.io/tp/UserGuide.html#Parameter-Constraints).
 
 
 Examples:
