@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.event.Consultation;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GroupId;
 import seedu.address.model.person.HomeworkTracker;
@@ -27,6 +28,9 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_GROUP = "T00";
     private static final String INVALID_TELEGRAM = "5dfr";
+    private static final String INVALID_CONSULTATION_TIME = "20251111 2500";
+    private static final String INVALID_CONSULTATION_TIME_WRONG_FORMAT = "2025-11-11 16:00";
+    private static final String INVALID_CONSULTATION_END_TIME = "20251111 1000";
 
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_PHONE = BENSON.getPhone().get().toString();
@@ -34,6 +38,9 @@ public class JsonAdaptedPersonTest {
     private static final String VALID_NUSNETID = BENSON.getNusnetid().toString();
     private static final String VALID_GROUP = BENSON.getGroupId().toString();
     private static final String VALID_TELEGRAM = BENSON.getTelegram().toString();
+    private static final String VALID_CONSULTATION = BENSON.getConsultation().get().toString();
+    private static final String VALID_CONSULTATION_START_TIME = BENSON.getConsultation().get().getFromInString();
+    private static final String VALID_CONSULTATION_END_TIME = BENSON.getConsultation().get().getToInString();
 
     private static final HomeworkTracker VALID_HOMEWORK_TRACKER;
     static {
@@ -169,6 +176,46 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_NUSNETID,
                 VALID_GROUP, null, convertToJsonMap(VALID_HOMEWORK_TRACKER), emptyAttendanceSheet, "", "");
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Telegram.class.getSimpleName());
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidConsultationStartTime_throwsIllegalValueException() {
+        List<JsonAdaptedAttendance> emptyAttendanceSheet = List.of();
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_NUSNETID,
+                        VALID_GROUP, VALID_TELEGRAM, convertToJsonMap(VALID_HOMEWORK_TRACKER),
+                        emptyAttendanceSheet, INVALID_CONSULTATION_TIME, VALID_CONSULTATION_END_TIME);
+        String expectedMessage = "Invalid date or time. Please ensure the date exists and time is valid!";
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullConsultationStartTime_returnsPerson() throws IllegalValueException {
+        List<JsonAdaptedAttendance> emptyAttendanceSheet = List.of();
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_NUSNETID,
+                VALID_GROUP, VALID_TELEGRAM, convertToJsonMap(VALID_HOMEWORK_TRACKER), emptyAttendanceSheet,
+                null, VALID_CONSULTATION_END_TIME);
+        assertEquals(BENSON.deleteConsultation(), person.toModelType());
+    }
+
+    @Test
+    public void toModelType_wrongConsultationTimeFormat_throwsIllegalValueException() {
+        List<JsonAdaptedAttendance> emptyAttendanceSheet = List.of();
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_NUSNETID,
+                VALID_GROUP, VALID_TELEGRAM, convertToJsonMap(VALID_HOMEWORK_TRACKER), emptyAttendanceSheet,
+                INVALID_CONSULTATION_TIME_WRONG_FORMAT, VALID_CONSULTATION_END_TIME);
+        String expectedMessage = "Incorrect date & time format. Please use yyyyMMdd HHmm format! (Eg. 20251010 1800)";
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidConsultation_throwsIllegalValueException() {
+        List<JsonAdaptedAttendance> emptyAttendanceSheet = List.of();
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_NUSNETID,
+                VALID_GROUP, VALID_TELEGRAM, convertToJsonMap(VALID_HOMEWORK_TRACKER), emptyAttendanceSheet,
+                VALID_CONSULTATION_START_TIME, INVALID_CONSULTATION_END_TIME);
+        String expectedMessage = Consultation.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 }

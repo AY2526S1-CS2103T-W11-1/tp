@@ -1,5 +1,10 @@
 package seedu.address.testutil;
 
+import java.time.LocalDateTime;
+
+import seedu.address.logic.parser.ParserUtil;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.event.Consultation;
 import seedu.address.model.person.AttendanceSheet;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GroupId;
@@ -30,6 +35,7 @@ public class PersonBuilder {
     private GroupId groupId;
     private HomeworkTracker homeworkTracker;
     private AttendanceSheet attendanceSheet;
+    private Consultation consultation;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -43,6 +49,7 @@ public class PersonBuilder {
         groupId = new GroupId(DEFAULT_GROUP);
         homeworkTracker = new HomeworkTracker();
         attendanceSheet = new AttendanceSheet();
+        consultation = null;
     }
 
     /**
@@ -57,6 +64,7 @@ public class PersonBuilder {
         groupId = personToCopy.getGroupId();
         homeworkTracker = personToCopy.getHomeworkTracker();
         attendanceSheet = personToCopy.getAttendanceSheet();
+        consultation = personToCopy.getConsultation().orElse(null);
     }
 
     /**
@@ -137,8 +145,22 @@ public class PersonBuilder {
         this.attendanceSheet = attendanceSheet;
         return this;
     }
+
+    /**
+     * Sets the {@code Consultation} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withConsultation(String start, String end) throws ParseException {
+        LocalDateTime from = ParserUtil.parseDateTime(start);
+        LocalDateTime to = ParserUtil.parseDateTime(end);
+        this.consultation = new Consultation(this.nusnetid, from, to);
+        return this;
+    }
+    /**
+     * Builds the Person object.
+     */
     public Person build() {
-        return new Person(name, phone, email, nusnetid, telegram, groupId, homeworkTracker, attendanceSheet);
+        return new Person(name, phone, email, nusnetid, telegram, groupId,
+                homeworkTracker, attendanceSheet, consultation);
     }
 
 }

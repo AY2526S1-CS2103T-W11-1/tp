@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.person.Person;
 
@@ -25,14 +26,34 @@ import seedu.address.model.person.Person;
  */
 public class TypicalPersons {
 
-    public static final Person ALICE = new PersonBuilder().withName("Alice Pauline")
-            .withNusnetid("E1234567").withEmail("alice@u.nus.edu")
-            .withPhone("94351253")
-            .withTelegram("@alicece").withGroup("T01").build();
-    public static final Person BENSON = new PersonBuilder().withName("Benson Meier")
-            .withNusnetid("E1234568")
-            .withEmail("johnd@u.nus.edu").withPhone("98765432")
-            .withTelegram("@benson").withGroup("T01").build();
+    public static final Person ALICE;
+
+    static {
+        try {
+            ALICE = new PersonBuilder().withName("Alice Pauline")
+                    .withNusnetid("E1234567").withEmail("alice@u.nus.edu")
+                    .withPhone("94351253")
+                    .withTelegram("@alicece").withGroup("T01")
+                    .withConsultation("20251010 1000", "20251010 1100").build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static final Person BENSON;
+
+    static {
+        try {
+            BENSON = new PersonBuilder().withName("Benson Meier")
+                    .withNusnetid("E1234568")
+                    .withEmail("johnd@u.nus.edu").withPhone("98765432")
+                    .withTelegram("@benson").withGroup("T01")
+                    .withConsultation("20251111 1100", "20251111 1200").build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz").withPhone("95352563")
             .withEmail("heinz@u.nus.edu").withNusnetid("E1234569").withTelegram("@carllll").withGroup("T15").build();
     public static final Person DANIEL = new PersonBuilder().withName("Daniel Meier").withPhone("87652533")
@@ -72,6 +93,9 @@ public class TypicalPersons {
         for (Person person : getTypicalPersons()) {
             ab.addPerson(person);
             ab.updateGroupWhenAddPerson(person);
+            if (person.hasConsultation()) {
+                ab.addConsultation(person.getConsultation().get());
+            }
         }
         return ab;
     }

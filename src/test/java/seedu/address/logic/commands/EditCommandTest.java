@@ -195,6 +195,13 @@ public class EditCommandTest {
         // Arrange: add a person with a consultation
         Person original = model.getFilteredPersonList().get(0);
         Nusnetid oldId = original.getNusnetid();
+
+        // Remove existing consultation if any
+        if (original.hasConsultation()) {
+            Consultation existingConsult = original.getConsultation().get();
+            model.deleteConsultation(existingConsult);
+            model.deleteConsultationFromPerson(oldId);
+        }
         LocalDateTime from = LocalDateTime.of(2025, 1, 2, 9, 0);
         LocalDateTime to = LocalDateTime.of(2025, 1, 2, 10, 0);
         Consultation consult = new Consultation(oldId, from, to);
