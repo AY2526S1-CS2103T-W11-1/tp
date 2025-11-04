@@ -6,6 +6,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 
 import org.junit.jupiter.api.Test;
+
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.event.Consultation;
 
@@ -45,7 +46,8 @@ public class JsonAdaptedConsultationTest {
     @Test
     public void toModelType_invalidTimeFormat_throwsIllegalValueException() {
         JsonAdaptedConsultation consultation =
-                new JsonAdaptedConsultation(VALID_NUSNETID, VALID_CONSULTATION_START_TIME, INVALID_CONSULTATION_TIME_WRONG_FORMAT);
+                new JsonAdaptedConsultation(VALID_NUSNETID,
+                        VALID_CONSULTATION_START_TIME, INVALID_CONSULTATION_TIME_WRONG_FORMAT);
         String expectedMessage = "Incorrect date & time format. Please use yyyyMMdd HHmm format! (Eg. 20251010 1800)";
         assertThrows(IllegalValueException.class, expectedMessage, consultation::toModelType);
     }
