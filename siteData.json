@@ -51,7 +51,7 @@
         "storage-component": "Storage component",
         "common-classes": "Common classes",
         "implementation": "Implementation",
-        "add-homework-feature": "Add Homework Feature",
+        "undo-redo-feature": "Undo/Redo Feature",
         "delete-homework-feature": "Delete Homework Feature",
         "mark-homework-feature": "Mark Homework Feature",
         "mark-attendance-feature": "Mark Attendance Feature",
@@ -160,6 +160,8 @@
         "finding-group-members-find-group": "Finding group members : find_group",
         "clearing-all-entries-clear": "Clearing all entries : clear",
         "exiting-the-program-exit": "Exiting the program : exit",
+        "undoing-a-command-undo": "Undoing a command : undo",
+        "redoing-a-command-redo": "Redoing a command : redo",
         "saving-the-data": "Saving the data",
         "editing-the-data-file": "Editing the data file",
         "faqs": "FAQs",
@@ -173,6 +175,34 @@
       "title": "",
       "headings": {
         "soctassist": "SoCTAssist"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "specs/UndoRedo-SPEC.md",
+      "headings": {
+        "1": "1. 背景与问题",
+        "2": "2. 目标与非目标",
+        "3": "3. 知识复用检查",
+        "4": "4. 现状分析与代码锚点",
+        "5": "5. 方案设计",
+        "7": "7. 可编号验收标准",
+        "9": "9. 风险与回滚",
+        "10": "10. 审核问题与待确认决策",
+        "11": "11. 参考与代码锚点",
+        "12": "12. 变更记录",
+        "undo-redo-spec": "Undo/Redo 功能 SPEC",
+        "4-1": "4.1 关键文件",
+        "4-2": "4.2 核心数据结构",
+        "4-3": "4.3 现有调用链（命令执行）",
+        "4-4-plantuml": "4.4 已有 PlantUML 设计总结",
+        "5-1": "5.1 高层设计",
+        "5-2": "5.2 详细方案",
+        "5-3-and-amp": "5.3 失败 &amp; 回滚",
+        "5-4": "5.4 灰度策略与发布计划",
+        "6-plan": "6. Plan 输入约束",
+        "8-eval": "8. Eval 验证方案",
+        "agent": "Agent 已自答的问题"
       },
       "headingKeywords": {}
     },
