@@ -39,7 +39,7 @@ done faster than traditional Graphical User Interface (GUI) apps while still hav
     cd C:\Users\your_username\Documents\Folder
     java -jar soctassist.jar
     ```
-   
+
    A GUI similar to the below should appear in a few seconds. <br>
    ![Ui](images/Ui_launch.png)
 
@@ -92,22 +92,22 @@ done faster than traditional Graphical User Interface (GUI) apps while still hav
 <box type="info" seamless>
 
   > [!NOTE]
-> * Words in `UPPER_CASE` are parameters to be supplied by the user.  
+> * Words in `UPPER_CASE` are parameters to be supplied by the user.
 >   e.g. in `add_student n/NAME`, replace `NAME` with student's name to get `add_student n/John Doe`.
-> 
+>
 > * **Command words** and **prefixes** are **case-sensitive**
-> * Items in square brackets are **optional**.  
+> * Items in square brackets are **optional**.
 >   e.g. `n/NAME [p/PHONE]` can be used as `n/John Doe p/87415612` or simply `n/John Doe`.
-> 
-> * Parameters can be in **any** order.  
->   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also valid.  
+>
+> * Parameters can be in **any** order.
+>   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also valid.
 >   ⚠️ But the **index parameter** must always come directly after the command word for commands that require an index.
-> 
-> * Extraneous parameters for commands that do not take parameters (`help`, `list`, `exit`, and `clear`) will be ignored.  
+>
+> * Extraneous parameters for commands that do not take parameters (`help`, `list`, `exit`, and `clear`) will be ignored.
 >   e.g. `help 123` will still be interpreted as `help`.
-> 
+>
 > * When using a PDF version, be careful copying commands that span multiple lines — spaces around line-breaks may be omitted.
-> 
+>
 > * A student is considered a **duplicate** if his NUSNET ID, Telegram handle, Phone Number, or Email matches another existing student in SoCTAssist.
 
 ## Parameter Constraints
@@ -301,7 +301,7 @@ Deletes the homework for the specified student or for all students.
 
 Format: `delete_hw i/NUSNETID (use 'i/all' for all students) a/ASSIGNMENT_NUMBER`
 
-* Deletes the homework with the given assignment number for the specified student. 
+* Deletes the homework with the given assignment number for the specified student.
 * The assignment number should be a positive integer between 1 to 13, and the assignment must exist for the student.
 * If `i/all` is used, the homework is deleted for all students.
 * The user can add homework to all students as long as at least one of the students have the homework. (i.e., deleting homework is successful if everyone has the homework or some of them have the homework, and is unsuccessful if none of the students has the homework).
@@ -321,7 +321,7 @@ Examples:
 </p>
 
 > [!IMPORTANT]
-> Only adding and deleting homework can be done to all student. Marking homework cannot be done for all students, since tutors are expected to mark each student's homework one by one. 
+> Only adding and deleting homework can be done to all student. Marking homework cannot be done for all students, since tutors are expected to mark each student's homework one by one.
 
 ---
 ## Attendance Commands
@@ -402,7 +402,7 @@ Format: `add_consult i/NUSNETID from/DATE_TIME to/DATE_TIME`
 Examples:
 * `add_consult i/E1234567 from/20251010 1400 to/20251010 1600` adds a consultation from 2–4PM on 10 Oct 2025 for student `E1234567`.
 * `add_consult i/E2345678 from/20240920 1000 to/20240920 1100` adds a consultation from 10–11AM on 20 Sep 2024 for student `E2345678`.
-  
+
 Note:
 * After using `add_consult` command, user will be brought to consultation list view. Index in `edit_student` and `delete` commands will refer to the global index of the student (index displayed after `list` command).
 * Users are highly recommended to use `list` command to find out the global index of the student before using `edit_student` or `delete` commands.
@@ -623,10 +623,10 @@ Furthermore, certain edits can cause the SoCTAssist to behave in unexpected ways
    **Remedy:** Delete the `preferences.json` file created by the application before running the application again.
 
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear.
-   
+
    **Remedy:** Manually restore the minimized Help Window.
 3. **When using `edit_student` or `delete` commands on the consultation view page**, the index of student to be edited or deleted cannot be seen.
-   
+
    **Remedy:** Use the `list` command to return to the student view page to obtain the target student's index before using the `edit_student` or `delete` command.
 
 --------------------------------------------------------------------------------------------------------------------

@@ -32,7 +32,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: UI/UX design & deadlines tracking
 * Responsibilities: UI/UX and Data
 
-### Jiayi 
+### Jiayi
 
 <img src="images/broccoli0616.png" width="200px">
 

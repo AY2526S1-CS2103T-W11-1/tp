@@ -1,10 +1,10 @@
 # Harness Init Report — --apply
 
-**Status**: ✅ PASS  
-**Mode**: --apply  
-**Profile**: standard  
-**SDK Version**: 1.2.0  
-**Workspace**: /Users/chuckbyang/tp  
+**Status**: ✅ PASS
+**Mode**: --apply
+**Profile**: standard
+**SDK Version**: 1.2.0
+**Workspace**: /Users/chuckbyang/tp
 **Generated**: 2026-06-04T14:30:00
 
 ---

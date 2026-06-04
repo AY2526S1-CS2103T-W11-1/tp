@@ -582,12 +582,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 1a. The list is empty.
-    * 1a1. SoCTAssist shows error. 
+    * 1a1. SoCTAssist shows error.
 
-      Use case ends.    
+      Use case ends.
 * 3a. Student index does not exist.
     * 3a1. SoCTAssist shows error.
-  
+
     Use case ends.
 * 3b. Student index is invalid (not a number or is not positive).
     * 3b1. SoCTAssist shows error.
@@ -610,21 +610,21 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 2a. Student with the given NUSNET ID does not exist
-  
+
     * 2a1. SoCTAssist displays an error message.
 
       Use case ends.
 * 3a. Homework ID already exists for this student
-  
+
   * 3a1. SoCTAssist displays an error message.
 
     Use case ends.
 * 3b. Homework ID is invalid (not between 1–13)
-  
+
   * 3b1. SoCTAssist displays an error message.
 
     Use case ends.
-    
+
 **Use case:** UC05 - Mark Homework completion
 
 **Actor**: TA
@@ -646,22 +646,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 * 2a. The student with the given NUSNET ID does not exist.
-  
+
     * 2a1. SoCTAssist shows error message: `Student not found`.
-  
+
       Use case ends.
 
 * 3a. The given assignment ID is invalid (not between 1-13).
-  
+
     * 3a1. SoCTAssist shows error message.
-  
+
       Use case ends.
-      
+
 * 4a. The given status is invalid (not one of complete / incomplete / late).
     * 4a1. SoCTAssist shows error message.
-  
+
       Use case ends.
-      
+
 * 4b. The student already has a status recorded for this assignment.
     * 4b1. SoCTAssist updates the record with the new status (last write wins).
 
@@ -673,34 +673,34 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to delete a homework for a student using their NUSNET ID.  
-2. SoCTAssist locates the student homework record.  
-3. SoCTAssist verifies the homework ID.  
-4. SoCTAssist removes the corresponding homework record from the student’s tracker.  
-5. SoCTAssist shows a confirmation message.  
+1. User requests to delete a homework for a student using their NUSNET ID.
+2. SoCTAssist locates the student homework record.
+3. SoCTAssist verifies the homework ID.
+4. SoCTAssist removes the corresponding homework record from the student’s tracker.
+5. SoCTAssist shows a confirmation message.
 
    Use case ends.
 
 **Extensions**
 
-* 1a. The list is empty.  
+* 1a. The list is empty.
 
-    Use case ends.  
+    Use case ends.
 
-* 2a. The student with the given NUSNET ID does not exist.  
-    * 2a1. SoCTAssist shows error message.  
+* 2a. The student with the given NUSNET ID does not exist.
+    * 2a1. SoCTAssist shows error message.
 
-      Use case ends.  
+      Use case ends.
 
-* 3a. The given assignment ID is invalid.  
-    * 3a1. SoCTAssist shows error message.  
+* 3a. The given assignment ID is invalid.
+    * 3a1. SoCTAssist shows error message.
 
-      Use case ends.  
+      Use case ends.
 
-* 4a. The specified homework does not exist for the student.  
-    * 4a1. SoCTAssist shows error message.  
+* 4a. The specified homework does not exist for the student.
+    * 4a1. SoCTAssist shows error message.
 
-      Use case ends.  
+      Use case ends.
 
 
 **Use case:** UC07 - Add a consultation
@@ -769,29 +769,29 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to delete a consultation by specifying student's NUSNET ID.  
+1. User requests to delete a consultation by specifying student's NUSNET ID.
 
-2. SoCTAssist validates the NUSNET ID.  
+2. SoCTAssist validates the NUSNET ID.
 
-3. SoCTAssist locates the consultation record that matches the provided details.  
+3. SoCTAssist locates the consultation record that matches the provided details.
 
-4. SoCTAssist deletes the consultation from the system.  
+4. SoCTAssist deletes the consultation from the system.
 
-5. SoCTAssist shows success message confirming the deletion and displays list of consultations to user.  
+5. SoCTAssist shows success message confirming the deletion and displays list of consultations to user.
 
-    Use case ends.  
+    Use case ends.
 
 **Extensions**
 
-* 2a. NUSNET ID does not exist in the directory.  
+* 2a. NUSNET ID does not exist in the directory.
 
-  * 2a1. SoCTAssist shows an error message.  
+  * 2a1. SoCTAssist shows an error message.
 
-       Use case ends.  
+       Use case ends.
 
-* 3a. Student with specified NUSNET ID does not have a consultation.  
+* 3a. Student with specified NUSNET ID does not have a consultation.
 
-  * 3a1. SoCTAssist shows an error message.  
+  * 3a1. SoCTAssist shows an error message.
 
        Use case ends.
 
@@ -934,7 +934,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Actor**: TA
 
-**Guarantees**: 
+**Guarantees**:
 * If the GroupId is valid and exists, at least one student is found.
 
 **MSS**
@@ -943,8 +943,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2. SoCTAssist verifies the GroupId is valid.
 3. SoCTAssist checks whether the group exists.
 4. SoCTAssist retrieves the list of students in the specified group.
-5. SoCTAssist displays the list of students in the UI. 
-   
+5. SoCTAssist displays the list of students in the UI.
+
    Use case ends.
 
 **Extensions**
@@ -956,14 +956,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3a. The group does not exist.
     * 3a1. SoCTAssist informs the user that no such group exists.
-  
+
       Use case ends.
 
 ### Non-Functional Requirements
 
 #### 1. Data Requirements
 ##### NFR-D1: Data Size
-- Maximum 500 students 
+- Maximum 500 students
 - Maximum 20 tutorial groups
 - Support 12 weeks of attendance data (weeks 2-13)
 - Support maximum 13 homework
@@ -1210,7 +1210,7 @@ This section provides step-by-step, comprehensive instructions for performing **
    2. Execute the command:
       `add_hw i/E1234567 a/1`
    3. **Expected:**
-   - Success message is displayed:  
+   - Success message is displayed:
      ```
      Added assignment 1 for <STUDENT_NAME> (default incomplete).
      ```
@@ -1222,18 +1222,18 @@ This section provides step-by-step, comprehensive instructions for performing **
    2. Execute the command:
       `add_hw i/all a/2`
    3. **Expected:**
-   - Success message is displayed:  
+   - Success message is displayed:
      ```
      Added assignment 2 for all students (default incomplete).
      ```
    - All students’ homework trackers now contain homework **2**.
-  
+
 3. Add homework (Student not found)
    1. Setup: Ensure the student with the NUSNET ID E0000000 is not present in the system.
    2. Execute the command:
       `add_hw i/E0000000 a/3`
    3. **Expected:**
-   - Error message is displayed:  
+   - Error message is displayed:
      ```
      Student with NUSNET ID E0000000 does not exist.
      ```
@@ -1243,7 +1243,7 @@ This section provides step-by-step, comprehensive instructions for performing **
    1. Execute the command:
       `add_hw a/1`
    2. **Expected:**
-   - Error message is displayed:  
+   - Error message is displayed:
      ```
      Invalid command format! <With the rest of helping information>
      ```
@@ -1253,7 +1253,7 @@ This section provides step-by-step, comprehensive instructions for performing **
    1. Execute the command:
       `add_hw i/E1234567 a/100`
    2. **Expected:**
-   - Error message is displayed:  
+   - Error message is displayed:
      ```
      Homework id must be between 1 and 13.
      ```
@@ -1264,7 +1264,7 @@ This section provides step-by-step, comprehensive instructions for performing **
    2. Execute the command:
       `add_hw i/E1234567 a/1`
    3. **Expected:**
-   - Error message is displayed:  
+   - Error message is displayed:
      ```
      Homework 1 already exists for <STUDNET_NAME>.
      ```
@@ -1282,76 +1282,76 @@ This section provides step-by-step, comprehensive instructions for performing **
 | 6 | `add_hw i/E1234567 i/E7654321 a/1` | ❌ Duplicate prefixes |
 
 ### Delete homework
-1. Delete homework from a single student  
-   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`, and that the student already has homework **1** assigned.  
-   2. Execute the command:  
-      `delete_hw i/E1234567 a/1`  
-   3. **Expected:**  
-   - Success message is displayed:  
+1. Delete homework from a single student
+   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`, and that the student already has homework **1** assigned.
+   2. Execute the command:
+      `delete_hw i/E1234567 a/1`
+   3. **Expected:**
+   - Success message is displayed:
      ```
      Deleted homework 1 for <STUDENT_NAME>.
      ```
    - Homework **1** is removed from the student’s homework tracker.
    - The command box is cleared and ready for the next input.
 
-2. Delete homework from all students  
-   1. Setup: Ensure multiple students are present in the system, each with homework **2** assigned.  
-   2. Execute the command:  
-      `delete_hw i/all a/2`  
-   3. **Expected:**  
-   - Success message is displayed:  
+2. Delete homework from all students
+   1. Setup: Ensure multiple students are present in the system, each with homework **2** assigned.
+   2. Execute the command:
+      `delete_hw i/all a/2`
+   3. **Expected:**
+   - Success message is displayed:
      ```
      Deleted homework 2 for all students.
      ```
    - Homework **2** is removed from every student’s homework tracker.
 
-3. Delete homework (Student not found)  
-   1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.  
-   2. Execute the command:  
-      `delete_hw i/E0000000 a/1`  
-   3. **Expected:**  
-   - Error message is displayed:  
+3. Delete homework (Student not found)
+   1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.
+   2. Execute the command:
+      `delete_hw i/E0000000 a/1`
+   3. **Expected:**
+   - Error message is displayed:
      ```
      Invalid NUSNET ID format.
      ```
    - No homework is deleted.
 
-4. Delete homework (Missing parameters)  
-   1. Execute the command:  
-      `delete_hw a/1`  
-   2. **Expected:**  
-   - Error message is displayed:  
+4. Delete homework (Missing parameters)
+   1. Execute the command:
+      `delete_hw a/1`
+   2. **Expected:**
+   - Error message is displayed:
      ```
      Invalid command format! <With the rest of helping information>
      ```
    - No homework is deleted.
 
-5. Delete homework (Invalid homework ID: out of range)  
-   1. Execute the command:  
-      `delete_hw i/E1234567 a/100`  
-   2. **Expected:**  
-   - Error message is displayed:  
+5. Delete homework (Invalid homework ID: out of range)
+   1. Execute the command:
+      `delete_hw i/E1234567 a/100`
+   2. **Expected:**
+   - Error message is displayed:
      ```
      Homework id must be between 1 and 13.
      ```
    - No homework is deleted.
 
-6. Delete homework (Homework not found)  
-   1. Setup: Ensure that the student with NUSNET ID `E1234567` **does not** have homework **3** assigned.  
-   2. Execute the command:  
-      `delete_hw i/E1234567 a/3`  
-   3. **Expected:**  
-   - Error message is displayed:  
+6. Delete homework (Homework not found)
+   1. Setup: Ensure that the student with NUSNET ID `E1234567` **does not** have homework **3** assigned.
+   2. Execute the command:
+      `delete_hw i/E1234567 a/3`
+   3. **Expected:**
+   - Error message is displayed:
      ```
      Homework 3 not found for Alex Yeoh.
      ```
    - No homework is deleted.
 
-7. Delete homework (Duplicate prefixes)  
-   1. Execute the command:  
-      `delete_hw i/E1234567 i/E7654321 a/1`  
-   2. **Expected:**  
-   - Error message is displayed:  
+7. Delete homework (Duplicate prefixes)
+   1. Execute the command:
+      `delete_hw i/E1234567 i/E7654321 a/1`
+   2. **Expected:**
+   - Error message is displayed:
      ```
      Invalid command format! <With the rest of helping information>
      ```
@@ -1370,86 +1370,86 @@ This section provides step-by-step, comprehensive instructions for performing **
 | 7          | `delete_hw i/E1234567 i/E7654321 a/1` | ❌ Duplicate prefixes                       |
 
 ### Mark homework
-1. Mark homework as completed for a single student  
-   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`, and that the student has homework **1** assigned.  
-   2. Execute the command:  
-      `mark_hw i/E1234567 a/1 status/complete`  
-   3. **Expected:**  
-   - Success message is displayed:  
+1. Mark homework as completed for a single student
+   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`, and that the student has homework **1** assigned.
+   2. Execute the command:
+      `mark_hw i/E1234567 a/1 status/complete`
+   3. **Expected:**
+   - Success message is displayed:
      ```
     Assignment 1 for <STUDENT_NAME> marked complete.
      ```
    - Homework **1** is now marked as **completed** in the student’s homework tracker.
    - The command box is cleared and ready for the next input.
 
-2. Mark homework as incomplete for a single student  
-   1. Setup: Ensure homework **1** for student `E1234567` is currently marked as **completed**.  
-   2. Execute the command:  
-      `mark_hw i/E1234567 a/1 status/incomplete`  
-   3. **Expected:**  
-   - Success message is displayed:  
+2. Mark homework as incomplete for a single student
+   1. Setup: Ensure homework **1** for student `E1234567` is currently marked as **completed**.
+   2. Execute the command:
+      `mark_hw i/E1234567 a/1 status/incomplete`
+   3. **Expected:**
+   - Success message is displayed:
      ```
      Assignment 1 for <STUDENT_NAME> marked incomplete.
      ```
    - Homework **1** is now marked as **incomplete** in the student’s homework tracker.
 
-3. Mark homework as late for a single student  
-   1. Setup: Ensure homework **2** is assigned to student `E1234567`.  
-   2. Execute the command:  
-      `mark_hw i/E1234567 a/2 status/late`  
-   3. **Expected:**  
-   - Success message is displayed:  
+3. Mark homework as late for a single student
+   1. Setup: Ensure homework **2** is assigned to student `E1234567`.
+   2. Execute the command:
+      `mark_hw i/E1234567 a/2 status/late`
+   3. **Expected:**
+   - Success message is displayed:
      ```
      Assignment 1 for <STUDENT_NAME> marked late.
      ```
    - Homework **2** is now marked as **late** in the student’s homework tracker.
 
-4. Mark homework (Student not found)  
-   1. Execute the command:  
-      `mark_hw i/E0000000 a/1 status/complete`  
-   2. **Expected:**  
-   - Error message is displayed:  
+4. Mark homework (Student not found)
+   1. Execute the command:
+      `mark_hw i/E0000000 a/1 status/complete`
+   2. **Expected:**
+   - Error message is displayed:
      ```
      Student not found
      ```
    - No homework is updated.
 
-5. Mark homework (Homework not assigned)  
-   1. Setup: Ensure that student `E1234567` **does not** have homework **3** assigned.  
-   2. Execute the command:  
-      `mark_hw i/E1234567 a/3 status/complete`  
-   3. **Expected:**  
-   - Error message is displayed:  
+5. Mark homework (Homework not assigned)
+   1. Setup: Ensure that student `E1234567` **does not** have homework **3** assigned.
+   2. Execute the command:
+      `mark_hw i/E1234567 a/3 status/complete`
+   3. **Expected:**
+   - Error message is displayed:
      ```
      Homework 3 does not exist for <STUDENT_NAME>. Add it first using 'add_hw'.
      ```
    - No homework is updated.
 
-6. Mark homework (Invalid status)  
-   1. Execute the command:  
-      `mark_hw i/E1234567 a/1 status/done`  
-   2. **Expected:**  
-   - Error message is displayed:  
+6. Mark homework (Invalid status)
+   1. Execute the command:
+      `mark_hw i/E1234567 a/1 status/done`
+   2. **Expected:**
+   - Error message is displayed:
      ```
      Status must be one of: complete, incomplete, late.
      ```
    - No homework is updated.
 
-7. Mark homework (Missing parameters)  
-   1. Execute the command:  
-      `mark_hw i/E1234567 a/1`  
-   2. **Expected:**  
-   - Error message is displayed:  
+7. Mark homework (Missing parameters)
+   1. Execute the command:
+      `mark_hw i/E1234567 a/1`
+   2. **Expected:**
+   - Error message is displayed:
      ```
      Invalid command format! <With the rest of helping information>
      ```
    - No homework is updated.
 
-8. Mark homework (Duplicate prefixes)  
-   1. Execute the command:  
-      `mark_hw i/E1234567 i/E7654321 a/1 status/complete`  
-   2. **Expected:**  
-   - Error message is displayed:  
+8. Mark homework (Duplicate prefixes)
+   1. Execute the command:
+      `mark_hw i/E1234567 i/E7654321 a/1 status/complete`
+   2. **Expected:**
+   - Error message is displayed:
      ```
      Multiple values specified for the following single-valued field(s): i/
      ```
@@ -1470,11 +1470,11 @@ This section provides step-by-step, comprehensive instructions for performing **
 
 ### Mark Attendance
 
-1. Mark attendance for a single student  
-   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`.  
-   2. Execute the command:  
-      `mark_attendance i/E1234567 w/2 status/present`  
-   3. **Expected:**  
+1. Mark attendance for a single student
+   1. Setup: Ensure that there is at least one student in the system with NUSNET ID `E1234567`.
+   2. Execute the command:
+      `mark_attendance i/E1234567 w/2 status/present`
+   3. **Expected:**
    - Success message is displayed.
 
 2. Mark attendance (Student not found)
@@ -1501,7 +1501,7 @@ This section provides step-by-step, comprehensive instructions for performing **
 ### Mark All Attendance
 1. Mark attendance for all students in one group
     1. Setup: Ensure group T01 with students present in the system.
-    2. Execute the command:  
+    2. Execute the command:
        `mark_all_attendance g/T01 w/2 status/absent`
     3. **Expected:**
     - Success message is displayed.
@@ -1534,101 +1534,101 @@ This section provides step-by-step, comprehensive instructions for performing **
     3. **Expected:**
     - Error message is displayed.
 ### Add Consultation
-1. Add a consultation for a student  
-   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567` that has no consultation.  
-   2. Execute the command:  
-      `add_consult i/E1234567 from/20251010 1400 to/20251010 1500`  
-   3. **Expected:**  
+1. Add a consultation for a student
+   1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567` that has no consultation.
+   2. Execute the command:
+      `add_consult i/E1234567 from/20251010 1400 to/20251010 1500`
+   3. **Expected:**
    - Success message is displayed.
    - List of consultations is updated to include the new consultation.
 
-2. Add a consultation (Student not found)  
+2. Add a consultation (Student not found)
    1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.
-   2. Execute the command:  
-      `add_consult i/E0000000 from/20251010 1400 to/20251010 1500`  
-   3. **Expected:**  
+   2. Execute the command:
+      `add_consult i/E0000000 from/20251010 1400 to/20251010 1500`
+   3. **Expected:**
    - Error message is displayed.
 
-3. Add a consultation (End time before start time)  
+3. Add a consultation (End time before start time)
    1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234568`.
-   2. Execute the command:  
+   2. Execute the command:
       `add_consult i/E1234568 from/20251010 1500 to/20251010 1400`
-   3. **Expected:**  
+   3. **Expected:**
       - Error message is displayed.
 
-4. Add a consultation (Overlapping consultation)  
+4. Add a consultation (Overlapping consultation)
    1. Setup: Ensure that there is a student in the system with a consultation from `20251010 1400` to `20251010 1500`. Ensure that there is a another student in the system with NUSNET ID `E1234569` without consultation.
-   2. Execute the command:  
-      `add_consult i/E1234569 from/20251010 1430 to/20251010 1530`  
-   3. **Expected:**  
+   2. Execute the command:
+      `add_consult i/E1234569 from/20251010 1430 to/20251010 1530`
+   3. **Expected:**
    - Error message is displayed.
 
-5. Add a consultation (Incorrect date/time format)  
+5. Add a consultation (Incorrect date/time format)
    1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`.
-   2. Execute the command:  
-      `add_consult i/E1234567 from/2025-10-10 14:00 to/2025-10-10 15:00`  
-   3. **Expected:**  
+   2. Execute the command:
+      `add_consult i/E1234567 from/2025-10-10 14:00 to/2025-10-10 15:00`
+   3. **Expected:**
    - Error message is displayed.
 
 6. Add a consultation (Invalid date)
    1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`.
-   2. Execute the command:  
-      `add_consult i/E1234567 from/20251310 1400 to/20251310 1500`  
-   3. **Expected:**  
+   2. Execute the command:
+      `add_consult i/E1234567 from/20251310 1400 to/20251310 1500`
+   3. **Expected:**
    - Error message is displayed.
 
 ### Delete Consultation
-1. Delete a consultation for a student  
+1. Delete a consultation for a student
    1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`, and that the student has a consultation scheduled.
-   2. Execute the command:  
+   2. Execute the command:
       `delete_consult i/E1234567`
-   3. **Expected:**  
+   3. **Expected:**
    - Success message is displayed.
    - The consultation list is updated to remove the deleted consultation.
 
-2. Delete a consultation (Student not found)  
+2. Delete a consultation (Student not found)
    1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system.
-   2. Execute the command:  
+   2. Execute the command:
       `delete_consult i/E0000000`
-   3. **Expected:**  
+   3. **Expected:**
    - Error message is displayed.
 
-3. Delete a consultation (No consultation found)  
+3. Delete a consultation (No consultation found)
    1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234568`, and that the student does not have any consultation scheduled.
-   2. Execute the command:  
+   2. Execute the command:
       `delete_consult i/E1234568`
-   3. **Expected:**  
+   3. **Expected:**
       Error message is displayed.
 
 ### Create Group
-1. Create a new group  
+1. Create a new group
    1. Ensure that group `T01` does not exist.
-   2. Execute the command:  
-      `create_group g/T01`  
-   2. **Expected:**  
+   2. Execute the command:
+      `create_group g/T01`
+   2. **Expected:**
    - Success message is displayed.
 
-2. Create group (Group already exists)  
+2. Create group (Group already exists)
    1. Setup: Ensure that group `T01` already exists in the system.
-   2. Execute the command:  
-      `create_group g/T01`  
-   3. **Expected:**  
+   2. Execute the command:
+      `create_group g/T01`
+   3. **Expected:**
    - Error message is displayed.
 
 ### Add Student to Group
-1. Add a student to an existing group  
+1. Add a student to an existing group
    1. Setup: Ensure that there is a student in the system with NUSNET ID `E1234567`.
-   2. Execute the command:  
-      `add_to_group i/E1234567 g/T01`  
-   3. **Expected:**  
+   2. Execute the command:
+      `add_to_group i/E1234567 g/T01`
+   3. **Expected:**
    - Success message is displayed.
    - Student is updated with the new group.
 
-2. Add student to group (Student not found)  
+2. Add student to group (Student not found)
    1. Setup: Ensure that there is no student with the NUSNET ID `E0000000` in the system, and that group `T01` exists.
-   2. Execute the command:  
-      `add_to_group i/E0000000 g/T01`  
-   3. **Expected:**  
+   2. Execute the command:
+      `add_to_group i/E0000000 g/T01`
+   3. **Expected:**
    - Error message is displayed.
 
 3. Add student to group (Group already contains the student)
@@ -1639,17 +1639,17 @@ This section provides step-by-step, comprehensive instructions for performing **
    - Error message is displayed.
 
 ### Find Students by Group
-1. Find students by group  
+1. Find students by group
    1. Setup: Ensure that group `T01` exists and has students assigned to it.
-   2. Execute the command:  
-      `find_group g/T01`  
-   3. **Expected:**  
+   2. Execute the command:
+      `find_group g/T01`
+   3. **Expected:**
    - Success message is displayed.
    - List of students in group `T01` is displayed.
 
 
 ## **Appendix: Planned Enhancement**
-This section outlines potential future enhancements for the application that could improve its functionality, usability, or performance. These enhancements are not part of the current scope but may be considered for future development. 
+This section outlines potential future enhancements for the application that could improve its functionality, usability, or performance. These enhancements are not part of the current scope but may be considered for future development.
 Team size: 5
 
 
