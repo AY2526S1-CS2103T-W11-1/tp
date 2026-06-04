@@ -1,0 +1,38 @@
+---
+description: Harness 权限边界。限制高风险文件、命令、生产配置和自动合入行为。
+alwaysApply: true
+enabled: true
+---
+
+# Harness 权限边界
+
+## 禁止默认修改
+
+- `.env*`
+- `.git/**`
+- `.codebuddy/mcp.json`
+- 包含 `secret`、`token`、`key` 的敏感配置文件
+- 生产部署配置
+
+## 禁止默认命令
+
+- `rm -rf`
+- `sudo`
+- `chmod 777`
+- `git push`
+- `curl * | sh`
+- 数据库写入或生产更新命令
+
+## 需要人工确认
+
+- 部署、发布、重启服务。
+- 数据库写入、迁移、远程更新。
+- 放宽权限、降低 Eval gate、修改 baseline。
+- 自进化 proposal 的 promote。
+
+## 原则
+
+1. 脚本必须非交互执行。
+2. 脚本不得硬编码 token、生产路径或私密配置。
+3. 高风险操作必须有回滚说明。
+4. 自进化只能 proposal-only，不得自动合入高风险变更。

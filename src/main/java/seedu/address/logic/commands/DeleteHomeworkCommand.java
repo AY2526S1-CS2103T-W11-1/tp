@@ -13,7 +13,7 @@ import seedu.address.model.person.Person;
 /**
  * Deletes a homework entry for a specific student or for all students.
  */
-public class DeleteHomeworkCommand extends Command {
+public class DeleteHomeworkCommand extends Command implements MutatingCommand {
 
     public static final String COMMAND_WORD = "delete_hw";
 

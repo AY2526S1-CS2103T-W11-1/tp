@@ -1,0 +1,89 @@
+{
+  "status": "pass",
+  "mode": "--apply",
+  "profile": "standard",
+  "workspace": "/Users/chuckbyang/tp",
+  "sdk_version": "1.2.0",
+  "existing_codebuddy": true,
+  "sdk_check": "pass",
+  "sdk_check_summary": {
+    "status": "pass",
+    "summary": "SDK directory + manifest deep-check passed",
+    "sdk_root": ".codebuddy/harness-sdk",
+    "missing_dirs": [],
+    "missing_files": [],
+    "optional_missing_dirs": ["project:commands", "project:agents", "project:skills"],
+    "manifest_required_missing": {
+      "commands": [],
+      "scripts": [],
+      "skills": [],
+      "python_modules": []
+    }
+  },
+  "projection_state": {
+    "version": "1.2.0",
+    "plugin_registered": true,
+    "managed_files_count": 92,
+    "all_sha256_match": true,
+    "conflicts": []
+  },
+  "skills_install": {
+    "installed": ["harness-core", "harness-spec-writer", "harness-eval-runner", "harness-workbench"],
+    "skipped_optional": ["iwiki-doc(prompt)", "iwiki-operation(prompt)", "skill-creator(prompt)"],
+    "project_owned": ["deploy(overlay)"]
+  },
+  "knowledge_base": {
+    "initialized": true,
+    "has_structure": true,
+    "has_index": true,
+    "files": [
+      ".codebuddy/knowledge/fn-index.jsonl",
+      ".codebuddy/knowledge/index.jsonl",
+      ".codebuddy/knowledge/README.md",
+      ".codebuddy/knowledge/decisions.jsonl",
+      ".codebuddy/knowledge/wing-project.md"
+    ]
+  },
+  "project_overlay": {
+    "current_path": ".codebuddy/harness-project/harness.project.yaml",
+    "needs_update": false,
+    "applied_changes": [
+      {"field": "project_name", "from": "<your-project-name>", "to": "SoCTAssist"},
+      {"field": "project_kind", "from": "generic", "to": "java-desktop"},
+      {"field": "frontend_root", "from": "frontend", "to": "src/main/resources/view"},
+      {"field": "backend_root", "from": "backend", "to": "src/main/java/seedu/address"},
+      {"field": "api_base", "from": "http://localhost:8000", "to": ""},
+      {"field": "staging_url", "from": "http://localhost:8080", "to": ""},
+      {"field": "prod_path", "from": "", "to": "build/libs/soctassist.jar"},
+      {"field": "high_risk_patterns", "from": ["**/Migrations/*.sql", "**/appsettings.Production.json"], "to": ["**/data/addressbook.json", "config/checkstyle/**", "**/Migrations/*.sql"]}
+    ]
+  },
+  "harness_md": {
+    "path": ".codebuddy/harness.md",
+    "exists": true,
+    "status": "current",
+    "sections_present": [
+      "Project Overview", "Tech Stack", "Build & Run Commands",
+      "Project Structure", "Commands Reference", "Data Model",
+      "Architecture", "Testing Conventions", "Key Constraints",
+      "CI/CD", "Common Development Patterns"
+    ]
+  },
+  "self_checks": {
+    "yaml_parse": "pass",
+    "template_var_substitution": "pass (no placeholder values remaining)",
+    "sample_spec_check": "not_run",
+    "sample_plan_check": "not_run",
+    "workbench_self_test": "not_run",
+    "secret_scan": "pass (no .env*, mcp.json, secrets found)"
+  },
+  "blocking_issues": [],
+  "warnings": [
+    "Python module agentharness not on sys.path; SDK CLI requires `cd /Users/chuckbyang/tp && PYTHONPATH=.codebuddy/harness-sdk python -m agentharness`"
+  ],
+  "next_steps": [
+    "Run /harness:kb-code-init to build code-level knowledge index",
+    "Use /harness:spec to start the SPEC → Plan → Execute → Eval → Repair → Release workflow"
+  ],
+  "generated_at": "2026-06-04T14:30:00"
+}

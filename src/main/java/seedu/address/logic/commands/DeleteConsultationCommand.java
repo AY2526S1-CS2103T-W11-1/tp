@@ -15,7 +15,7 @@ import seedu.address.model.person.Nusnetid;
 /**
  * Deletes a consultation from the address book.
  */
-public class DeleteConsultationCommand extends Command {
+public class DeleteConsultationCommand extends Command implements MutatingCommand {
 
     public static final String COMMAND_WORD = "delete_consult";
 

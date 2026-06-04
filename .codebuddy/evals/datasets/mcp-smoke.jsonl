@@ -1,0 +1,1 @@
+{"id":"mcp-smoke-placeholder","inputs":{"tool":"list_tools","args":{}},"reference_outputs":{"schema_valid":true},"metadata":{"suite":"mcp","risk":"high","source":"harness-initial","tags":["schema","smoke"]}}

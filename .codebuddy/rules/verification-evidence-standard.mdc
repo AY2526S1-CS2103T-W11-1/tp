@@ -1,0 +1,39 @@
+---
+description: 验证证据标准。定义 Eval 和交付中哪些证据有效，哪些不能作为通过依据。
+alwaysApply: false
+enabled: true
+---
+
+# 验证证据标准
+
+## 有效证据
+
+- 实际执行命令及退出码。
+- 测试日志、构建日志、截图、JSON 报告。
+- Eval suite 输出。
+- baseline vs candidate 对比。
+- MCP tool schema/smoke 调用结果。
+- SQL explain、耗时记录、慢查询复现。
+
+## 无效证据
+
+- “看起来没问题”。
+- 未执行命令的口头结论。
+- 没有路径的日志摘要。
+- 自动化失败但人工口头标记通过。
+- 与 SPEC 验收项无映射的泛泛检查。
+
+## 证据字段
+
+Eval 报告至少包含：
+
+- `acceptance_id`
+- `suite`
+- `command`
+- `evidence`
+- `result`
+- `rerun_required`
+
+## 阻塞规则
+
+high / critical 验收项缺少证据时，`release_allowed=false`。

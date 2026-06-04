@@ -23,6 +23,8 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RedoCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Group;
@@ -174,6 +176,75 @@ public class LogicManagerTest {
         Group expectedGroup = new Group(expectedPerson.getGroupId());
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
+        expectedModel.commitAddressBook();
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
+    }
+
+    // @ACC-UNDOREDO-010
+    @Test
+    public void execute_undoAfterAdd_refreshesFilteredList() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                + EMAIL_DESC_AMY + NUSNETID_DESC_AMY + TELEGRAM_DESC_AMY + GROUPID_DESC_AMY;
+        Person expectedPerson = new PersonBuilder(AMY).build();
+
+        // Execute add command
+        logic.execute(addCommand);
+        assertEquals(1, model.getFilteredPersonList().size());
+
+        // Execute undo command
+        CommandResult undoResult = logic.execute(UndoCommand.COMMAND_WORD);
+        assertEquals(UndoCommand.MESSAGE_SUCCESS, undoResult.getFeedbackToUser());
+        assertEquals(0, model.getFilteredPersonList().size());
+        assertEquals(0, model.getFilteredConsultationList().size());
+    }
+
+    // @ACC-UNDOREDO-010
+    @Test
+    public void execute_redoAfterUndo_refreshesFilteredList() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                + EMAIL_DESC_AMY + NUSNETID_DESC_AMY + TELEGRAM_DESC_AMY + GROUPID_DESC_AMY;
+        Person expectedPerson = new PersonBuilder(AMY).build();
+
+        // Execute add command
+        logic.execute(addCommand);
+
+        // Undo
+        logic.execute(UndoCommand.COMMAND_WORD);
+        assertEquals(0, model.getFilteredPersonList().size());
+
+        // Redo
+        CommandResult redoResult = logic.execute(RedoCommand.COMMAND_WORD);
+        assertEquals(RedoCommand.MESSAGE_SUCCESS, redoResult.getFeedbackToUser());
+        assertEquals(1, model.getFilteredPersonList().size());
+    }
+
+    // @ACC-UNDOREDO-013
+    @Test
+    public void execute_undo_storageConsistent() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                + EMAIL_DESC_AMY + NUSNETID_DESC_AMY + TELEGRAM_DESC_AMY + GROUPID_DESC_AMY;
+
+        // Execute add command
+        logic.execute(addCommand);
+
+        // Undo
+        logic.execute(UndoCommand.COMMAND_WORD);
+
+        // Verify model state is consistent (empty)
+        assertEquals(0, model.getAddressBook().getPersonList().size());
+
+        // Verify storage is consistent by reading from file
+        ReadOnlyAddressBook savedAddressBook = logic.getAddressBook();
+        assertEquals(model.getAddressBook(), savedAddressBook);
+    }
+
+    @Test
+    public void execute_undoNoHistory_throwsCommandException() {
+        assertCommandException(UndoCommand.COMMAND_WORD, UndoCommand.MESSAGE_FAILURE);
+    }
+
+    @Test
+    public void execute_redoNoHistory_throwsCommandException() {
+        assertCommandException(RedoCommand.COMMAND_WORD, RedoCommand.MESSAGE_FAILURE);
     }
 }

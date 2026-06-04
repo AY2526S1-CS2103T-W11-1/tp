@@ -1,0 +1,11 @@
+# docs-reorg 通用归类映射示例
+#
+# 格式：<相对源路径>  <目标子目录>
+# 用于 python3 -m agentharness docs-reorg 的 --map 参数。
+#
+# 本文件是 SDK 自带「示例」，不含任何项目专属字面量。
+# 消费者项目应 cp 一份到 .codebuddy/harness-project/docs-reorg.map.txt 后按需调整。
+
+# 示例：把顶层散落的方案 md 归入子目录
+# 数据库分支隔离方案.md          数据库分支隔离/
+# 大盘统计优化方案.md            大盘统计优化/

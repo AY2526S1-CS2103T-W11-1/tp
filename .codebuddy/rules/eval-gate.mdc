@@ -1,0 +1,45 @@
+---
+description: Eval gate 规则。执行后必须用脚本、自动化测试和可复核证据证明需求实现质量，release_allowed=false 时不得交付。
+alwaysApply: true
+enabled: true
+---
+
+# Eval Gate 规则
+
+## 定位
+
+Eval 合并原 Code Review 与 QA，是执行后的唯一质量收口阶段。
+
+## 必须运行 Eval 的场景
+
+- Standard Path 和 High-risk Path。
+- 涉及后端、前端、MCP、SQL、安全、性能、部署。
+- 修改公共接口、数据结构、权限或主流程。
+
+## Eval suite
+
+- `spec_alignment`
+- `code_quality`
+- `unit`
+- `integration`
+- `api`
+- `frontend`
+- `mcp`
+- `sql_performance`
+- `security`
+- `regression`
+
+## 阻塞条件
+
+- 自动化失败。
+- high/critical 验收项缺少 evidence。
+- secret/security/schema 检查失败。
+- SQL 查询超过 1 秒且违反“先分页，后关联”等规则。
+- baseline regression 超过阈值。
+- `release_allowed=false`。
+
+## 推荐脚本
+
+- `python3 -m agentharness eval run-all <spec-path>`
+- `python3 -m agentharness eval run <suite> <spec-path>`
+- `/eval:all`（IDE 命令）

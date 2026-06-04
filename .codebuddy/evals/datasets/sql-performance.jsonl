@@ -1,0 +1,1 @@
+{"id":"sqlite-schema-smoke","inputs":{"db":"${PROJECT_ROOT}/data/app.db","sql":"SELECT name FROM sqlite_master WHERE type='table' LIMIT 5;"},"reference_outputs":{"max_duration_ms":1000},"metadata":{"suite":"sql_performance","risk":"low","source":"harness-initial","tags":["sqlite","smoke"]}}

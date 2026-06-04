@@ -28,7 +28,7 @@ import seedu.address.model.person.GroupId;
  * This marks week 3 attendance for all students in group T02 as present.
  */
 
-public class MarkAllAttendanceCommand extends Command {
+public class MarkAllAttendanceCommand extends Command implements MutatingCommand {
     public static final String COMMAND_WORD = "mark_all_attendance";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the attendance of all the students in one group "

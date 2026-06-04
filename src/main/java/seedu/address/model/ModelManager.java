@@ -32,7 +32,7 @@ import seedu.address.model.person.Person;
 public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
     private static final String MESSAGE_STUDENT_NOT_FOUND = "Student not found.";
-    private final AddressBook addressBook;
+    private final VersionedAddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final FilteredList<Consultation> filteredConsultations;
@@ -45,7 +45,7 @@ public class ModelManager implements Model {
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
-        this.addressBook = new AddressBook(addressBook);
+        this.addressBook = new VersionedAddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         filteredConsultations = new FilteredList<>(this.addressBook.getConsultationList());
@@ -512,5 +512,32 @@ public class ModelManager implements Model {
     public void moveStudentToNewGroup(Person student, GroupId newGroupId) throws CommandException {
         requireAllNonNull(student, newGroupId);
         this.addressBook.moveStudentToNewGroup(student, newGroupId);
+    }
+
+    //=========== Undo/Redo ================================================================================
+
+    @Override
+    public void commitAddressBook() {
+        addressBook.commit();
+    }
+
+    @Override
+    public void undoAddressBook() {
+        addressBook.undo();
+    }
+
+    @Override
+    public void redoAddressBook() {
+        addressBook.redo();
+    }
+
+    @Override
+    public boolean canUndoAddressBook() {
+        return addressBook.canUndo();
+    }
+
+    @Override
+    public boolean canRedoAddressBook() {
+        return addressBook.canRedo();
     }
 }

@@ -121,6 +121,7 @@ The `Model` component,
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+* supports undo/redo via `VersionedAddressBook`, which extends `AddressBook` to maintain a history of address book states (up to 20 states). The `ModelManager` uses `VersionedAddressBook` internally and exposes `commitAddressBook()`, `undoAddressBook()`, `redoAddressBook()`, `canUndoAddressBook()`, and `canRedoAddressBook()` methods through the `Model` interface.
 
 ### Storage component
 
@@ -144,6 +145,31 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 This section describes some noteworthy details on how certain features are implemented.
 
 ---
+
+### Undo/Redo Feature
+
+The undo/redo feature uses the **Memento (State Snapshot) pattern** via `VersionedAddressBook`, which extends `AddressBook` to maintain a linear history of address book states.
+
+**Design:**
+
+* `VersionedAddressBook` maintains a `List<ReadOnlyAddressBook> addressBookStateList` and an `int currentStatePointer`.
+* A maximum of 20 states are kept in history (`MAX_HISTORY = 20`). When exceeded, the oldest state is evicted.
+* `commit()` saves the current state, truncates any redo stack, and increments the pointer.
+* `undo()` decrements the pointer and restores the state via `resetData()`.
+* `redo()` increments the pointer and restores the state via `resetData()`.
+
+**MutatingCommand marker interface:**
+
+Commands that modify the address book implement the `MutatingCommand` marker interface. After a `MutatingCommand` executes successfully, `LogicManager` calls `model.commitAddressBook()` to save the state. This ensures:
+* Read-only commands (e.g., `list`, `find`) do not create history entries.
+* `UndoCommand` and `RedoCommand` themselves do not create history entries.
+* If a command execution throws an exception, no state is committed.
+
+**Current implementation supports undo for the following 13 mutating commands:**
+`add_student`, `edit_student`, `delete`, `clear`, `create_group`, `add_to_group`, `add_hw`, `mark_hw`, `delete_hw`, `mark_attendance`, `mark_all_attendance`, `add_consult`, `delete_consult`
+
+<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="Undo Sequence Diagram - Logic Component" />
+<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="Undo Sequence Diagram - Model Component" />
 ### Add Homework Feature
 
 The add homework feature allows users to assign a homework task to either a specific student or all students. Each homework is identified by an assignment ID.

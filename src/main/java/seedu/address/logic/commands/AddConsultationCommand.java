@@ -18,7 +18,7 @@ import seedu.address.model.event.Consultation;
 /**
  * Adds a consultation to the address book.
  */
-public class AddConsultationCommand extends Command {
+public class AddConsultationCommand extends Command implements MutatingCommand {
 
     public static final String COMMAND_WORD = "add_consult";
 

@@ -30,7 +30,7 @@ import seedu.address.model.person.Person;
  * }</pre>
  */
 
-public class AddHomeworkCommand extends Command {
+public class AddHomeworkCommand extends Command implements MutatingCommand {
 
     public static final String COMMAND_WORD = "add_hw";
 

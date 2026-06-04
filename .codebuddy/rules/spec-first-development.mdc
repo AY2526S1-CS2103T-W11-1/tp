@@ -1,0 +1,50 @@
+---
+description: SPEC-first 开发规则。复杂需求必须先产出高质量、无歧义、可执行、可验证 SPEC，再进入 Plan 和实现。
+alwaysApply: true
+enabled: true
+---
+
+# SPEC-first 开发规则
+
+## 触发场景
+
+满足任一条件时必须先写或修订 SPEC：
+
+- 跨文件或跨模块改动。
+- 涉及 API、MCP、SQL、权限、安全、性能、部署。
+- 影响主流程、数据结构、公共接口或兼容性。
+- 用户明确要求走 harness / SPEC / Plan。
+
+## 标准流程
+
+```text
+SPEC → Plan → Execute → Eval → Release
+```
+
+## SPEC 必备内容
+
+- 背景与问题。
+- 目标与非目标。
+- 知识复用检查。
+- 现状分析和代码锚点。
+- 方案设计。
+- Plan 输入约束。
+- 可编号验收标准。
+- Eval 验证方案。
+- 风险与回滚。
+- 待确认问题。
+
+## 门禁
+
+- 存在 `[待确认]` 阻塞项时不得进入 Plan。
+- 验收项未编号、未映射 Eval 时不得进入 Plan。
+- 涉及 SQL 时必须引用 SQL 性能规则。
+- 涉及 MCP 时必须说明工具契约和失败场景。
+- 执行阶段不得扩大 SPEC 范围。
+
+## 推荐脚本
+
+- `python3 -m agentharness kb-search <keyword>`
+- `python3 -m agentharness spec-check <spec-path>`
+- `python3 -m agentharness plan-check <spec-path> <plan-path>`
+- `/harness:kb`、`/harness:spec`、`/harness:plan`（IDE 命令）

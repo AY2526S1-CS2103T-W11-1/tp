@@ -1,0 +1,21 @@
+{
+  "spec": "evals/fixtures/specs/iteration-flow.fixture.md",
+  "plan_id": "harness-flow-fixture-iteration",
+  "todos": [
+    {"id": "T1", "content": "T1 fixture SPEC 解析为 iteration ACC-HARNESSFLOW-001", "dependencies": [], "spec_refs": ["T1", "ACC-HARNESSFLOW-001"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T2", "content": "T2 ACC-ID 数量 ≥15 ACC-HARNESSFLOW-002", "dependencies": ["T1"], "spec_refs": ["T2", "ACC-HARNESSFLOW-002"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T3", "content": "T3 5 个过程文件存在 ACC-HARNESSFLOW-003", "dependencies": ["T1"], "spec_refs": ["T3", "ACC-HARNESSFLOW-003"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T4", "content": "T4 sidecar 解析 ACC-HARNESSFLOW-004", "dependencies": ["T3"], "spec_refs": ["T4", "ACC-HARNESSFLOW-004"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T5", "content": "T5 plan binding 走过程目录 ACC-HARNESSFLOW-005", "dependencies": ["T3"], "spec_refs": ["T5", "ACC-HARNESSFLOW-005"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T6", "content": "T6 legacy 路径不再共存 ACC-HARNESSFLOW-006", "dependencies": ["T3"], "spec_refs": ["T6", "ACC-HARNESSFLOW-006"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T7", "content": "T7 plan-check 通过 ACC-HARNESSFLOW-007", "dependencies": ["T1"], "spec_refs": ["T7", "ACC-HARNESSFLOW-007"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T8", "content": "T8 artifact-path plan ACC-HARNESSFLOW-008", "dependencies": ["T3"], "spec_refs": ["T8", "ACC-HARNESSFLOW-008"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T9", "content": "T9 artifact-path flow ACC-HARNESSFLOW-009", "dependencies": ["T3"], "spec_refs": ["T9", "ACC-HARNESSFLOW-009"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T10", "content": "T10 artifact-path review-notes ACC-HARNESSFLOW-010", "dependencies": ["T3"], "spec_refs": ["T10", "ACC-HARNESSFLOW-010"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T11", "content": "T11 artifact-path freeze-review ACC-HARNESSFLOW-011", "dependencies": ["T3"], "spec_refs": ["T11", "ACC-HARNESSFLOW-011"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T12", "content": "T12 regression 覆盖过程产物布局 ACC-HARNESSFLOW-012", "dependencies": ["T3"], "spec_refs": ["T12", "ACC-HARNESSFLOW-012"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T13", "content": "T13 artifact-path run-id ACC-HARNESSFLOW-013", "dependencies": ["T3"], "spec_refs": ["T13", "ACC-HARNESSFLOW-013"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T14", "content": "T14 plan_path 含过程目录段 ACC-HARNESSFLOW-014", "dependencies": ["T3"], "spec_refs": ["T14", "ACC-HARNESSFLOW-014"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"},
+    {"id": "T15", "content": "T15 flow_metadata_path 指向 sidecar ACC-HARNESSFLOW-015", "dependencies": ["T3"], "spec_refs": ["T15", "ACC-HARNESSFLOW-015"], "verification": [{"type": "command", "cmd": "true"}], "status": "completed"}
+  ]
+}

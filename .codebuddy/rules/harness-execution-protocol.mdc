@@ -1,0 +1,313 @@
+---
+description: Harness 执行协议。规定 Agent 在长任务、Plan 绑定、自动连推、并行派发、停机条件上的强制行为，避免再次出现绕开 Plan、无谓中断和拒绝并行。
+alwaysApply: true
+enabled: true
+---
+
+# Harness 执行协议（强制）
+
+## 1. 触发条件：什么算"长任务"
+
+满足任一条件即视为 **长任务（Standard / High-risk Path）**，必须走完整 harness 流程：
+
+- 预计修改 ≥ 3 个文件，或跨模块（前端 / 后端 / MCP / SQL / 配置）。
+- 涉及 API / 数据结构 / 公共接口 / 权限 / 安全 / 性能 / 部署 / 数据库。
+- 用户已存在 SPEC 文档（`*SPEC*.md` / `Docs/*.md`）并要求实现。
+- 用户口头描述 ≥ 3 个分阶段任务（"P1/P2/..." / "先做 X 再做 Y"）。
+
+不满足以上条件的微调可走 Fast Path。
+
+## 2. Plan 绑定（一票否决）
+
+进入长任务的 Execute 阶段前，**必须**：
+
+1. 存在已落盘的 `*.plan.json`。默认路径由 Harness 过程文件解析器派生：主 SPEC 可留在功能大目录，Plan/flow/review/run-id 等过程文件必须优先位于该 SPEC 的专属过程子目录；显式传入的 plan-path 优先。
+2. 该 Plan 已通过 `python3 -m agentharness plan-check <spec> <plan>`。
+3. 当前正在执行的 todo 在 Plan 中存在、依赖均 `completed`、最多一个 `in_progress`。
+
+**禁止**：
+
+- 把对话中的待办列表（"P5/P6/P7..."）当 Plan 用。
+- 在没有 plan-path 的情况下批量修改 ≥ 3 个文件。
+- 用 `dotnet build` / `vite build` 通过当作 todo 的 `verification`，除非该 todo 的 verification 字段就是构建命令。
+
+违反任一条 → 立即停止编辑，先 `/harness:plan` 落盘 Plan 并通过 `plan-check`，再回到 `/harness:run`。
+
+## 3. 自动连推（默认行为）
+
+长任务一旦进入 `/harness:run` 状态机，**Agent 必须自动推进**，直到下列任一终止条件之一：
+
+- `run-loop` 返回 `action=done` 且 `release_allowed=true`。
+- 达到 `max_repair_rounds`（默认 3）仍 Eval 失败。
+- 命中 §5 中的"必须停机"清单。
+
+期间 **禁止** 出现以下行为：
+
+- 在 todo 之间询问"继续吗 / C1 / C2 / C3 / 是否要进行下一步"。
+- 把"分阶段汇报"写成"分阶段确认"，等待用户输入。
+- 在 build/lint 通过后主动暂停，要求用户决定下一阶段。
+- 在 todo `verification` 通过后人为加确认环节。
+
+正确的中段输出格式（不需要用户回复）：
+
+```
+[run-loop] action=execute_todo todo=<id>
+  changed: <files>
+  verification: <command/result>
+  → continuing
+```
+
+## 4. 并行派发（默认开启）
+
+满足全部条件时 **必须** 并行派发：
+
+- ≥ 2 个 todo 之间无文件级冲突（不同目录 / 不同模块）。
+- 每个 todo 的 `verification` 可独立运行。
+- 输入输出已被 Plan 明确划定。
+
+并行派发方式（按优先级）：
+
+1. **`Task` 子代理（首选）**：对独立模块开启 `code-explorer` / 实现型子任务，通过 `subagent_name` 派发。
+2. **同一回合内多个 tool calls**：相同类型（多个 `read_file` / `replace_in_file` 不同文件）必须放在同一 message 里并发。
+3. **`team_create` + 命名子任务**：仅当任务长到需要跨多回合协同时启用。
+
+禁止行为：
+
+- 把"前端切换器"和"MCP Server"这类显然独立的模块串行做。
+- 在并行收益明显时只为"逻辑顺手"而串行。
+- 同文件并行修改（必须串行 / 由主 Agent 合并）。
+
+## 5. 必须停机的 6 类高风险触发
+
+只有命中以下任一情况才允许停机并请求人工确认：
+
+1. 部署 / 发布 / 重启服务。
+2. 数据库写入 / schema 迁移 / 远程数据更新。
+3. 修改生产配置、`.env*`、真实密钥 / token / cert。
+4. SPEC 与代码现实严重冲突，需扩大范围或推翻设计。
+5. `permission-check` 返回 `blocked`。
+6. `run-loop` 返回 `status=blocked` 且非可自动 repair 的失败。
+
+除此之外的"不确定 / 想确认 / 想分阶段汇报"，一律 **不停机**，按 §3 自动连推。
+
+## 6. 输出证据格式
+
+每个 todo 完成后必须输出（追加到 trace，不需要用户确认）：
+
+```
+todo: <id>
+  status: completed
+  changed: <file list>
+  verification:
+    - command: <实际命令>
+      exit: 0
+      log: <evidence path>
+  evidence: <run_dir>/...
+```
+
+禁止以下"无效证据"：
+
+- 仅写"已通过 dotnet build / vite build"而无具体命令和日志路径。
+- 用 grep 数量代替功能验证（grep 只能作为辅助，不能作为 acceptance 证据）。
+- 仅靠肉眼 diff 判断"看起来对"。
+
+## 7. 失败修复行为
+
+Eval 失败时：
+
+1. `run-loop` 自动追加 `REPAIR-*` todo 到同一 Plan。
+2. Agent 直接进入下一轮 `run-loop` 调用，不询问用户。
+3. 修复必须是"补实现 / 补测试 / 修类型 / 修配置一致性"，禁止：
+   - 删失败测试 / 降低断言。
+   - 修改 baseline。
+   - 放宽 Eval gate 阈值。
+   - 跳过 suite。
+
+## 8. 自检清单（每个长任务结束前）
+
+- [ ] 是否有 plan-path？
+- [ ] plan-check 是否通过？
+- [ ] 全部 todo 是否为 `completed`？
+- [ ] `release_allowed=true`？
+- [ ] 中途是否问过用户"C2/继续吗"？若有 → 流程缺陷，记录到 `.codebuddy/harness-runs/<run-id>/incidents.md`。
+- [ ] 独立模块是否并行？若没有 → 同上记录。
+- [ ] **[ACC-HARNESS-016]** SPEC frontmatter `status` 是否与 `*.plan.json` todos 状态一致？（spec-ready 不应配 todos 全 completed；finished 不应配 todos 未完成）
+- [ ] **[ACC-HARNESS-018]** 进入 `/harness:run` 后 SPEC frontmatter 是否已自动推进到 `building`/`finished`？（由状态机维护，Agent 不手动改）
+- [ ] **[ACC-HARNESS-019]** Workbench 快照该 SPEC 卡片 `status_label` 是否 ≠ `待执行`？若仍是"待执行"且 plan 已存在 → 检查 `incidents.md`
+
+## 9. 与现有规则的关系
+
+- 优先级：本规则 > `tdd-development-workflow` > `spec-first-development`。
+- 本规则不替代 SPEC 质量门禁；SPEC 仍由 `spec-first-development.mdc` 管。
+- 本规则只管"已经进入 Execute 阶段后 Agent 怎么走"。
+
+## 10. 推荐入口
+
+```bash
+# 长任务一键自动跑
+/harness:run <spec-path>
+
+# 已落盘 Plan 后只手动推进一个 todo（不推荐用于长任务）
+/harness:execute <spec-path> <plan-path> <todo-id>
+
+# 状态机直调（用于脚本 / hooks）
+python3 -m agentharness run-loop <spec-path> [plan-path] [max-rounds]
+```
+
+## 11. SDLC 四步强制约束
+
+任何改动生产的变更，必须走完整四步，**不得跳步**：
+
+```
+开发 → 测试环境部署 → 测试验收 → 正式环境发布
+  |          |            |            |
+Execute   /eval:staging  auto/manual  /harness:release
+        （staging_deploy_verify suite）
+```
+
+- 测试环境为 `${STAGING_PATH}/`（前端 8080、后端 5100），与生产完全隔离。
+- `staging_deploy_verify` suite 通过是 `before_release` 硬门禁；`harness.yaml.gates.before_release.require` 已强制列入 `staging_verify_passed`。
+- 任何绕过测试环境、直接 `/harness:release` 的行为视为流程违规，`pre-release-gate` 会阻断。
+
+## 12. 测试验收归属 eval
+
+"测试环境部署 + 冒烟 + 冒烟通过"整体是 eval 阶段的一个 suite，而**不是**独立 workflow 一级阶段。
+
+- suite 名：`staging_deploy_verify`
+- 命令：`/eval:staging`
+- 脚本：`python3 -m agentharness eval run-staging`
+- 出口状态：`pass` / `fail` / `blocked` / `pending-human-approval`
+- 与其他 suite 并行运行（parallel_policy 默认允许）
+- evidence 落 `.codebuddy/harness-runs/<run-id>/eval/staging_deploy_verify/`
+
+## 13. High-risk 分级人工 approve
+
+`python3 -m agentharness classify-risk-level` 扫描本次变更的文件路径，命中以下白名单即 **high-risk**：
+
+- `**/Migrations/*.sql`
+- `.codebuddy/mcp.json`
+- `.codebuddy/rules/harness-permissions.mdc`
+- `.codebuddy/rules/harness-execution-protocol.mdc`
+- 生产目录 `${PROD_PATH}/**`
+- `**/appsettings*.json`（排除 `.Staging` `.Development` 变种）
+- `**/deploy*.sh`（排除 staging 变种）
+- `**/nginx.conf` / `**/docker-compose.ya?ml`
+
+命中时 `staging_deploy_verify` 即使冒烟全绿，也返回 `status=pending-human-approval`。
+解除方式：`/harness:staging-approve <run-id> "<ack-reason>"`（写入 `staging-approve.ack`）。
+
+**不得**通过修改白名单或降级判定来绕过人工 ack（见 §7 repair_policy）。
+
+## 14. 自检清单新增条目
+
+- [ ] 本次变更是否已通过 `staging_deploy_verify`（eval-result.json 中 `suites.staging_deploy_verify == pass`）？
+- [ ] 若命中 high-risk，是否有对应 `staging-approve.ack` 文件？
+- [ ] 生产目录 `${PROD_PATH}/` 本次执行前后是否 0 改动（`prod-snapshot-{before,after}.txt (SDK fixture)` diff）？
+- [ ] 进入 Execute 前是否已确认 `plan_create` 工具可用？若不可用，是否已按 §15 停机并输出标准话术？
+
+## 15. plan_create 工具不可用时的停机义务
+
+> 本条为 §2 Plan 绑定的**事前前置检查**，与 `assert-plan-binding` 的事后阻断互补。
+> 追溯 ID：本条款覆盖 [ACC-HARNESS-001]、[ACC-HARNESS-002]、[ACC-HARNESS-003]。
+
+### 15.1 三类触发场景（[ACC-HARNESS-001]）
+
+<!-- Test tag: @ACC-HARNESS-001 三类触发场景自检锚点 -->
+
+当以下任一场景出现时，Agent **必须立即停止编辑**，先运行 `python3 -m agentharness check-plan-mode` 获取标准停机话术再输出给用户：
+
+1. **新任务命中长任务阈值**：当前用户请求命中 §1 的长任务条件（预计 ≥ 3 文件改动 / 跨模块 / 涉及 API/数据结构/权限/安全/性能/部署/数据库 / 有 SPEC 文档要求实现 / 口头 ≥ 3 分阶段），但**本轮会话工具列表不含 `plan_create`**。
+2. **执行中途需要新建或重建 Plan**：已在 Execute 或 Repair 阶段，发现原 Plan 无法覆盖新需求（SPEC 扩范围 / 发现遗漏的大模块 / 需要完全重做 Plan），此时 `plan_create` 不可用。
+3. **已有 Plan 需扩范围**：Plan 的某个 todo 需要拆分成多个子 todo 或新增 REPAIR 之外的常规 todo，但 IDE plan 侧无法同步登记。
+
+### 15.2 三条禁止降级动作（[ACC-HARNESS-002]）
+
+<!-- Test tag: @ACC-HARNESS-002 三条禁止降级动作自检锚点 -->
+
+**禁止**（违反任一条视为流程违规，需记录到 `.codebuddy/harness-runs/<run-id>/incidents.md`）：
+
+- **A** ❌ 只 `write_to_file` 写 `*.plan.json` 而跳过 IDE `plan_create` 登记（违反 CODEBUDDY.md 第 1 条铁律的"双登记"要求）
+- **B** ❌ 把 Plan 当成"聊天消息里的 todo 列表"推进（违反 §2 Plan 绑定，事后会被 `assert-plan-binding` 阻断但此时已干了一半）
+- **C** ❌ 自行判定"这个任务不算长任务"而绕过阈值（违反 §1 长任务定义；阈值由 `HARNESS_PLAN_BINDING_THRESHOLD=3` 客观认定）
+- **D** ❌ 调 `plan_create` 后未在**同一回合**内 `write_to_file` 落盘 `*.plan.json` 并跑 `plan-check`（违反双登记一致性，事后会被 `plan-check` 的 ACC-HARNESS-016 frontmatter 一致性校验与 `assert-plan-binding` 的 `frontmatter=building/finished` 但 plan 缺失分支阻断）
+
+### 15.3 标准停机话术模板（[ACC-HARNESS-003]）
+
+> **权威版本**。本模板与 `check-plan-mode` 脚本输出、`plan-mode-guard-SPEC.md §11 附录` 必须**逐字一致**。修改本模板需同步改动三处并跑 ACC-HARNESS-013 自检。
+
+```
+🛑 已停机：需要切换到 plan mode
+
+触发原因：<REASON>
+当前障碍：plan_create 工具在本轮会话不可用
+
+需要你做：切换到 plan mode（IDE 右下角 mode 切换，或重新发一条消息时选 plan）
+切换后：直接发"继续"或本次原始需求，我会自动 plan_create + 落盘 *.plan.json + 过 plan-check，然后请你 approve
+
+升级方案草案（如已准备好）：见对话上文
+```
+
+**占位符说明**：
+
+- `<REASON>`：由 `check-plan-mode` 填充，例如 `changed_files=5 >= threshold=3, long task triggered` 或 `agent self-declared via --force-require`
+
+**Agent 输出规则**：
+
+- **必须原样输出**此模板（仅替换 `<REASON>` 占位符）
+- **禁止**改写标题、缩写段落、改变 emoji、翻译成英文
+- 模板外可追加"升级方案草案"具体内容（不影响模板本体的 grep 一致性检查）
+
+### 15.4 推荐调用序列
+
+```bash
+# 场景 A：Agent 判定是长任务 + 工具列表含 plan_create
+plan_create(...)             # 正常走
+write_to_file(*.plan.json)
+bash python3 -m agentharness plan-check <spec> <plan>
+/harness:run <spec>
+
+# 场景 B：Agent 判定是长任务 + 工具列表不含 plan_create
+bash python3 -m agentharness check-plan-mode '<intent>' --force-require
+# → exit=2，读 halt_message 原样输出给用户，停机
+
+# 场景 C：Agent 不确定
+bash python3 -m agentharness check-plan-mode '<intent>'
+# → exit=0 继续 Fast Path / exit=2 按场景 B 处置
+```
+
+### 15.5 与其他规则的关系
+
+- 本 §15 是 §2 的**事前前置**；与 §5 "6 类高风险停机"**不重叠**（§5 是运行时触发，§15 是进入 Execute 前触发）。
+- 事后有 `assert-plan-binding`（基于 git 改动数）做兜底阻断，双保险。
+- 与 `CODEBUDDY.md` 第 1 条铁律"双登记 + 工具可用性前置检查"同源（测试 tag @ACC-HARNESS-012）。
+- 与 `acceptance-id-convention.mdc`：本条款的 ACC-HARNESS-001..003 按 MODULE=HARNESS 标注，受 `acceptance_traceability` suite 强制覆盖。
+
+
+## 16. 状态推进自动化（[ACC-HARNESS-016] [ACC-HARNESS-017] [ACC-HARNESS-018] [ACC-HARNESS-019]）
+
+> 本节是 §2 Plan 绑定 + §15 plan_create 双登记的**运行期闭环**。
+> 解决问题：手动改文件 + 不走 `/harness:run` 状态机时，Workbench 状态显示"待执行"而实际已完成的漂移。
+
+### 16.1 三钩点闭环
+
+<!-- Test tag: @ACC-HARNESS-016 @ACC-HARNESS-017 @ACC-HARNESS-018 @ACC-HARNESS-019 -->
+
+| 钩点 | 脚本 | 触发时机 | 守护点 |
+|---|---|---|---|
+| **入口一致性** | `plan-check` | 每次手动 / 自动跑 plan-check | **[ACC-HARNESS-016]** SPEC frontmatter `status` 与 `*.plan.json` todos 状态一致；不一致 fail |
+| **运行前 pre-flight** | `run-loop` 启动后第 1 步调 `assert-plan-binding` | `/harness:run` 任意入口 | **[ACC-HARNESS-017]** 强制双登记：缺 `*.plan.json`、plan-check 不过、frontmatter=building 但 plan 缺失 → 全部阻断 |
+| **状态机自动改写** | `run-loop` 内 `update_spec_frontmatter` | `write_state` 后（execute_todo / repair_added / done） | **[ACC-HARNESS-018]** SPEC frontmatter `status` 由状态机推进（spec-ready → building → finished），单调推进，幂等写入 |
+| **render 后断言** | `run-loop` 内 `assert_workbench_snapshot` | 每个终态 `render_project_workbench` 后 | **[ACC-HARNESS-019]** Workbench 快照该 SPEC 卡片若仍 `status_label=待执行` 且 plan 已存在 → 写 `incidents.md`（warning 级，不阻断 release） |
+
+### 16.2 Agent 行为约束
+
+- **禁止手动维护 SPEC frontmatter `status`**：进入 `/harness:run` 后状态由状态机维护，Agent 修改会被下一次 plan-check（ACC-HARNESS-016）冲突检测发现
+- **禁止跳过 `/harness:run` 直接手动改文件 + 渲染 Workbench**：手动路径不会触发 `update_spec_frontmatter`，会导致 frontmatter 与实际状态漂移；漂移会被 ACC-HARNESS-016 / ACC-HARNESS-019 双重发现
+- **允许的修复路径**：发现漂移后只能通过重跑 `/harness:run`（即使所有 todo 已 completed）或手动同步 frontmatter 一次后再 plan-check 验证
+
+### 16.3 与其他规则的关系
+
+- 本节与 §2、§15、§8 自检清单**协同生效**，不重叠：§2/§15 管事前 Plan 绑定；本节管"已绑定后状态如何被维护、如何被人感知"
+- 与 `acceptance-id-convention.mdc`：ACC-HARNESS-016..019 按 MODULE=HARNESS 续编，受 `acceptance_traceability` suite 强制覆盖
+- 与 `eval-gate.mdc`：本节新增的 ACC-HARNESS-016..019 是 SPEC alignment 类自检，不进 hard gate；事后由 `acceptance_traceability` suite 兜底
+

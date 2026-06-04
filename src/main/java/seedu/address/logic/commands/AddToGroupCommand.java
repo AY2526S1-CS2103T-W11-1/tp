@@ -13,7 +13,7 @@ import seedu.address.model.person.Person;
 /**
  * Adds a person to a group.
  */
-public class AddToGroupCommand extends Command {
+public class AddToGroupCommand extends Command implements MutatingCommand {
     public static final String COMMAND_WORD = "add_to_group";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a existing student to a group.\n"

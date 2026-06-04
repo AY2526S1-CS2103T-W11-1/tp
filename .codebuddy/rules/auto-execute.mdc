@@ -1,0 +1,85 @@
+---
+description: 自动执行规则。定义 CodeBuddy 可以自动执行的操作范围，减少不必要的确认询问。
+alwaysApply: true
+enabled: true
+---
+
+# 自动执行规则
+
+## 可以自动执行的操作
+
+### 文件操作
+- 读取文件（read_file）
+- 写入非敏感文件（write_to_file）
+- 修改非敏感文件（replace_in_file）
+- 创建临时文件或辅助文件
+
+### 构建和测试命令
+- `dotnet build`
+- `dotnet test`
+- `npm install`
+- `npm test`
+- `npm run build`
+- `vite build`
+- `lint` 检查
+- `type-check` 检查
+
+### 代码搜索和查询
+- `search_file`
+- `search_content`
+- `list_dir`
+- `read_lints`
+
+### 安全脚本执行
+- 项目内的构建脚本
+- 非删除、非 sudo、非高危的脚本
+- `.codebuddy/scripts/` 下的辅助脚本
+
+### Plan 执行
+- 执行 Plan 中的 todo 时，完成一个后自动继续下一个
+- 不询问用户"是否继续"或"继续吗"
+- 并行执行独立的 todo（无文件冲突）
+
+## 需要确认的操作
+
+### 高风险命令
+- `rm -rf`
+- `sudo`
+- `chmod 777`
+- `git push`
+- `curl * | sh`
+- 数据库写入或生产更新命令
+
+### 敏感文件修改
+- `.env*` 文件
+- 包含 `secret`、`token`、`key` 的配置文件
+- `.git/**` 目录
+- `.codebuddy/mcp.json`
+- 生产部署配置
+
+### 部署和发布
+- 部署、发布、重启服务
+- 数据库写入、迁移、远程更新
+- 放宽权限、降低 Eval gate、修改 baseline
+- 自进化 proposal 的 promote
+
+### 高风险场景
+- SPEC 与代码现实严重冲突，需扩大范围或推翻设计
+- 权限检查返回 `blocked`
+- 状态机返回 `status=blocked` 且非可自动 repair 的失败
+
+## 执行原则
+
+1. **自动连推**：进入 `/harness:run` 后必须自动推进，直到 `release_allowed=true` 或命中高风险触发
+2. **并行执行**：独立模块（前端/后端/MCP）必须并行执行，禁止串行
+3. **禁止询问**：以下行为禁止出现：
+   - 在 todo 之间询问"继续吗 / C1 / C2 / C3"
+   - 把"分阶段汇报"写成"分阶段确认"，等待用户输入
+   - 在 build/lint 通过后主动暂停，要求用户决定下一阶段
+4. **安全边界**：遵循现有的 `harness-permissions.mdc` 权限边界
+5. **证据输出**：每个 todo 完成后必须输出 evidence，不需要用户确认
+
+## 与现有规则的关系
+
+- 优先级低于 `harness-permissions.mdc`、`harness-execution-protocol.mdc`
+- 不覆盖高风险操作的确认要求

@@ -250,4 +250,32 @@ public interface Model {
      * The implementation should update any Consultation objects that reference the old nusnetid to use the new one.
      */
     void updateConsultationsForEditedPerson(Nusnetid oldNusnetid, Nusnetid newNusnetid);
+
+    /**
+     * Commits the current address book state to history.
+     * Should be called after a mutating command executes successfully.
+     */
+    void commitAddressBook();
+
+    /**
+     * Restores the address book to its previous state.
+     * @throws NoUndoableStateException if there is no state to undo to.
+     */
+    void undoAddressBook();
+
+    /**
+     * Restores the address book to the state that was undone.
+     * @throws NoRedoableStateException if there is no state to redo to.
+     */
+    void redoAddressBook();
+
+    /**
+     * Returns true if there is a previous state to undo to.
+     */
+    boolean canUndoAddressBook();
+
+    /**
+     * Returns true if there is a next state to redo to.
+     */
+    boolean canRedoAddressBook();
 }

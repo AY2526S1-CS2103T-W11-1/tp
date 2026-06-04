@@ -11,7 +11,7 @@ import seedu.address.model.person.GroupId;
 /**
  * Creates a group with a given groupId (used as group identifier).
  */
-public class CreateGroupCommand extends Command {
+public class CreateGroupCommand extends Command implements MutatingCommand {
     public static final String COMMAND_WORD = "create_group";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Creates a new group identified by the given group id.\n"

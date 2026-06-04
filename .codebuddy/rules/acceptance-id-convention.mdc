@@ -1,0 +1,186 @@
+---
+description: Acceptance ID 规约。SPEC 中每条验收项必须挂 [ACC-MODULE-NNN] 标识；测试用例（Playwright/xUnit/k6/契约/追溯）必须含同 ID tag；未覆盖且非 [deferred-until: ...] 即 fail。强追溯门禁的元规约。
+alwaysApply: true
+enabled: true
+---
+
+# Acceptance ID 规约（Strong Traceability）
+
+---
+
+## 1. 命名格式
+
+```
+ACC-<MODULE>-<NNN>
+```
+
+- **MODULE**：大写字母 + 数字，2-12 位，体现功能/模块/示例域
+  - 推荐：`DBBRANCH`、`ASSET`、`SCENE`、`USER`、`AUTH`
+  - 维度示例域（仅示例用例用）：`EXAMPLE-UI`、`EXAMPLE-E2E`、`EXAMPLE-CONTRACT`、`EXAMPLE-ARCH`、`EXAMPLE-PERF`、`EXAMPLE-TRACE`
+  - 自身验收（验收方案 SPEC 自测）：`ACCAUTO`
+- **NNN**：3 位数字，从 `001` 开始；同一 MODULE 下连续编号
+- **示例**：`ACC-DBBRANCH-001`、`ACC-ASSET-042`、`ACC-EXAMPLE-E2E-001`
+
+### 1.1 严禁
+
+- ❌ 小写 / 中文 / 全角字符
+- ❌ 跳号到 100+（用 `001`-`042` 即可，不要 `ACC-XXX-1042`）
+- ❌ 跨模块复用同一 ID（`ACC-COMMON-001` 不允许，必须按业务模块归属）
+- ❌ 在测试代码或 SPEC 里写不带连字符的变体（如 `ACCDBBRANCH001`）
+
+---
+
+## 2. SPEC 中的标注
+
+每条验收项必须以下面任一形式标注 acceptance_id：
+
+```markdown
+- **[ACC-DBBRANCH-001]** T1：管理员切换分支后，普通用户会话保持不变
+- **[ACC-ASSET-042]** T8：列表 API 返回字段 `runtime_size` 单位为 byte
+- **[ACC-USER-007] [deferred-until: 2026-Q3-移动端]** T15：移动端切换提示
+```
+
+要求：
+
+1. **行首位置**靠近验收项编号（T1/T8/T15）
+2. **粗体方括号**（`**[ACC-...]**`），便于 grep 与人类视觉扫描
+3. **deferred 标记**：未实现的项目必须显式写 `[deferred-until: <reason>]`（如 `[deferred-until: 2026-Q3-移动端]`、`[deferred-until: depends-on-spec-X]`），否则 traceability suite 视为 fail
+
+---
+
+## 3. 测试代码中的 tag
+
+测试代码必须以下列任一形式声明 acceptance_id（grep 锚点）：
+
+### 3.1 Playwright（TS/JS）
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('switch db branch keeps user session', { tag: '@ACC-DBBRANCH-001' }, async ({ page }) => {
+  // ...
+});
+
+// 或 describe 级别
+test.describe('asset list flow', { tag: '@ACC-ASSET-042' }, () => {
+  test('returns runtime_size in bytes', async ({ request }) => { /* ... */ });
+});
+```
+
+### 3.2 xUnit（C#，含 NetArchTest 架构测试）
+
+```csharp
+[Fact]
+[Trait("Category", "architecture")]
+[Trait("AcceptanceId", "ACC-EXAMPLE-ARCH-001")]
+public void Controllers_Should_Not_Reference_Repositories() { /* ... */ }
+```
+
+### 3.3 k6（性能脚本）
+
+```javascript
+// @ACC-EXAMPLE-PERF-001
+export const options = {
+  thresholds: { http_req_duration: ['p(95)<1500'] }
+};
+```
+
+### 3.4 任意脚本 / 契约用例 / Bash
+
+允许在文件头部或测试段前注释：
+
+```bash
+# @ACC-EXAMPLE-CONTRACT-001
+# Tests: GET /api/assets returns valid schema
+```
+
+```javascript
+// @ACC-EXAMPLE-CONTRACT-001
+const result = await validator.validate(...);
+```
+
+---
+
+## 4. 追溯流程
+
+由 `acceptance_traceability` suite 自动执行：
+
+```
+Step 1: 抽取 SPEC 中的 ACC-ID（active|deferred）
+        → ids.txt
+
+Step 2: grep 测试代码中的 ACC-ID tag
+        → tests-tags.txt
+
+Step 3: 生成追溯矩阵
+        → traceability-matrix.md / traceability-matrix.json
+
+Step 4: coverage = covered_active_ids / total_active_ids
+        coverage < 100% → exit 1（hard fail）
+        coverage = 100% → exit 0（pass）
+```
+
+SDK 提供追溯工具：`python3 -m agentharness acceptance trace <docs-glob>`
+
+---
+
+## 5. deferred 例外的合法用途
+
+允许 deferred 的场景（必须在 `[deferred-until: <reason>]` 中给出明确理由）：
+
+| 场景 | reason 示例 |
+|---|---|
+| 跨季度排期 | `2026-Q3-移动端` |
+| 依赖未完成的 SPEC | `depends-on-spec-X` |
+| 第三方 SDK 未发布 | `awaiting-sdk-vendor-release` |
+| 业务待定 | `pending-product-decision` |
+
+**禁止**：
+
+- ❌ `[deferred-until: TBD]`（必须具体）
+- ❌ `[deferred-until: never]`（应直接从 SPEC 删除该验收项）
+- ❌ deferred 比例超过 30%（视为 SPEC 质量问题，需重新评审）
+
+---
+
+## 6. 与其他规则的关系
+
+- **优先级**：本规则与 `harness-execution-protocol.mdc`、`docs-organization.mdc` 平级；冲突时各管各的领域，不交叉
+- **与 `spec-first-development.mdc`**：本规则是其"可编号验收标准"约束的强化；后者只要求 T1/Tn 编号，本规则进一步要求挂 ACC-ID
+- **与 `harness-execution-protocol.mdc` §11-§14**：SDLC 闭环的 `staging_deploy_verify` 是基础层；本规则配合 `acceptance_*` 6 类 suite 是验收深度层
+- **gate 集成**：`acceptance_traceability_passed` 已加入 `harness.yaml.gates.before_release.require`（hard 门禁）
+
+---
+
+## 7. 违规后果
+
+| 违规 | 后果 |
+|---|---|
+| SPEC 中 T 项无 acceptance_id | `acceptance_traceability` suite fail → release blocked |
+| ID 命名不合规（小写/中文等） | `extract-acceptance-ids.sh` 不识别 → 视为未挂 → fail |
+| 测试代码无 tag 但实现了对应验收 | matrix 标 missing → fail |
+| 测试代码 tag 引用不存在的 ID | matrix 报 orphan → warning（不阻断，但需修） |
+| deferred 无 reason 或 reason=TBD | extract 时拒绝识别为 deferred → 视为未覆盖 → fail |
+
+---
+
+## 8. 推荐工具
+
+```bash
+# 使用 SDK CLI 抽取 SPEC 中的 ACC-ID
+python3 -m agentharness acceptance extract <docs-glob> [--with-status]
+
+# 生成追溯矩阵（含覆盖率）
+python3 -m agentharness acceptance matrix <ids-file> <tests-tags-file> <output.md>
+
+# 直接跑 traceability suite（IDE 命令）
+/eval:acceptance-traceability
+```
+
+---
+
+## 9. 演进与回顾
+
+- 每季度回顾一次 deferred 列表，将"已可实现"的从 deferred 转回 active
+- 每次 SPEC 修订必须同步更新 acceptance_id（不允许复用废弃 ID 编号）
+- 如发现 `MODULE` 命名冲突，由本规则维护者协调统一

@@ -1,0 +1,23 @@
+{
+  "flow": {
+    "type": "iteration",
+    "id": "harness-flow-fixture-iteration",
+    "priority": "P1",
+    "status": "release-ready",
+    "display_title": "Iteration Flow Fixture",
+    "owner": "SDK Fixture",
+    "spec_path": "evals/fixtures/specs/iteration-flow.fixture.md",
+    "plan_path": "evals/fixtures/specs/iteration-flow/iteration-flow.fixture.plan.json",
+    "flow_metadata_path": "evals/fixtures/specs/iteration-flow/iteration-flow.fixture.flow.json",
+    "acceptance_ids": [
+      "ACC-HARNESSFLOW-001", "ACC-HARNESSFLOW-002", "ACC-HARNESSFLOW-003",
+      "ACC-HARNESSFLOW-004", "ACC-HARNESSFLOW-005", "ACC-HARNESSFLOW-006",
+      "ACC-HARNESSFLOW-007", "ACC-HARNESSFLOW-008", "ACC-HARNESSFLOW-009",
+      "ACC-HARNESSFLOW-010", "ACC-HARNESSFLOW-011", "ACC-HARNESSFLOW-012",
+      "ACC-HARNESSFLOW-013", "ACC-HARNESSFLOW-014", "ACC-HARNESSFLOW-015"
+    ],
+    "run_ids": [],
+    "review_items": [],
+    "evidence": []
+  }
+}

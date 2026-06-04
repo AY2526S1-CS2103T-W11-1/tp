@@ -1,0 +1,1 @@
+{"id":"api-placeholder","inputs":{"method":"GET","path":"/health"},"reference_outputs":{"status":[200,404]},"metadata":{"suite":"api","risk":"medium","source":"harness-initial","tags":["contract"]}}

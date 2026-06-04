@@ -1,0 +1,27 @@
+{
+  "id": "<UUID>",
+  "name": "<Plan name>",
+  "spec": "<path/to/SPEC.md>",
+  "version": 1,
+  "created": "<YYYY-MM-DDTHH:MM:SSZ>",
+  "todos": [
+    {
+      "id": "todo-1",
+      "title": "<short title>",
+      "description": "<detailed description>",
+      "files": ["<file/path>"],
+      "depends_on": [],
+      "verification": {
+        "command": "<exact command>",
+        "expected": "<exit 0 / specific output>"
+      },
+      "acceptance_ids": ["ACC-<MODULE>-001"],
+      "status": "pending"
+    }
+  ],
+  "constraints": {
+    "no_file_overlap": true,
+    "must_parallel": [],
+    "max_repair_rounds": 3
+  }
+}

@@ -23,7 +23,7 @@ import seedu.address.model.person.Person;
  * }</pre>
  * This marks week 3 attendance for student E1234567 as present.
  */
-public class MarkAttendanceCommand extends Command {
+public class MarkAttendanceCommand extends Command implements MutatingCommand {
     public static final String COMMAND_WORD = "mark_attendance";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the attendance of a student identified "

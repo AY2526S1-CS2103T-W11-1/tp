@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "release_allowed": true,
+  "summary": "SPEC alignment checked",
+  "suites": {
+    "spec_alignment": "pass"
+  },
+  "failed_acceptance_ids": [],
+  "blocking_issues": [],
+  "warnings": [
+    "SPEC is long (406 lines), consider splitting",
+    "no knowledge base search found (correctness check may be incomplete)",
+    "no review signature found (recommend PM/QA/Tech Lead signature)"
+  ],
+  "evidence": [
+    "docs/specs/UndoRedo-SPEC.md"
+  ],
+  "rerun_required": []
+}

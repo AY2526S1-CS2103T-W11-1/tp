@@ -81,6 +81,8 @@ done faster than traditional Graphical User Interface (GUI) apps while still hav
 | **Add student to group**    | `add_to_group i/NUSNETID g/GROUPID`                                                                              | `add_to_group i/E1234567 g/T03`                                                      |
 | **Find students by group**  | `find_group g/GROUPID`                                                                                           | `find_group g/T03`                                                                   |
 | **Clear SoCTAssist**        | `clear`                                                                                                          | `clear`                                                                              |
+| **Undo**                    | `undo`                                                                                                           | `undo`                                                                               |
+| **Redo**                    | `redo`                                                                                                           | `redo`                                                                               |
 | **Exit application**        | `exit`                                                                                                           | `exit`                                                                               |
 
 --------------------------------------------------------------------------------------------------------------------
@@ -499,6 +501,38 @@ Format: `clear`
 Exits the program.
 
 Format: `exit`
+
+---
+
+## Undoing a command : `undo`
+
+Undoes the most recent modifying command and restores the address book to its previous state.
+
+Format: `undo`
+
+Examples:
+* After adding a student with `add_student n/John i/E1234567 t/@john g/T01`, typing `undo` will remove the student.
+* After clearing all data with `clear`, typing `undo` will restore all deleted data.
+
+Limitations:
+* You can undo up to 20 steps.
+* Read-only commands (e.g., `list`, `find`, `help`) do not count as steps and cannot be undone.
+* After undoing, if you execute a new modifying command, the undone steps are discarded and cannot be redone.
+* Undo history is not preserved across sessions (closing the app clears the history).
+
+## Redoing a command : `redo`
+
+Redoes the most recently undone command.
+
+Format: `redo`
+
+Examples:
+* After using `undo` to reverse an `add_student` command, typing `redo` will re-add the student.
+* You can redo multiple times if you have undone multiple steps.
+
+Limitations:
+* You cannot redo if you have executed a new modifying command after the last undo (the redo history is cleared).
+* Redo history is not preserved across sessions.
 
 ## Saving the data
 

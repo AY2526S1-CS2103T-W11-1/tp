@@ -1,0 +1,121 @@
+{
+  "spec": "docs/specs/UndoRedo-SPEC.md",
+  "plan_id": "plan-undoredo-001",
+  "todos": [
+    {
+      "id": "T1",
+      "content": "创建 VersionedAddressBook 核心类（含 NoUndoableStateException/NoRedoableStateException），实现 commit/undo/redo/canUndo/canRedo，MAX_HISTORY=20",
+      "dependencies": [],
+      "spec_refs": ["T9", "ACC-UNDOREDO-009"],
+      "files": ["src/main/java/seedu/address/model/VersionedAddressBook.java", "src/main/java/seedu/address/model/NoUndoableStateException.java", "src/main/java/seedu/address/model/NoRedoableStateException.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew compileJava --no-daemon 2>&1 | tail -3"}],
+      "acceptance_ids": ["ACC-UNDOREDO-009"],
+      "status": "completed"
+    },
+    {
+      "id": "T2",
+      "content": "Model 接口新增 5 个 undo/redo 方法，ModelManager 中 addressBook 字段改为 VersionedAddressBook 并实现委托",
+      "dependencies": ["T1"],
+      "spec_refs": ["T3", "T4", "T5", "T8", "T12", "ACC-UNDOREDO-003", "ACC-UNDOREDO-004", "ACC-UNDOREDO-005", "ACC-UNDOREDO-008", "ACC-UNDOREDO-012"],
+      "files": ["src/main/java/seedu/address/model/Model.java", "src/main/java/seedu/address/model/ModelManager.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew compileJava --no-daemon 2>&1 | tail -3"}],
+      "acceptance_ids": ["ACC-UNDOREDO-003", "ACC-UNDOREDO-004", "ACC-UNDOREDO-005", "ACC-UNDOREDO-008", "ACC-UNDOREDO-012"],
+      "status": "completed"
+    },
+    {
+      "id": "T3",
+      "content": "创建 MutatingCommand 标记接口，13 个修改型命令添加 implements MutatingCommand",
+      "dependencies": [],
+      "spec_refs": ["T14", "ACC-UNDOREDO-014"],
+      "files": ["src/main/java/seedu/address/logic/commands/MutatingCommand.java", "src/main/java/seedu/address/logic/commands/AddCommand.java", "src/main/java/seedu/address/logic/commands/EditCommand.java", "src/main/java/seedu/address/logic/commands/DeleteCommand.java", "src/main/java/seedu/address/logic/commands/ClearCommand.java", "src/main/java/seedu/address/logic/commands/CreateGroupCommand.java", "src/main/java/seedu/address/logic/commands/AddToGroupCommand.java", "src/main/java/seedu/address/logic/commands/AddHomeworkCommand.java", "src/main/java/seedu/address/logic/commands/MarkHomeworkCommand.java", "src/main/java/seedu/address/logic/commands/DeleteHomeworkCommand.java", "src/main/java/seedu/address/logic/commands/MarkAttendanceCommand.java", "src/main/java/seedu/address/logic/commands/MarkAllAttendanceCommand.java", "src/main/java/seedu/address/logic/commands/AddConsultationCommand.java", "src/main/java/seedu/address/logic/commands/DeleteConsultationCommand.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew compileJava --no-daemon 2>&1 | tail -3"}],
+      "acceptance_ids": ["ACC-UNDOREDO-014"],
+      "status": "completed"
+    },
+    {
+      "id": "T4",
+      "content": "创建 UndoCommand 和 RedoCommand，实现 execute() 调用 model.canUndo/canRedo 判断和 undo/redo 操作",
+      "dependencies": ["T2"],
+      "spec_refs": ["T1", "T2", "T6", "T7", "T11", "ACC-UNDOREDO-001", "ACC-UNDOREDO-002", "ACC-UNDOREDO-006", "ACC-UNDOREDO-007", "ACC-UNDOREDO-011"],
+      "files": ["src/main/java/seedu/address/logic/commands/UndoCommand.java", "src/main/java/seedu/address/logic/commands/RedoCommand.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew compileJava --no-daemon 2>&1 | tail -3"}],
+      "acceptance_ids": ["ACC-UNDOREDO-001", "ACC-UNDOREDO-002", "ACC-UNDOREDO-006", "ACC-UNDOREDO-007", "ACC-UNDOREDO-011"],
+      "status": "completed"
+    },
+    {
+      "id": "T5",
+      "content": "修改 AddressBookParser 新增 undo/redo case，修改 LogicManager.execute() 在 MutatingCommand 成功后调用 model.commitAddressBook()",
+      "dependencies": ["T3", "T4"],
+      "spec_refs": ["T10", "T13", "ACC-UNDOREDO-010", "ACC-UNDOREDO-013"],
+      "files": ["src/main/java/seedu/address/logic/parser/AddressBookParser.java", "src/main/java/seedu/address/logic/LogicManager.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew compileJava --no-daemon 2>&1 | tail -3"}],
+      "acceptance_ids": ["ACC-UNDOREDO-010", "ACC-UNDOREDO-013"],
+      "status": "completed"
+    },
+    {
+      "id": "T6",
+      "content": "编写 VersionedAddressBookTest：构造函数、commit 追加/截断 redo 栈、undo/redo 恢复、canUndo/canRedo 边界、超过 MAX_HISTORY 淘汰最旧状态",
+      "dependencies": ["T1"],
+      "spec_refs": ["T9", "T12", "ACC-UNDOREDO-009", "ACC-UNDOREDO-012"],
+      "files": ["src/test/java/seedu/address/model/VersionedAddressBookTest.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew test --tests VersionedAddressBookTest --no-daemon 2>&1 | tail -5"}],
+      "acceptance_ids": ["ACC-UNDOREDO-009", "ACC-UNDOREDO-012"],
+      "status": "completed"
+    },
+    {
+      "id": "T7",
+      "content": "编写 ModelManagerUndoRedoTest：连续 undo/redo、undo 后新命令清空 redo 栈、只读命令不改变历史、遍历 13 个 MutatingCommand 每个 commit 后 canUndo==true",
+      "dependencies": ["T2", "T3"],
+      "spec_refs": ["T3", "T4", "T5", "T8", "T12", "T14", "ACC-UNDOREDO-003", "ACC-UNDOREDO-004", "ACC-UNDOREDO-005", "ACC-UNDOREDO-008", "ACC-UNDOREDO-012", "ACC-UNDOREDO-014"],
+      "files": ["src/test/java/seedu/address/model/ModelManagerUndoRedoTest.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew test --tests ModelManagerUndoRedoTest --no-daemon 2>&1 | tail -5"}],
+      "acceptance_ids": ["ACC-UNDOREDO-003", "ACC-UNDOREDO-004", "ACC-UNDOREDO-005", "ACC-UNDOREDO-008", "ACC-UNDOREDO-012", "ACC-UNDOREDO-014"],
+      "status": "completed"
+    },
+    {
+      "id": "T8",
+      "content": "编写 UndoCommandTest 和 RedoCommandTest：add 后 undo 恢复、undo 后 redo 恢复、空历史 undo 报错、无 redo 历史 redo 报错、clear 后 undo 数据完整恢复",
+      "dependencies": ["T4", "T5"],
+      "spec_refs": ["T1", "T2", "T6", "T7", "T11", "ACC-UNDOREDO-001", "ACC-UNDOREDO-002", "ACC-UNDOREDO-006", "ACC-UNDOREDO-007", "ACC-UNDOREDO-011"],
+      "files": ["src/test/java/seedu/address/logic/commands/UndoCommandTest.java", "src/test/java/seedu/address/logic/commands/RedoCommandTest.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew test --tests UndoCommandTest --tests RedoCommandTest --no-daemon 2>&1 | tail -5"}],
+      "acceptance_ids": ["ACC-UNDOREDO-001", "ACC-UNDOREDO-002", "ACC-UNDOREDO-006", "ACC-UNDOREDO-007", "ACC-UNDOREDO-011"],
+      "status": "completed"
+    },
+    {
+      "id": "T9",
+      "content": "集成测试 LogicManagerTest：undo/redo 后 filteredPersons 和 filteredConsultations 正确刷新、undo 后 storage 文件与模型一致",
+      "dependencies": ["T5", "T8"],
+      "spec_refs": ["T10", "T13", "ACC-UNDOREDO-010", "ACC-UNDOREDO-013"],
+      "files": ["src/test/java/seedu/address/logic/LogicManagerTest.java"],
+      "verification": [{"type": "command", "cmd": "./gradlew test --tests LogicManagerTest --no-daemon 2>&1 | tail -5"}],
+      "acceptance_ids": ["ACC-UNDOREDO-010", "ACC-UNDOREDO-013"],
+      "status": "completed"
+    },
+    {
+      "id": "T10",
+      "content": "更新 UserGuide 新增 undo/redo 命令文档（命令汇总表后独立章节），更新 DeveloperGuide 新增 VersionedAddressBook 架构说明",
+      "dependencies": ["T5"],
+      "spec_refs": ["docs"],
+      "files": ["docs/UserGuide.md", "docs/DeveloperGuide.md"],
+      "verification": [{"type": "command", "cmd": "grep -qc 'undo' docs/UserGuide.md && grep -qc 'VersionedAddressBook' docs/DeveloperGuide.md"}],
+      "acceptance_ids": [],
+      "status": "completed"
+    },
+    {
+      "id": "T11",
+      "content": "全量构建和回归测试：运行 gradle build 确保编译、测试、checkstyle 全部通过",
+      "dependencies": ["T6", "T7", "T8", "T9", "T10"],
+      "spec_refs": ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12", "T13", "T14", "ACC-UNDOREDO-001", "ACC-UNDOREDO-002", "ACC-UNDOREDO-003", "ACC-UNDOREDO-004", "ACC-UNDOREDO-005", "ACC-UNDOREDO-006", "ACC-UNDOREDO-007", "ACC-UNDOREDO-008", "ACC-UNDOREDO-009", "ACC-UNDOREDO-010", "ACC-UNDOREDO-011", "ACC-UNDOREDO-012", "ACC-UNDOREDO-013", "ACC-UNDOREDO-014"],
+      "files": [],
+      "verification": [{"type": "command", "cmd": "./gradlew build --no-daemon 2>&1 | tail -5"}],
+      "acceptance_ids": ["ACC-UNDOREDO-001", "ACC-UNDOREDO-002", "ACC-UNDOREDO-003", "ACC-UNDOREDO-004", "ACC-UNDOREDO-005", "ACC-UNDOREDO-006", "ACC-UNDOREDO-007", "ACC-UNDOREDO-008", "ACC-UNDOREDO-009", "ACC-UNDOREDO-010", "ACC-UNDOREDO-011", "ACC-UNDOREDO-012", "ACC-UNDOREDO-013", "ACC-UNDOREDO-014"],
+      "status": "completed"
+    }
+  ],
+  "constraints": {
+    "no_file_overlap": true,
+    "must_parallel": [["T1", "T3"], ["T6", "T7"]],
+    "max_repair_rounds": 3
+  }
+}

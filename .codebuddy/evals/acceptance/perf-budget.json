@@ -1,0 +1,27 @@
+{
+  "$schema": "internal://acceptance-perf-budget",
+  "_comment": "性能预算 — 首版宽松，对齐项目 SQL 性能规则（API > 1s 才优化）+ 50% 缓冲；UI 软门禁",
+  "api": {
+    "p95_ms": {
+      "/api/health": 500,
+      "/api/assets": 1500,
+      "default": 2000
+    },
+    "p99_ms": {
+      "default": 3000
+    },
+    "error_rate": 0.01
+  },
+  "frontend_lighthouse": {
+    "_comment": "首版宽松：让 baseline 先稳定，跑 5 次 PR 后逐步紧缩",
+    "performance": 0.6,
+    "accessibility": 0.8,
+    "best-practices": 0.8,
+    "seo": 0.7,
+    "first-contentful-paint_ms": 3000,
+    "largest-contentful-paint_ms": 4000,
+    "cumulative-layout-shift": 0.1,
+    "total-blocking-time_ms": 600
+  },
+  "_promote_to_hard_when": "连续 5 次 PR pass + p95 抖动 < 20%（运营层面，本规约不强制）"
+}

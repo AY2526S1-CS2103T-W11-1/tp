@@ -1,0 +1,650 @@
+{
+  "version": "1.2.0",
+  "plugin_registered": true,
+  "managed_files": {
+    ".codebuddy/rules/verification-evidence-standard.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/verification-evidence-standard.mdc",
+      "target": ".codebuddy/rules/verification-evidence-standard.mdc",
+      "strategy": "copy",
+      "source_sha256": "07df5c4a135c3312ed63e26fef8d86feb5c534d9d8b64c1ff3e141b84d2b1c9d",
+      "target_sha256": "07df5c4a135c3312ed63e26fef8d86feb5c534d9d8b64c1ff3e141b84d2b1c9d"
+    },
+    ".codebuddy/rules/auto-execute.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/auto-execute.mdc",
+      "target": ".codebuddy/rules/auto-execute.mdc",
+      "strategy": "copy",
+      "source_sha256": "b4615629b490543f06229dd31ab3f711d2e2c16abd93dd5fb03dd4037e1f36fa",
+      "target_sha256": "b4615629b490543f06229dd31ab3f711d2e2c16abd93dd5fb03dd4037e1f36fa"
+    },
+    ".codebuddy/rules/tdd-development-workflow.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/tdd-development-workflow.mdc",
+      "target": ".codebuddy/rules/tdd-development-workflow.mdc",
+      "strategy": "copy",
+      "source_sha256": "cd7605a1594f54993f62d6347c250112d442d923c6c63ea2b23ccc1a97795661",
+      "target_sha256": "cd7605a1594f54993f62d6347c250112d442d923c6c63ea2b23ccc1a97795661"
+    },
+    ".codebuddy/rules/acceptance-id-convention.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/acceptance-id-convention.mdc",
+      "target": ".codebuddy/rules/acceptance-id-convention.mdc",
+      "strategy": "copy",
+      "source_sha256": "cd7952cf90f899df4661cd25221b2d4feba98330032fb883d283b292135212ab",
+      "target_sha256": "cd7952cf90f899df4661cd25221b2d4feba98330032fb883d283b292135212ab"
+    },
+    ".codebuddy/rules/eval-gate.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/eval-gate.mdc",
+      "target": ".codebuddy/rules/eval-gate.mdc",
+      "strategy": "copy",
+      "source_sha256": "5c7aaab2b3a5d290a5ae92725d79409aaa6ed30ed3f863003bb6200e82d2e845",
+      "target_sha256": "5c7aaab2b3a5d290a5ae92725d79409aaa6ed30ed3f863003bb6200e82d2e845"
+    },
+    ".codebuddy/rules/spec-first-development.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/spec-first-development.mdc",
+      "target": ".codebuddy/rules/spec-first-development.mdc",
+      "strategy": "copy",
+      "source_sha256": "1286045f9183fe9fa3a9f93d7360d94386e8bae70544eae54ffbef3ba88a7679",
+      "target_sha256": "1286045f9183fe9fa3a9f93d7360d94386e8bae70544eae54ffbef3ba88a7679"
+    },
+    ".codebuddy/rules/html-output-policy.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/html-output-policy.mdc",
+      "target": ".codebuddy/rules/html-output-policy.mdc",
+      "strategy": "copy",
+      "source_sha256": "e750d61af0abded3986a1d6b269531eb03e5a6e0a1a6f6181f5c971763b583e1",
+      "target_sha256": "e750d61af0abded3986a1d6b269531eb03e5a6e0a1a6f6181f5c971763b583e1"
+    },
+    ".codebuddy/rules/harness-permissions.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/harness-permissions.mdc",
+      "target": ".codebuddy/rules/harness-permissions.mdc",
+      "strategy": "copy",
+      "source_sha256": "eeb355602f8acb6f36ac7cd8da957f827bcd307d134016d86b63c2d7db740903",
+      "target_sha256": "eeb355602f8acb6f36ac7cd8da957f827bcd307d134016d86b63c2d7db740903"
+    },
+    ".codebuddy/rules/harness-execution-protocol.mdc": {
+      "source": ".codebuddy/harness-sdk/rules/harness-execution-protocol.mdc",
+      "target": ".codebuddy/rules/harness-execution-protocol.mdc",
+      "strategy": "copy",
+      "source_sha256": "ab6c6806e2731aba613818a6847d21701391832191a667ff669889a4d67da544",
+      "target_sha256": "ab6c6806e2731aba613818a6847d21701391832191a667ff669889a4d67da544"
+    },
+    ".codebuddy/templates/plan.json": {
+      "source": ".codebuddy/harness-sdk/templates/plan.json",
+      "target": ".codebuddy/templates/plan.json",
+      "strategy": "copy",
+      "source_sha256": "15620e4a39549702f19941580c1184a7144d7cc17858742a6609132dca4f5778",
+      "target_sha256": "15620e4a39549702f19941580c1184a7144d7cc17858742a6609132dca4f5778"
+    },
+    ".codebuddy/templates/release-summary.md": {
+      "source": ".codebuddy/harness-sdk/templates/release-summary.md",
+      "target": ".codebuddy/templates/release-summary.md",
+      "strategy": "copy",
+      "source_sha256": "13c9a1105a1cb19f9e8109eb16a159165305d20fa9603f48cb4fd2c0db120fa5",
+      "target_sha256": "13c9a1105a1cb19f9e8109eb16a159165305d20fa9603f48cb4fd2c0db120fa5"
+    },
+    ".codebuddy/templates/review-notes.md": {
+      "source": ".codebuddy/harness-sdk/templates/review-notes.md",
+      "target": ".codebuddy/templates/review-notes.md",
+      "strategy": "copy",
+      "source_sha256": "ff0264f6aa6104af79337014ac29ca1b620d9367ef511039c216842fc9dd7599",
+      "target_sha256": "ff0264f6aa6104af79337014ac29ca1b620d9367ef511039c216842fc9dd7599"
+    },
+    ".codebuddy/templates/bug-report.md": {
+      "source": ".codebuddy/harness-sdk/templates/bug-report.md",
+      "target": ".codebuddy/templates/bug-report.md",
+      "strategy": "copy",
+      "source_sha256": "64703865da4c171af79684e4bdcb3a0a1ebdd8a5ea78cd00fd452d855a4de403",
+      "target_sha256": "64703865da4c171af79684e4bdcb3a0a1ebdd8a5ea78cd00fd452d855a4de403"
+    },
+    ".codebuddy/templates/code-review.md": {
+      "source": ".codebuddy/harness-sdk/templates/code-review.md",
+      "target": ".codebuddy/templates/code-review.md",
+      "strategy": "copy",
+      "source_sha256": "b48629a5a7aef0b7ee9aeaec3f3f7e26148e8e69f9ffd3acce213cabb12975c7",
+      "target_sha256": "b48629a5a7aef0b7ee9aeaec3f3f7e26148e8e69f9ffd3acce213cabb12975c7"
+    },
+    ".codebuddy/templates/spec.md": {
+      "source": ".codebuddy/harness-sdk/templates/spec.md",
+      "target": ".codebuddy/templates/spec.md",
+      "strategy": "copy",
+      "source_sha256": "61f4e2ffe2e8220d41247b6294652e82fbedfedb0877692856e5be145a329bbc",
+      "target_sha256": "61f4e2ffe2e8220d41247b6294652e82fbedfedb0877692856e5be145a329bbc"
+    },
+    ".codebuddy/templates/acceptance-test-stub.ts": {
+      "source": ".codebuddy/harness-sdk/templates/acceptance-test-stub.ts",
+      "target": ".codebuddy/templates/acceptance-test-stub.ts",
+      "strategy": "copy",
+      "source_sha256": "62feed5b8942451392425ca971834ec973f46e3ac7106008ff9bfa1da67e63b7",
+      "target_sha256": "62feed5b8942451392425ca971834ec973f46e3ac7106008ff9bfa1da67e63b7"
+    },
+    ".codebuddy/templates/staging-verified.md": {
+      "source": ".codebuddy/harness-sdk/templates/staging-verified.md",
+      "target": ".codebuddy/templates/staging-verified.md",
+      "strategy": "copy",
+      "source_sha256": "9c130e1c9508b7ee2962290c71824e62a3c76c530451a884d60990f815f87e7e",
+      "target_sha256": "9c130e1c9508b7ee2962290c71824e62a3c76c530451a884d60990f815f87e7e"
+    },
+    ".codebuddy/templates/k6-perf-stub.js": {
+      "source": ".codebuddy/harness-sdk/templates/k6-perf-stub.js",
+      "target": ".codebuddy/templates/k6-perf-stub.js",
+      "strategy": "copy",
+      "source_sha256": "1de532e4ef6c21954de6186d40c18fa550417fea4b8101d0dad3657fcc55b3ad",
+      "target_sha256": "1de532e4ef6c21954de6186d40c18fa550417fea4b8101d0dad3657fcc55b3ad"
+    },
+    ".codebuddy/templates/dep-cruiser.config.js": {
+      "source": ".codebuddy/harness-sdk/templates/dep-cruiser.config.js",
+      "target": ".codebuddy/templates/dep-cruiser.config.js",
+      "strategy": "copy",
+      "source_sha256": "4b7075d796b886d661074d39e92d68bc2bb509158c7f77055eaa86849bc41728",
+      "target_sha256": "4b7075d796b886d661074d39e92d68bc2bb509158c7f77055eaa86849bc41728"
+    },
+    ".codebuddy/evals/datasets/held-out.jsonl": {
+      "source": ".codebuddy/harness-sdk/evals/datasets/held-out.jsonl",
+      "target": ".codebuddy/evals/datasets/held-out.jsonl",
+      "strategy": "copy",
+      "source_sha256": "d974f5b58dfbda0f4196eb9a503eb9e2debc5cbe565a3c53164b218ae66e8130",
+      "target_sha256": "d974f5b58dfbda0f4196eb9a503eb9e2debc5cbe565a3c53164b218ae66e8130"
+    },
+    ".codebuddy/evals/datasets/regression.jsonl": {
+      "source": ".codebuddy/harness-sdk/evals/datasets/regression.jsonl",
+      "target": ".codebuddy/evals/datasets/regression.jsonl",
+      "strategy": "copy",
+      "source_sha256": "308cc5e927e636299f48412d29f45c787f893b7a06330b7ccffe2cf31802269c",
+      "target_sha256": "308cc5e927e636299f48412d29f45c787f893b7a06330b7ccffe2cf31802269c"
+    },
+    ".codebuddy/evals/datasets/sql-performance.jsonl": {
+      "source": ".codebuddy/harness-sdk/evals/datasets/sql-performance.jsonl",
+      "target": ".codebuddy/evals/datasets/sql-performance.jsonl",
+      "strategy": "copy",
+      "source_sha256": "773cc7b0be8b45199d1a7c0488c61f90a45393ce9066c29a36e30088b384263d",
+      "target_sha256": "773cc7b0be8b45199d1a7c0488c61f90a45393ce9066c29a36e30088b384263d"
+    },
+    ".codebuddy/evals/datasets/api.jsonl": {
+      "source": ".codebuddy/harness-sdk/evals/datasets/api.jsonl",
+      "target": ".codebuddy/evals/datasets/api.jsonl",
+      "strategy": "copy",
+      "source_sha256": "6f4df8ea430d289705178a269a9e36709e14887d426d824e54a87c7b57286d9e",
+      "target_sha256": "6f4df8ea430d289705178a269a9e36709e14887d426d824e54a87c7b57286d9e"
+    },
+    ".codebuddy/evals/datasets/mcp-smoke.jsonl": {
+      "source": ".codebuddy/harness-sdk/evals/datasets/mcp-smoke.jsonl",
+      "target": ".codebuddy/evals/datasets/mcp-smoke.jsonl",
+      "strategy": "copy",
+      "source_sha256": "f5259a3e58b8f3acdd767eefe7b964b7e6457c2cf4512bf12db75718275d3593",
+      "target_sha256": "f5259a3e58b8f3acdd767eefe7b964b7e6457c2cf4512bf12db75718275d3593"
+    },
+    ".codebuddy/evals/acceptance/harness-sdkpy-traceability.js": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/harness-sdkpy-traceability.js",
+      "target": ".codebuddy/evals/acceptance/harness-sdkpy-traceability.js",
+      "strategy": "copy",
+      "source_sha256": "9f41f3361cbf62d90290ed33eb17a5249d88566cd010547df78233cee3e3dcea",
+      "target_sha256": "9f41f3361cbf62d90290ed33eb17a5249d88566cd010547df78233cee3e3dcea"
+    },
+    ".codebuddy/evals/acceptance/contract-validator.mjs": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/contract-validator.mjs",
+      "target": ".codebuddy/evals/acceptance/contract-validator.mjs",
+      "strategy": "copy",
+      "source_sha256": "b943bac8e3fce5581e0b617fe892358a0479340a50f5ecf07378a16b3331ad5e",
+      "target_sha256": "b943bac8e3fce5581e0b617fe892358a0479340a50f5ecf07378a16b3331ad5e"
+    },
+    ".codebuddy/evals/acceptance/k6-api-budget.js": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/k6-api-budget.js",
+      "target": ".codebuddy/evals/acceptance/k6-api-budget.js",
+      "strategy": "copy",
+      "source_sha256": "6e6c879153f13371d8ef5daaad1552a7e86bc76575c64e29753fc8453e592efa",
+      "target_sha256": "6e6c879153f13371d8ef5daaad1552a7e86bc76575c64e29753fc8453e592efa"
+    },
+    ".codebuddy/evals/acceptance/harness-flow-traceability.js": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/harness-flow-traceability.js",
+      "target": ".codebuddy/evals/acceptance/harness-flow-traceability.js",
+      "strategy": "copy",
+      "source_sha256": "1424f700d687b5bf5ced5b8550f18b40aaf438436e0a621b0da104176de424d4",
+      "target_sha256": "1424f700d687b5bf5ced5b8550f18b40aaf438436e0a621b0da104176de424d4"
+    },
+    ".codebuddy/evals/acceptance/dependency-cruiser.config.cjs": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/dependency-cruiser.config.cjs",
+      "target": ".codebuddy/evals/acceptance/dependency-cruiser.config.cjs",
+      "strategy": "copy",
+      "source_sha256": "3ea9005501bc7ae7189b07994b4a6599fc50da072331c8a39849715db12cc650",
+      "target_sha256": "3ea9005501bc7ae7189b07994b4a6599fc50da072331c8a39849715db12cc650"
+    },
+    ".codebuddy/evals/acceptance/lighthouserc.cjs": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/lighthouserc.cjs",
+      "target": ".codebuddy/evals/acceptance/lighthouserc.cjs",
+      "strategy": "copy",
+      "source_sha256": "bfa8374427876eb259b5da0f40af5940809bd53d18332e62fb7f78b7c8e094fe",
+      "target_sha256": "bfa8374427876eb259b5da0f40af5940809bd53d18332e62fb7f78b7c8e094fe"
+    },
+    ".codebuddy/evals/acceptance/harness-sdk-traceability.js": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/harness-sdk-traceability.js",
+      "target": ".codebuddy/evals/acceptance/harness-sdk-traceability.js",
+      "strategy": "copy",
+      "source_sha256": "52b624076d4eace1f10270496eeb8a65e50b690921bbc946b8d44796a5e87ed0",
+      "target_sha256": "52b624076d4eace1f10270496eeb8a65e50b690921bbc946b8d44796a5e87ed0"
+    },
+    ".codebuddy/evals/acceptance/playwright.config.ts": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/playwright.config.ts",
+      "target": ".codebuddy/evals/acceptance/playwright.config.ts",
+      "strategy": "copy",
+      "source_sha256": "c99b472e3ef60545cce0015a3749e24bb2e14061cf763b05363b3ec0b7635eea",
+      "target_sha256": "c99b472e3ef60545cce0015a3749e24bb2e14061cf763b05363b3ec0b7635eea"
+    },
+    ".codebuddy/evals/acceptance/perf-budget.json": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/perf-budget.json",
+      "target": ".codebuddy/evals/acceptance/perf-budget.json",
+      "strategy": "copy",
+      "source_sha256": "76bc2975265247e1963394af8059cec59c7641a6a7f0f329df32b4b4cfb09eae",
+      "target_sha256": "76bc2975265247e1963394af8059cec59c7641a6a7f0f329df32b4b4cfb09eae"
+    },
+    ".codebuddy/evals/acceptance/harness-html-workbench-traceability.js": {
+      "source": ".codebuddy/harness-sdk/evals/acceptance/harness-html-workbench-traceability.js",
+      "target": ".codebuddy/evals/acceptance/harness-html-workbench-traceability.js",
+      "strategy": "copy",
+      "source_sha256": "b0cf807be5e0db38ac767e06c1e6eb9f5cd05ef479cd11ba270b3c6c76e8938e",
+      "target_sha256": "b0cf807be5e0db38ac767e06c1e6eb9f5cd05ef479cd11ba270b3c6c76e8938e"
+    },
+    ".codebuddy/evals/fixtures/docs-reorg.map.example.txt": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/docs-reorg.map.example.txt",
+      "target": ".codebuddy/evals/fixtures/docs-reorg.map.example.txt",
+      "strategy": "copy",
+      "source_sha256": "5ee02f9f0d05c4aa5dbbc35a4c1a63049e182b5d00cd1462b2434214bdb0fe15",
+      "target_sha256": "5ee02f9f0d05c4aa5dbbc35a4c1a63049e182b5d00cd1462b2434214bdb0fe15"
+    },
+    ".codebuddy/evals/fixtures/README.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/README.md",
+      "target": ".codebuddy/evals/fixtures/README.md",
+      "strategy": "copy",
+      "source_sha256": "88e8fd81744e1caed284b6598159987d43944039810de8d382c224ed4032de18",
+      "target_sha256": "88e8fd81744e1caed284b6598159987d43944039810de8d382c224ed4032de18"
+    },
+    ".codebuddy/evals/fixtures/specs/minimal.fixture.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/minimal.fixture.md",
+      "target": ".codebuddy/evals/fixtures/specs/minimal.fixture.md",
+      "strategy": "copy",
+      "source_sha256": "e235e1672c4abd50637e489db618aa21f898c2670b7ba873d1af9ec4e3a69de4",
+      "target_sha256": "e235e1672c4abd50637e489db618aa21f898c2670b7ba873d1af9ec4e3a69de4"
+    },
+    ".codebuddy/evals/fixtures/specs/bugfix-template.fixture.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/bugfix-template.fixture.md",
+      "target": ".codebuddy/evals/fixtures/specs/bugfix-template.fixture.md",
+      "strategy": "copy",
+      "source_sha256": "ebb384daeb0b0352c9e30b4871123b861567a8a74bcb6a84ad3b41cab77149cf",
+      "target_sha256": "ebb384daeb0b0352c9e30b4871123b861567a8a74bcb6a84ad3b41cab77149cf"
+    },
+    ".codebuddy/evals/fixtures/specs/plan-mode-guard.fixture.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/plan-mode-guard.fixture.md",
+      "target": ".codebuddy/evals/fixtures/specs/plan-mode-guard.fixture.md",
+      "strategy": "copy",
+      "source_sha256": "5a02bda369337e2e4916048f596f243ab8cd34c2fe01ed4d49d10efd0a4cc687",
+      "target_sha256": "5a02bda369337e2e4916048f596f243ab8cd34c2fe01ed4d49d10efd0a4cc687"
+    },
+    ".codebuddy/evals/fixtures/specs/inline-review-annotation.fixture.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/inline-review-annotation.fixture.md",
+      "target": ".codebuddy/evals/fixtures/specs/inline-review-annotation.fixture.md",
+      "strategy": "copy",
+      "source_sha256": "26abe7b312f9312996b48ab298704841b673631ca846ed412239cba83adb5116",
+      "target_sha256": "26abe7b312f9312996b48ab298704841b673631ca846ed412239cba83adb5116"
+    },
+    ".codebuddy/evals/fixtures/specs/iteration-flow.fixture.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/iteration-flow.fixture.md",
+      "target": ".codebuddy/evals/fixtures/specs/iteration-flow.fixture.md",
+      "strategy": "copy",
+      "source_sha256": "90586515d14f4ca715547d72282ffa4e87408a176bc53a4b82175689b16f1dab",
+      "target_sha256": "90586515d14f4ca715547d72282ffa4e87408a176bc53a4b82175689b16f1dab"
+    },
+    ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.plan.json": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.plan.json",
+      "target": ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.plan.json",
+      "strategy": "copy",
+      "source_sha256": "6285014a385915ab53762b5a87cff3aab4c501a62ccbac8c3e6d89d3abb7e660",
+      "target_sha256": "6285014a385915ab53762b5a87cff3aab4c501a62ccbac8c3e6d89d3abb7e660"
+    },
+    ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.md.review-notes.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.md.review-notes.md",
+      "target": ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.md.review-notes.md",
+      "strategy": "copy",
+      "source_sha256": "0ef37caa9e4c1d737261064b6d63f9ab87f15ca8a2ec82fdf87a2e641fbf1be8",
+      "target_sha256": "0ef37caa9e4c1d737261064b6d63f9ab87f15ca8a2ec82fdf87a2e641fbf1be8"
+    },
+    ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.plan.json.run-id": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.plan.json.run-id",
+      "target": ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.plan.json.run-id",
+      "strategy": "copy",
+      "source_sha256": "e3d95aa820c3ee48af5e09d4f3eab855adcc142450a7613e55b4474f0c5e2d40",
+      "target_sha256": "e3d95aa820c3ee48af5e09d4f3eab855adcc142450a7613e55b4474f0c5e2d40"
+    },
+    ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/README.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/iteration-flow.fixture/README.md",
+      "target": ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/README.md",
+      "strategy": "copy",
+      "source_sha256": "57a8ef63ef40ce2cb84b91343dc0b710f2155159871baebb119d448e5a20ee73",
+      "target_sha256": "57a8ef63ef40ce2cb84b91343dc0b710f2155159871baebb119d448e5a20ee73"
+    },
+    ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.freeze-review.md": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.freeze-review.md",
+      "target": ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.freeze-review.md",
+      "strategy": "copy",
+      "source_sha256": "8c8e8589790dee921e4b75bbc28f4da9d8fce77ded8b81b2f6fc719e2d439ad2",
+      "target_sha256": "8c8e8589790dee921e4b75bbc28f4da9d8fce77ded8b81b2f6fc719e2d439ad2"
+    },
+    ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.flow.json": {
+      "source": ".codebuddy/harness-sdk/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.flow.json",
+      "target": ".codebuddy/evals/fixtures/specs/iteration-flow.fixture/iteration-flow.fixture.flow.json",
+      "strategy": "copy",
+      "source_sha256": "cd23fe202f7a27d5f773a1743fceeea3f85286941cacab8caebf5089849ce788",
+      "target_sha256": "cd23fe202f7a27d5f773a1743fceeea3f85286941cacab8caebf5089849ce788"
+    },
+    ".codebuddy/evals/baselines/current-stable.json": {
+      "source": ".codebuddy/harness-sdk/evals/baselines/current-stable.json",
+      "target": ".codebuddy/evals/baselines/current-stable.json",
+      "strategy": "copy",
+      "source_sha256": "4817dc30ea28f863737d15673507121e3b2a9bf14ef72bad00dfcb5ac9791714",
+      "target_sha256": "4817dc30ea28f863737d15673507121e3b2a9bf14ef72bad00dfcb5ac9791714"
+    },
+    ".codebuddy/harness-workbench/vendor/purify.min.js": {
+      "source": ".codebuddy/harness-sdk/workbench/vendor/purify.min.js",
+      "target": ".codebuddy/harness-workbench/vendor/purify.min.js",
+      "strategy": "copy",
+      "source_sha256": "ef9a98b5b21aac33c73e316ef21f5cf06f68eff003a40ac953022129112cff3c",
+      "target_sha256": "ef9a98b5b21aac33c73e316ef21f5cf06f68eff003a40ac953022129112cff3c"
+    },
+    ".codebuddy/harness-workbench/vendor/mermaid.min.js": {
+      "source": ".codebuddy/harness-sdk/workbench/vendor/mermaid.min.js",
+      "target": ".codebuddy/harness-workbench/vendor/mermaid.min.js",
+      "strategy": "copy",
+      "source_sha256": "217b66ef4279c33c141b4afe22effad10a91c02558dc70917be2c0981e78ed87",
+      "target_sha256": "217b66ef4279c33c141b4afe22effad10a91c02558dc70917be2c0981e78ed87"
+    },
+    ".codebuddy/harness-workbench/vendor/README.md": {
+      "source": ".codebuddy/harness-sdk/workbench/vendor/README.md",
+      "target": ".codebuddy/harness-workbench/vendor/README.md",
+      "strategy": "copy",
+      "source_sha256": "9310cf6b1de58f8d981c275496435a75b5d74b42a7d6ca85113819038063d106",
+      "target_sha256": "9310cf6b1de58f8d981c275496435a75b5d74b42a7d6ca85113819038063d106"
+    },
+    ".codebuddy/harness-workbench/vendor/marked.min.js": {
+      "source": ".codebuddy/harness-sdk/workbench/vendor/marked.min.js",
+      "target": ".codebuddy/harness-workbench/vendor/marked.min.js",
+      "strategy": "copy",
+      "source_sha256": "15fabce5b65898b32b03f5ed25e9f891a729ad4c0d6d877110a7744aa847a894",
+      "target_sha256": "15fabce5b65898b32b03f5ed25e9f891a729ad4c0d6d877110a7744aa847a894"
+    },
+    ".codebuddy/commands/harness/workbench.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/workbench.md",
+      "target": ".codebuddy/commands/harness/workbench.md",
+      "strategy": "copy",
+      "source_sha256": "4d6a8de51153d5884048f7ce56b2edd809c6b8affb330af8c99d9b213a097319",
+      "target_sha256": "4d6a8de51153d5884048f7ce56b2edd809c6b8affb330af8c99d9b213a097319"
+    },
+    ".codebuddy/commands/harness/kb-code-init.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/kb-code-init.md",
+      "target": ".codebuddy/commands/harness/kb-code-init.md",
+      "strategy": "copy",
+      "source_sha256": "fde6fd2715ca8b70bd27b51e45a0723ff195c348b9008d8ee0f03daa91e6b2e5",
+      "target_sha256": "fde6fd2715ca8b70bd27b51e45a0723ff195c348b9008d8ee0f03daa91e6b2e5"
+    },
+    ".codebuddy/commands/harness/kb-code-search.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/kb-code-search.md",
+      "target": ".codebuddy/commands/harness/kb-code-search.md",
+      "strategy": "copy",
+      "source_sha256": "a3537e37142a2f4a5e71c5e469acc13707a1747f71f2355a7ca5d1a7f69d860a",
+      "target_sha256": "a3537e37142a2f4a5e71c5e469acc13707a1747f71f2355a7ca5d1a7f69d860a"
+    },
+    ".codebuddy/commands/harness/kb.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/kb.md",
+      "target": ".codebuddy/commands/harness/kb.md",
+      "strategy": "copy",
+      "source_sha256": "9a74752f28ad06ba15b9f4f5034ae8c253dea4557d689f43e86bcbbd584dd5e2",
+      "target_sha256": "9a74752f28ad06ba15b9f4f5034ae8c253dea4557d689f43e86bcbbd584dd5e2"
+    },
+    ".codebuddy/commands/harness/eval.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/eval.md",
+      "target": ".codebuddy/commands/harness/eval.md",
+      "strategy": "copy",
+      "source_sha256": "44951021033f842ec5060f58b433fe552adbe51c80fe630257a66e293cff6a67",
+      "target_sha256": "44951021033f842ec5060f58b433fe552adbe51c80fe630257a66e293cff6a67"
+    },
+    ".codebuddy/commands/harness/init.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/init.md",
+      "target": ".codebuddy/commands/harness/init.md",
+      "strategy": "copy",
+      "source_sha256": "471912f6e504a54e15921a008f4c047d231cb4d03aeec0c56ad8fe07ae493914",
+      "target_sha256": "471912f6e504a54e15921a008f4c047d231cb4d03aeec0c56ad8fe07ae493914"
+    },
+    ".codebuddy/commands/harness/kb-code-update.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/kb-code-update.md",
+      "target": ".codebuddy/commands/harness/kb-code-update.md",
+      "strategy": "copy",
+      "source_sha256": "959b58e6207640406b5d3c237b8b42c66ed013c796759d402abfd4797480ca2d",
+      "target_sha256": "959b58e6207640406b5d3c237b8b42c66ed013c796759d402abfd4797480ca2d"
+    },
+    ".codebuddy/commands/harness/update-sdk.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/update-sdk.md",
+      "target": ".codebuddy/commands/harness/update-sdk.md",
+      "strategy": "copy",
+      "source_sha256": "eda7a7f8e206d285dd0793d862087e1f1c7f63472234285f86d0021ed68548e4",
+      "target_sha256": "eda7a7f8e206d285dd0793d862087e1f1c7f63472234285f86d0021ed68548e4"
+    },
+    ".codebuddy/commands/harness/release.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/release.md",
+      "target": ".codebuddy/commands/harness/release.md",
+      "strategy": "copy",
+      "source_sha256": "21d21af1435895197ea43f3eb51230ee4a374cf4aa73978b66c8542e47084c77",
+      "target_sha256": "21d21af1435895197ea43f3eb51230ee4a374cf4aa73978b66c8542e47084c77"
+    },
+    ".codebuddy/commands/harness/evolve.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/evolve.md",
+      "target": ".codebuddy/commands/harness/evolve.md",
+      "strategy": "copy",
+      "source_sha256": "cd051219ed1ae287a8d0808f06a58b0979511a1bebb0e9b7a3b44039bc9ca81d",
+      "target_sha256": "cd051219ed1ae287a8d0808f06a58b0979511a1bebb0e9b7a3b44039bc9ca81d"
+    },
+    ".codebuddy/commands/harness/run.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/run.md",
+      "target": ".codebuddy/commands/harness/run.md",
+      "strategy": "copy",
+      "source_sha256": "c0d13067c03779214c5c7e4fad002f8589c8b752dac4fce2d45ad5a514956b7b",
+      "target_sha256": "c0d13067c03779214c5c7e4fad002f8589c8b752dac4fce2d45ad5a514956b7b"
+    },
+    ".codebuddy/commands/harness/staging-approve.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/staging-approve.md",
+      "target": ".codebuddy/commands/harness/staging-approve.md",
+      "strategy": "copy",
+      "source_sha256": "0323f4bd2efd4992de5aa16f5ca09f71b012e093c61adc184a1c5f48f014f080",
+      "target_sha256": "0323f4bd2efd4992de5aa16f5ca09f71b012e093c61adc184a1c5f48f014f080"
+    },
+    ".codebuddy/commands/harness/plan.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/plan.md",
+      "target": ".codebuddy/commands/harness/plan.md",
+      "strategy": "copy",
+      "source_sha256": "385aaabeaec719a28be902ce4f8bf91541cabe96069102eb994ff6fbb8d1b334",
+      "target_sha256": "385aaabeaec719a28be902ce4f8bf91541cabe96069102eb994ff6fbb8d1b334"
+    },
+    ".codebuddy/commands/harness/spec.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/spec.md",
+      "target": ".codebuddy/commands/harness/spec.md",
+      "strategy": "copy",
+      "source_sha256": "698daf6898f7e74ef1792301b4511222d98ec6ccde36f589c7877a03232e30c0",
+      "target_sha256": "698daf6898f7e74ef1792301b4511222d98ec6ccde36f589c7877a03232e30c0"
+    },
+    ".codebuddy/commands/harness/execute.md": {
+      "source": ".codebuddy/harness-sdk/commands/harness/execute.md",
+      "target": ".codebuddy/commands/harness/execute.md",
+      "strategy": "copy",
+      "source_sha256": "74832bba9f5ed4f562697171e92649524eec6481aeaf7b500736566da571fe0e",
+      "target_sha256": "74832bba9f5ed4f562697171e92649524eec6481aeaf7b500736566da571fe0e"
+    },
+    ".codebuddy/commands/eval/unit.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/unit.md",
+      "target": ".codebuddy/commands/eval/unit.md",
+      "strategy": "copy",
+      "source_sha256": "d88fbbf646f3d66ebc7370136152947866aed31e232a9ab92f66d525be9b4619",
+      "target_sha256": "d88fbbf646f3d66ebc7370136152947866aed31e232a9ab92f66d525be9b4619"
+    },
+    ".codebuddy/commands/eval/code-quality.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/code-quality.md",
+      "target": ".codebuddy/commands/eval/code-quality.md",
+      "strategy": "copy",
+      "source_sha256": "0c741fb3a941a86a29b56a50418a5c968f21e3261153a6324259c236cc026577",
+      "target_sha256": "0c741fb3a941a86a29b56a50418a5c968f21e3261153a6324259c236cc026577"
+    },
+    ".codebuddy/commands/eval/api.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/api.md",
+      "target": ".codebuddy/commands/eval/api.md",
+      "strategy": "copy",
+      "source_sha256": "f0301d1ea02ed2c2ac6cffc90ee961521e8dfc0b852b64f7b90117b6974c4e5b",
+      "target_sha256": "f0301d1ea02ed2c2ac6cffc90ee961521e8dfc0b852b64f7b90117b6974c4e5b"
+    },
+    ".codebuddy/commands/eval/acceptance-traceability.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/acceptance-traceability.md",
+      "target": ".codebuddy/commands/eval/acceptance-traceability.md",
+      "strategy": "copy",
+      "source_sha256": "3e63c3afb4b534470a83ba1589d5a17fea905b9dff3a2541fbfa93213c240391",
+      "target_sha256": "3e63c3afb4b534470a83ba1589d5a17fea905b9dff3a2541fbfa93213c240391"
+    },
+    ".codebuddy/commands/eval/mcp.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/mcp.md",
+      "target": ".codebuddy/commands/eval/mcp.md",
+      "strategy": "copy",
+      "source_sha256": "f0549c671a52695d89cec4784bfd044cfc28678482791f870d11feeb63e22e5b",
+      "target_sha256": "f0549c671a52695d89cec4784bfd044cfc28678482791f870d11feeb63e22e5b"
+    },
+    ".codebuddy/commands/eval/acceptance-arch.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/acceptance-arch.md",
+      "target": ".codebuddy/commands/eval/acceptance-arch.md",
+      "strategy": "copy",
+      "source_sha256": "6b29f1fd824fbf925ff8062feddc44e55dd4d73ccd5e781a393c5fd348b52e44",
+      "target_sha256": "6b29f1fd824fbf925ff8062feddc44e55dd4d73ccd5e781a393c5fd348b52e44"
+    },
+    ".codebuddy/commands/eval/staging.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/staging.md",
+      "target": ".codebuddy/commands/eval/staging.md",
+      "strategy": "copy",
+      "source_sha256": "aca63ab75e3dc47fb665b735e8c95bc3320bfd653454d3ca62f5516c4e6bb9cf",
+      "target_sha256": "aca63ab75e3dc47fb665b735e8c95bc3320bfd653454d3ca62f5516c4e6bb9cf"
+    },
+    ".codebuddy/commands/eval/acceptance-perf.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/acceptance-perf.md",
+      "target": ".codebuddy/commands/eval/acceptance-perf.md",
+      "strategy": "copy",
+      "source_sha256": "1671a3aaac8be04c9a81cfd869486e0d61ccbc57713f87c5057f437575e27a68",
+      "target_sha256": "1671a3aaac8be04c9a81cfd869486e0d61ccbc57713f87c5057f437575e27a68"
+    },
+    ".codebuddy/commands/eval/acceptance-e2e.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/acceptance-e2e.md",
+      "target": ".codebuddy/commands/eval/acceptance-e2e.md",
+      "strategy": "copy",
+      "source_sha256": "8905cfd5f4b0d28c98edb9492bf8ceefc4171e256f88f9df9a3ab4fe62798f5f",
+      "target_sha256": "8905cfd5f4b0d28c98edb9492bf8ceefc4171e256f88f9df9a3ab4fe62798f5f"
+    },
+    ".codebuddy/commands/eval/sql.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/sql.md",
+      "target": ".codebuddy/commands/eval/sql.md",
+      "strategy": "copy",
+      "source_sha256": "1cdc589c040d24abd87336b0357c38cb0672cb78e883cddbea35748e321b889e",
+      "target_sha256": "1cdc589c040d24abd87336b0357c38cb0672cb78e883cddbea35748e321b889e"
+    },
+    ".codebuddy/commands/eval/acceptance-contract.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/acceptance-contract.md",
+      "target": ".codebuddy/commands/eval/acceptance-contract.md",
+      "strategy": "copy",
+      "source_sha256": "8afeb55eb699046d0fcfeb81b951b50f9726d11bea02735d100048ac2cee7f16",
+      "target_sha256": "8afeb55eb699046d0fcfeb81b951b50f9726d11bea02735d100048ac2cee7f16"
+    },
+    ".codebuddy/commands/eval/regression.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/regression.md",
+      "target": ".codebuddy/commands/eval/regression.md",
+      "strategy": "copy",
+      "source_sha256": "200107eefe8684b6e94cb04e5de68aff8e333b152eeee04ebc8cb8fc829867db",
+      "target_sha256": "200107eefe8684b6e94cb04e5de68aff8e333b152eeee04ebc8cb8fc829867db"
+    },
+    ".codebuddy/commands/eval/acceptance-all.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/acceptance-all.md",
+      "target": ".codebuddy/commands/eval/acceptance-all.md",
+      "strategy": "copy",
+      "source_sha256": "a0901850cf8d6a5bc2fccb0a857e7d27b2cae52f81cd845e2b2212d9a4d1fc12",
+      "target_sha256": "a0901850cf8d6a5bc2fccb0a857e7d27b2cae52f81cd845e2b2212d9a4d1fc12"
+    },
+    ".codebuddy/commands/eval/spec-alignment.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/spec-alignment.md",
+      "target": ".codebuddy/commands/eval/spec-alignment.md",
+      "strategy": "copy",
+      "source_sha256": "e15c15f5527f6d3b5b3938ddecf0211da87a1e61cb37cc78db60c65440e0aa3a",
+      "target_sha256": "e15c15f5527f6d3b5b3938ddecf0211da87a1e61cb37cc78db60c65440e0aa3a"
+    },
+    ".codebuddy/commands/eval/acceptance-ui.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/acceptance-ui.md",
+      "target": ".codebuddy/commands/eval/acceptance-ui.md",
+      "strategy": "copy",
+      "source_sha256": "34b6968ac5b4312dfb692dcfd4259b43b0176e1873784b9d8a817b8aff389733",
+      "target_sha256": "34b6968ac5b4312dfb692dcfd4259b43b0176e1873784b9d8a817b8aff389733"
+    },
+    ".codebuddy/commands/eval/trajectory.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/trajectory.md",
+      "target": ".codebuddy/commands/eval/trajectory.md",
+      "strategy": "copy",
+      "source_sha256": "aa7217ed36547bbe9bff708ff3f77dacca3bf215d142026f67241702d5956b44",
+      "target_sha256": "aa7217ed36547bbe9bff708ff3f77dacca3bf215d142026f67241702d5956b44"
+    },
+    ".codebuddy/commands/eval/frontend.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/frontend.md",
+      "target": ".codebuddy/commands/eval/frontend.md",
+      "strategy": "copy",
+      "source_sha256": "c7473d683c0072ae753cdca24ddd9211532dcf2e96da6fad84fd15f6e5c6f713",
+      "target_sha256": "c7473d683c0072ae753cdca24ddd9211532dcf2e96da6fad84fd15f6e5c6f713"
+    },
+    ".codebuddy/commands/eval/all.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/all.md",
+      "target": ".codebuddy/commands/eval/all.md",
+      "strategy": "copy",
+      "source_sha256": "a5ebf9da774fd61a53e936c02d5da7e1c01e72097a831045a969906e6e683ef5",
+      "target_sha256": "a5ebf9da774fd61a53e936c02d5da7e1c01e72097a831045a969906e6e683ef5"
+    },
+    ".codebuddy/commands/eval/security.md": {
+      "source": ".codebuddy/harness-sdk/commands/eval/security.md",
+      "target": ".codebuddy/commands/eval/security.md",
+      "strategy": "copy",
+      "source_sha256": "5b9ad3a3c27194ebe380b7a0c1db0170887c228e6b9a9b7a3dff64fa3050ebde",
+      "target_sha256": "5b9ad3a3c27194ebe380b7a0c1db0170887c228e6b9a9b7a3dff64fa3050ebde"
+    },
+    ".codebuddy/agents/eval-runner.md": {
+      "source": ".codebuddy/harness-sdk/agents/eval-runner.md",
+      "target": ".codebuddy/agents/eval-runner.md",
+      "strategy": "copy",
+      "source_sha256": "11eada93e21f8639b266e834ba08762eee5ad942d8437a27e4062792dd6e6a32",
+      "target_sha256": "11eada93e21f8639b266e834ba08762eee5ad942d8437a27e4062792dd6e6a32"
+    },
+    ".codebuddy/agents/spec-writer.md": {
+      "source": ".codebuddy/harness-sdk/agents/spec-writer.md",
+      "target": ".codebuddy/agents/spec-writer.md",
+      "strategy": "copy",
+      "source_sha256": "39f4dff0fc4d41e7abf59d0a932ef033a0e6bfd431eabb879f81e15383d6a13f",
+      "target_sha256": "39f4dff0fc4d41e7abf59d0a932ef033a0e6bfd431eabb879f81e15383d6a13f"
+    },
+    ".codebuddy/skills/harness-workbench/SKILL.md": {
+      "source": ".codebuddy/harness-sdk/skills/harness-workbench/SKILL.md",
+      "target": ".codebuddy/skills/harness-workbench/SKILL.md",
+      "strategy": "copy",
+      "source_sha256": "df5adb6dc599e01bb311171134e6159ceaeb86023e52befe86498eeb585c3722",
+      "target_sha256": "df5adb6dc599e01bb311171134e6159ceaeb86023e52befe86498eeb585c3722"
+    },
+    ".codebuddy/skills/harness-eval-runner/SKILL.md": {
+      "source": ".codebuddy/harness-sdk/skills/harness-eval-runner/SKILL.md",
+      "target": ".codebuddy/skills/harness-eval-runner/SKILL.md",
+      "strategy": "copy",
+      "source_sha256": "9e3943af1055b16e7347ea14f56a5e44f534177d917fff1fb4c7adc2b9f25642",
+      "target_sha256": "9e3943af1055b16e7347ea14f56a5e44f534177d917fff1fb4c7adc2b9f25642"
+    },
+    ".codebuddy/skills/harness-spec-writer/SKILL.md": {
+      "source": ".codebuddy/harness-sdk/skills/harness-spec-writer/SKILL.md",
+      "target": ".codebuddy/skills/harness-spec-writer/SKILL.md",
+      "strategy": "copy",
+      "source_sha256": "ce043cf8fed2b18806e970864b96abadb310e01c98632f724407736877ba0c53",
+      "target_sha256": "ce043cf8fed2b18806e970864b96abadb310e01c98632f724407736877ba0c53"
+    },
+    ".codebuddy/skills/harness-core/SKILL.md": {
+      "source": ".codebuddy/harness-sdk/skills/harness-core/SKILL.md",
+      "target": ".codebuddy/skills/harness-core/SKILL.md",
+      "strategy": "copy",
+      "source_sha256": "6bcd7468fb08b823da2133aed7464bc0685d111daa9d4e0222a969f7da9f89df",
+      "target_sha256": "6bcd7468fb08b823da2133aed7464bc0685d111daa9d4e0222a969f7da9f89df"
+    }
+  }
+}

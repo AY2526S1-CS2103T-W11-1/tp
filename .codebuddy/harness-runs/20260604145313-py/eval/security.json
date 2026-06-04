@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "release_allowed": true,
+  "summary": "security path scan completed",
+  "suites": {
+    "security": "pass"
+  },
+  "failed_acceptance_ids": [],
+  "blocking_issues": [],
+  "warnings": [],
+  "evidence": [],
+  "rerun_required": []
+}

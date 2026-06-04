@@ -23,7 +23,7 @@ import seedu.address.model.person.Person;
  * }</pre>
  * This marks assignment 0 for student E1234567 as complete.
  */
-public class MarkHomeworkCommand extends Command {
+public class MarkHomeworkCommand extends Command implements MutatingCommand {
 
     public static final String COMMAND_WORD = "mark_hw";
 

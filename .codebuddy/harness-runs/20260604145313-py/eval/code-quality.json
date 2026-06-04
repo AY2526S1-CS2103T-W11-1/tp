@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "release_allowed": true,
+  "summary": "code quality checks executed",
+  "suites": {
+    "code_quality": "pass"
+  },
+  "failed_acceptance_ids": [],
+  "blocking_issues": [],
+  "warnings": [
+    "project builds skipped unless explicitly enabled"
+  ],
+  "evidence": [
+    "/Users/chuckbyang/tp/.codebuddy/harness-runs/20260604145313-py/eval/code-quality/python-compile.log"
+  ],
+  "rerun_required": []
+}
