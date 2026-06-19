@@ -17,6 +17,7 @@ import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.event.Consultation;
 import seedu.address.model.person.Person;
 
 /**
@@ -36,7 +37,12 @@ public class DeleteCommandTest {
                 Messages.format(personToDelete));
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        if (personToDelete.hasConsultation()) {
+            Consultation consultationToDelete = personToDelete.getConsultation().orElse(null);
+            expectedModel.deleteConsultation(consultationToDelete);
+        }
         expectedModel.deletePerson(personToDelete);
+        expectedModel.getGroup(personToDelete.getGroupId()).removeStudent(personToDelete.getNusnetid());
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
@@ -60,7 +66,12 @@ public class DeleteCommandTest {
                 Messages.format(personToDelete));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        if (personToDelete.hasConsultation()) {
+            Consultation consultationToDelete = personToDelete.getConsultation().orElse(null);
+            expectedModel.deleteConsultation(consultationToDelete);
+        }
         expectedModel.deletePerson(personToDelete);
+        expectedModel.getGroup(personToDelete.getGroupId()).removeStudent(personToDelete.getNusnetid());
         showNoPerson(expectedModel);
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);

@@ -6,14 +6,18 @@
     "email" : "alice@u.nus.edu",
     "nusnetid": "E1234567",
     "telegram": "@alicece",
-    "groupId": "T01"
+    "groupId": "T01",
+    "consultationStart": "20251010 1000",
+    "consultationEnd": "20251010 1100"
   }, {
     "name" : "Benson Meier",
     "phone" : "98765432",
     "email" : "johnd@u.nus.edu",
     "nusnetid": "E1234568",
     "telegram": "@benson",
-    "groupId": "T01"
+    "groupId": "T01",
+    "consultationStart": "20251111 1100",
+    "consultationEnd": "20251111 1200"
   }, {
     "name" : "Carl Kurz",
     "phone" : "95352563",
@@ -50,7 +54,15 @@
     "telegram": "@besttttttt",
     "groupId": "T48"
   } ],
-  "consultations" : [ ],
+  "consultations" : [ {
+    "nusnetId" : "E1234567",
+    "from" : "20251010 1000",
+    "to" : "20251010 1100"
+  }, {
+    "nusnetId" : "E1234568",
+    "from" : "20251111 1100",
+    "to" : "20251111 1200"
+  } ],
   "groups" : [ {
     "groupId" : "T01",
     "studentNusnetids" : [ "E1234567", "E1234568" ]

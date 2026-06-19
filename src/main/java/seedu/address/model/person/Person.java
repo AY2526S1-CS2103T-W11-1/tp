@@ -292,9 +292,6 @@ public class Person {
         if (this.email.isPresent()) {
             builder.add("email", email.get());
         }
-        if (this.consultation.isPresent()) {
-            builder.add("consultation", consultation.get());
-        }
         return builder.toString();
     }
 
